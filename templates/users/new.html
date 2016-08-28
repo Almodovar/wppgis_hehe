@@ -1,0 +1,108 @@
+{{define "users/new"}}
+<video autoplay loop muted poster="screenshot.jpg" id="background">
+    <source src="/assets/video/559568348.mp4" type="video/mp4">
+</video>
+<div class="jumbotron" id="register">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6 col-md-2 col-xs-offset-3 col-md-offset-5">
+                <img src="/assets/images/logo_transparent.png" alt="...">
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="registerForm">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                {{if .Error }}
+                <div class="col-sm-6 col-sm-offset-3" id="errorMessage">
+                    {{.Error}}
+                </div>
+                {{end}}
+                <form class="form-horizontal" action="/register" method="POST">
+                    <!-- username error display -->
+                    {{if .Error }} {{if eq .Error "You must supply a username" "That username is taken"}}
+                    <div class="form-group has-error has-feedback">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control">
+                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <span id="inputError2Status" class="sr-only">(error)</span>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control">
+                        </div>
+                    </div>
+                    {{end}} {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control" placeholder="Username">
+                        </div>
+                    </div>{{end}}
+                    <!-- email error display -->
+                    {{if .Error }} {{if eq .Error "You must supply an email" "That email address has an account"}}
+                    <div class="form-group has-error has-feedback">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
+                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
+                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <span id="inputError2Status" class="sr-only">(error)</span>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
+                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
+                        </div>
+                    </div>
+                    {{end}} {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
+                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control" placeholder="Email">
+                        </div>
+                    </div>{{end}}
+                    <!-- password error display -->
+                    {{if .Error }} {{if eq .Error "Your password is too short"}}
+                    <div class="form-group has-error has-feedback">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <input type="password" name="password" id="newPassword" class="form-control">
+                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <span id="inputError2Status" class="sr-only">(error)</span>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <input type="password" name="password" id="newPassword" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+                    {{end}} {{else}}
+                    <div class="form-group">
+                        <div class="input-group col-sm-8 col-sm-offset-2">
+                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <input type="password" name="password" id="newPassword" class="form-control" placeholder="Password">
+                        </div>
+                    </div>{{end}}
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-4">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                <div class="btn-group" role="group">
+                                    <button type="submit" class="btn btn-danger ">Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

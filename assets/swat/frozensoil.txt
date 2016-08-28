@@ -1,0 +1,14 @@
+0    |code, 0-original frozen soil algorithm; 1-modified algorithm
+1.0  |usle_kc, usle_k correction coefficient under thawing condition 1.3
+2.5  |erorgn_r, revised organic N enrichment ratio under thawing condition 0.5
+0.15 |erorgp_r, revised organic P enrichment ratio under thawing condition 0.5
+85  |phoskd_r, revised P soil partitioning coefficient under thawing condition 100
+0.2  |nperco_r, revised N percolation coefficient under thawing condition 0.6
+0.4  |usle_pr, revised usle_p for no-till
+12   |pperco_r, revised pperco for no-tll
+0.30 |psp_r, revised psp for no-till
+0.15 |rsdco_r, revised rsdco for no-till
+10   |p_updis_r, revised p_updis for no-till
+15    |sol_solp_r, revised sol_solp for notill //7 for forage // 15 for notill
+20   |n_updis_r, revised n_updis for no-till
+

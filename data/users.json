@@ -1,0 +1,34 @@
+{
+  "Users": {
+    "usr_7rjwMvyi6ttGFaQY": {
+      "ID": "usr_7rjwMvyi6ttGFaQY",
+      "Email": "ee@qq.com",
+      "HashedPassword": "$2a$10$DgiRxpLriMDuJIxLQgFyhO3MHnRTo25nRExQrO0BMJ9r93J3zvrgW",
+      "Username": "admin"
+    },
+    "usr_C6HjCwjUMsRNSQ4p": {
+      "ID": "usr_C6HjCwjUMsRNSQ4p",
+      "Email": "qqq@qq.com",
+      "HashedPassword": "$2a$10$PYkWdLi5yXxwXGV8gAG14.lUTK.owubRYh2gcLV/iPTbAhyGXYuTW",
+      "Username": "hahaha"
+    },
+    "usr_YiPcZASAtA52v3od": {
+      "ID": "usr_YiPcZASAtA52v3od",
+      "Email": "dfdddf@dfdf.com",
+      "HashedPassword": "$2a$10$O6YmmLc9cHOoKK.dy1J7vuEthHMQ70tdc2.lHkHGwcaiS386GzbQm",
+      "Username": "kunchendddsf"
+    },
+    "usr_fwVNaEnIurSslXAN": {
+      "ID": "usr_fwVNaEnIurSslXAN",
+      "Email": "delisen@sina.com",
+      "HashedPassword": "$2a$10$V14Hzilwc.lJOsR5oB7Hsujz6ox0P5UZEQOx8VY967cf5XodYCc9W",
+      "Username": "liwei"
+    },
+    "usr_tNtJkWIH9L4g44tw": {
+      "ID": "usr_tNtJkWIH9L4g44tw",
+      "Email": "kchen08@uoguelph.ca",
+      "HashedPassword": "$2a$10$I9plWJWEqiMOF3lM3ToKye7ze24U7CtbNGlMa0.JHzExizmugLwyG",
+      "Username": "kunchen"
+    }
+  }
+}

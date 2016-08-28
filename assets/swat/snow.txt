@@ -1,0 +1,14 @@
+0       !snow redistribution code. 0=no redistribution, 1=redistribution
+3       !sr_print, print code: 0=print snow water equivalent of the watershed, 1=print SWE of each HRU
+106 109 110  !output these HRU to snowcomp.txt for comparasion
+108     !ztcode, zero tillage code
+0.04	!k1_sd, slope coefficient  , 0.4
+0.05  	!k2_sd, curvature coefficient, 0.05
+7.0	!ut0, wind speed for initiating snow redistribution at T=-27 degree (m/s), by default 6.98
+30.0	!u0, wind speed over which the decay coefficient is 1
+27.0	!t0_sd, air temperature at which Ut = Ut0
+0.0033	!aa, empirical coefficient for calculating critical wind speed
+20.0	!swe0, initial snow water equaverlant (mm)
+0.0	!k_blow, fraction of snow blowing into or out of the watershed, 0.0
+25.0	!snow holding capacity of cropland in mm SWE
+0.10    !rsno_fac, rain on snow impact factor (mm/mm/°C/day)

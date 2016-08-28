@@ -1,0 +1,99 @@
+ .mgt file Subbasin:26 HRU:5 Luse:5 Soil:CORN 5/8/2015 5:23:01 PM
+               0    | NMGT:Management code
+Initial Plant Growth Parameters
+               0    | IGRO: Land cover status: 0-none growing; 1-growing
+              19    | PLANT_ID: Land cover ID number (IGRO = 1)
+            0.00    | LAI_INIT: Initial leaf are index (IGRO = 1)
+            0.00    | BIO_INIT: Initial biomass (kg/ha) (IGRO = 1)
+            0.00    | PHU_PLT: Number of heat units to bring plant to maturity (IGRO = 1)
+General Management Parameters
+            0.20    | BIOMIX: Biological mixing efficiency
+           83.00    | CN2: Initial SCS CN II value
+            0.50    | USLE_P: USLE support practice factor
+            0.00    | BIO_MIN: Minimum biomass for grazing (kg/ha)
+           2.500    | FILTERW: width of edge of field filter strip (m)
+Urban Management Parameters
+               0    | IURBAN: urban simulation code, 0-none, 1-USGS, 2-buildup/washoff
+               0    | URBLU: urban land type
+Irrigation Management Parameters
+               0    | IRRSC: irrigation code
+               0    | IRRNO: irrigation source location
+           0.000    | FLOWMIN: min in-stream flow for irr diversions (m^3/s)
+           0.000    | DIVMAX: max irrigation diversion from reach (+mm/-10^4m^3)
+           0.000    | FLOWFR: : fraction of flow allowed to be pulled for irr
+Tile Drain Management Parameters
+         900.000    | DDRAIN: depth to subsurface tile drain (mm)
+          24.000    | TDRAIN: time to drain soil to field capacity (hr)
+           3.000    | GDRAIN: drain tile lag time (hr)
+Management Operations:
+               6    | NROT: number of years of rotation
+Operation Schedule:
+  4  1           3    1           110.79940   1.00
+  4  1           3    2            10.86512   1.00
+  4 20           1   28             0.00000   0.00     0.00000 0.00   0.00 81.00
+  7 25           5                 87.48000
+  9 29           3    1             8.63196   1.00
+  9 29           3    2            12.94648   1.00
+ 10 11           6  108            81.00000
+ 10 21           6  108            81.00000
+ 11  7           6    3            84.24000
+ 11 11           6  108            81.00000
+                 0
+  5 10           6    3            84.24000
+  5 11           3    1            12.94648   0.20
+  5 11           3    2            25.02830   0.20
+  5 12           1   19             0.00000   0.00     0.00000 0.00   0.00 83.00
+  5 12           3    1             9.49370   0.20
+  5 12           3    2            13.80821   0.20
+  5 19           6  108            83.00000
+  6  7           3    1           144.77100   1.00
+ 11 16           5                 88.81001
+ 11 17           6  108            83.00000
+ 11 20           6  108            83.00000
+                 0
+  4 30           3    1             0.36012   1.00
+  4 30           3    2             0.04977   1.00
+  5 21           6    4            87.14999
+  5 23           1   56             0.00000   0.00     0.00000 0.00   0.00 85.00
+  5 23           3    1             4.33794   0.20
+  5 23           3    2             6.07604   0.20
+  5 26           6  108            85.00000
+  9 20           5                 88.39999
+ 10 11           6    3            88.39999
+ 10 21           6  108            85.00000
+                 0
+  5  4           3    1            18.09243   1.00
+  5  4           3    2            25.56434   1.00
+  5  5           3    1             9.50834   1.00
+  5  5           3    2            13.83164   1.00
+  5 10           6    3            88.39999
+  5 12           1   19             0.00000   0.00     0.00000 0.00   0.00 83.00
+  5 19           6  108            83.00000
+  6  7           3    1           144.77100   1.00
+ 11 15           5                 88.81001
+ 11 17           6  108            83.00000
+ 11 20           6  108            83.00000
+                 0
+  5  4           3    1             0.01171   1.00
+  5  4           3    2             0.02928   1.00
+  5 15           3    1             4.34087   1.00
+  5 15           3    2             6.09654   1.00
+  5 21           6    4            87.14999
+  5 23           1   56             0.00000   0.00     0.00000 0.00   0.00 85.00
+  5 26           6  108            85.00000
+  6  7           3    1             0.49187   1.00
+  9 20           5                 88.39999
+ 10 11           6    4            89.24999
+ 10 21           6  108            85.00000
+                 0
+  4 15           3    1           105.99310   1.00
+  4 15           3    2            10.34079   1.00
+  4 20           1   28             0.00000   0.00     0.00000 0.00   0.00 81.00
+  7 25           5                 87.48000
+ 10  5           3    1             8.63196   1.00
+ 10  5           3    2            12.94648   1.00
+ 10  5           6  108            81.00000
+ 10  8           6  108            81.00000
+ 10 11           6    4            85.05000
+ 10 21           6  108            81.00000
+
