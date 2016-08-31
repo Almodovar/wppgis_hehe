@@ -15,6 +15,10 @@ const (
 	userIDLength   = 16
 )
 
+func (user *User) ScenarioRoute() string {
+	return "/user/" + user.ID
+}
+
 func NewUser(username, email, password string) (User, error) {
 	user := User{
 		Email:    email,

@@ -1,11 +1,34 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
+
+func init() {
+
+	store, err := NewFileUserStore("./data/users.json")
+	if err != nil {
+		panic(fmt.Errorf("Error creating user store: %s", err))
+	}
+	globalUserStore = store
+
+	sessionStore, err := NewFileSessionStore("./data/sessions.json")
+	if err != nil {
+		panic(fmt.Errorf("Error creating session store: %s", err))
+	}
+	globalSessionStore = sessionStore
+
+	db, err := NewPostgreDB("user=postgres password=postgre dbname=wppgis sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
+	globalPostgreDB = db
+	globalScenarioStore = NewDBScenarioStore()
+}
 
 func main() {
 	router := NewRouter()
@@ -22,6 +45,9 @@ func main() {
 	)
 
 	secureRouter := NewRouter()
+	secureRouter.Handle("GET", "/userID/:userID", HandleScenarioList)
+	secureRouter.Handle("POST", "/userID/:userID", HandleScenarioShow)
+	secureRouter.Handle("POST", "/deletescenario", HandleScenarioDelete)
 	secureRouter.Handle("GET", "/sign-out", HandleSessionDestroy)
 
 	middleware := Middleware{}

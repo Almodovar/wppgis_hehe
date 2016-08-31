@@ -8,7 +8,7 @@ import (
 
 const (
 	// Keep users logged in for 3 days
-	sessionLength     = 1 * time.Minute
+	sessionLength     = 1 * 24 * time.Hour
 	sessionCookieName = "GophrSession"
 	sessionIDLength   = 20
 )

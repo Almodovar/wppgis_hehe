@@ -12,11 +12,23 @@
       "HashedPassword": "$2a$10$PYkWdLi5yXxwXGV8gAG14.lUTK.owubRYh2gcLV/iPTbAhyGXYuTW",
       "Username": "hahaha"
     },
+    "usr_QTy0AS7x16Hr9GiQ": {
+      "ID": "usr_QTy0AS7x16Hr9GiQ",
+      "Email": "kche3n08@uoguelph.ca",
+      "HashedPassword": "$2a$10$qGwo4ArHQG4EKTKX1nVNXOdx2G1kpIWEBRNCPLPVSYmhlJhMOjZP6",
+      "Username": "liweidd"
+    },
     "usr_YiPcZASAtA52v3od": {
       "ID": "usr_YiPcZASAtA52v3od",
       "Email": "dfdddf@dfdf.com",
       "HashedPassword": "$2a$10$O6YmmLc9cHOoKK.dy1J7vuEthHMQ70tdc2.lHkHGwcaiS386GzbQm",
       "Username": "kunchendddsf"
+    },
+    "usr_dp22vDnK7I4uoDUC": {
+      "ID": "usr_dp22vDnK7I4uoDUC",
+      "Email": "kunchen1986@hotmail.com",
+      "HashedPassword": "$2a$10$Gd4kb8y5Ozb754ii1O3mheIZLVSIrX63/8fMRUyOk6ApuNDjbJ.v2",
+      "Username": "liwei22"
     },
     "usr_fwVNaEnIurSslXAN": {
       "ID": "usr_fwVNaEnIurSslXAN",
@@ -29,6 +41,12 @@
       "Email": "kchen08@uoguelph.ca",
       "HashedPassword": "$2a$10$I9plWJWEqiMOF3lM3ToKye7ze24U7CtbNGlMa0.JHzExizmugLwyG",
       "Username": "kunchen"
+    },
+    "usr_uA7paNFA3QmEVd1T": {
+      "ID": "usr_uA7paNFA3QmEVd1T",
+      "Email": "de222lisen@sina.com",
+      "HashedPassword": "$2a$10$PtirlHka/yfbnM08gSoQveEhAxSeNWEG6/DfOzeM.voxIeTBVIesi",
+      "Username": "kunchen1233"
     }
   }
 }

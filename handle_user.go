@@ -43,5 +43,5 @@ func HandleUserCreate(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 		panic(err)
 	}
 
-	http.Redirect(w, r, "/?flash=User+created", http.StatusFound)
+	http.Redirect(w, r, "/userID/"+user.ID, http.StatusFound)
 }

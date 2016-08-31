@@ -1,0 +1,127 @@
+#scenariopanel button {
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    top: 85%;
+    left: 50%;
+    margin: -20px -100px;
+    align-self: center;
+    font-family: verdana, arial, sans-serif;
+    -webkit-border-radius: 10;
+    -moz-border-radius: 10;
+    border-radius: 10px;
+    color: #fafafa;
+    background: #3477a3;
+    border: solid #ffffff 3px;
+    text-decoration: none;
+}
+
+#scenariopanel button:hover {
+    background: #3cb0fd;
+    text-decoration: none;
+}
+
+#createScenario {
+    position: absolute;
+    bottom: 20%;
+}
+
+#left input {
+    height: 30px;
+    width: 120px;
+    padding-left: 10px;
+    font-family: verdana, arial, sans-serif;
+}
+
+#left #scenarioname {
+    position: absolute;
+    left: 25%;
+    margin: 10px -60px;
+    border: white;
+}
+
+#left #access {
+    position: absolute;
+    left: 75%;
+    margin: 10px -60px;
+    border: white;
+}
+
+#getScenario {
+    position: absolute;
+    bottom: 15%;
+}
+
+#left {
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    background-color: #4A6EB6;
+    z-index: 99;
+    margin-top: 15%;
+}
+
+#right {
+    position: absolute;
+    width: 30%;
+    height: 50%;
+    background-color: #D95252;
+    z-index: 99;
+    margin-top: 10%;
+}
+
+#left {
+    position: absolute;
+    margin-left: 15%;
+}
+
+#right {
+    position: absolute;
+    left: 55%;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10%;
+}
+
+th {
+    height: 30px;
+    text-align: left;
+    background-color: #3477a3;
+    color: white;
+}
+
+td {
+    height: 20px;
+    vertical-align: center;
+}
+
+th,
+td {
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+tr {
+    background-color: #f5f5f5
+}
+
+tr:hover {
+    background-color: #4156C2;
+}
+
+.selected {
+    background-color: brown;
+    color: #FFF;
+}

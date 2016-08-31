@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -14,14 +13,6 @@ type SessionStore interface {
 }
 
 var globalSessionStore SessionStore
-
-func init() {
-	sessionStore, err := NewFileSessionStore("./data/sessions.json")
-	if err != nil {
-		panic(fmt.Errorf("Error creating session store: %s", err))
-	}
-	globalSessionStore = sessionStore
-}
 
 type FileSessionStore struct {
 	filename string

@@ -11,6 +11,7 @@ var (
 	errPasswordTooShort     = ValidationError(errors.New("Your password is too short"))
 	errUsernameExists       = ValidationError(errors.New("That username is taken"))
 	errEmailExists          = ValidationError(errors.New("That email address has an account"))
+	errNoScenarioname       = ValidationError(errors.New("You must supply a scenarioname"))
 	errCredentialsIncorrect = ValidationError(errors.New("We couldn’t find a user with the supplied username and password combination"))
 )
 

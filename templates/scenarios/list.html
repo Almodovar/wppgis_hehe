@@ -1,0 +1,72 @@
+{{ define "scenarios/list"}}
+<div class="container-fluid" style=" font-family: Raleway; font-style: normal; font-variant: normal; font-weight: 500; line-height: 26.4px; ">
+    <div class="row" style="margin-top:8%">
+        <div class="col-md-4 col-md-offset-4">
+            <form method="POST" action="/userID/{{.User.ID}}">
+                {{if .Error}}
+                <div class="form-group has-error has-feedback">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
+                        <input class="form-control" type="text" name="scenarioname" placeholder="{{.Error}}">
+                        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                        <span id="inputError2Status" class="sr-only">(error)</span>
+                    </div>
+                </div>
+                {{else}}
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
+                        <input class="form-control" type="text" name="scenarioname" placeholder="Scenario name">
+                    </div>
+                </div>
+                {{end}}
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-info fa-fw"></i></span>
+                        <textarea class="form-control custom-control" value="{{.Scenario.Description}}" name="description" rows="2" style="resize:none; font-size:12px"></textarea>
+                    </div>
+                </div>
+                <div style="text-align:center">
+                    <button type="submit" class="btn btn-default" style="font-size:12px">Create scenario</button>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <hr style="border:1px solid">
+            </div>
+        </div>
+        <div class="row" style="margin-top:15px;">
+            <div class="col-md-4 col-md-offset-4">
+                {{if .Scenarios}}
+                <table id="scenario-table" class="table table-condensed table-hover" style="font-family: Raleway; font-style: normal; font-variant: normal; font-weight: 500; line-height: 26.4px; font-size:12px">
+                    {{range .Scenarios}}
+                    <tr>
+                        <td style="padding-top:11px;">{{.Name}}</td>
+                        <td style="padding-top:11px;">{{.CreatedAt}}</td>
+                        <td style="padding-top:11px; display:none;">{{.ID}}</td>                        
+                        <td style="padding-top:11px;">Status</td>
+                        <td class=" deletescenario" style="white-space: nowrap;width: 1%;">
+                            <a class="btn btn-danger" aria-label="Delete">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {{end}}
+                </table>
+                {{end}}
+                <div style="text-align:center">
+                    <button type="submit" class="btn btn-default" style="font-size:12px">Continue ...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="padding-top:50px">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center" style="background-color: rgba(232, 64, 64, 0.6);  display:none; color: white; font-weight: bold; height: 50px; font-family: Raleway; font-style: normal; font-variant: normal;  line-height: 26.4px; font-size:12px; border-radius:10px" id="scenario-notification">
+                <span style="line-height:50px">Scenario deleted</span>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

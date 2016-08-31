@@ -49,9 +49,5 @@ func HandleSessionCreate(w http.ResponseWriter, r *http.Request, _ httprouter.Pa
 		panic(err)
 	}
 
-	if next == "" {
-		next = "/"
-	}
-
-	http.Redirect(w, r, next+"?flash=Signed+in", http.StatusFound)
+	http.Redirect(w, r, "/userID/"+user.ID, http.StatusFound)
 }
