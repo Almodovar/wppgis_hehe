@@ -90,47 +90,24 @@ func HandleScenarioDelete(w http.ResponseWriter, r *http.Request, _ httprouter.P
 
 }
 
-// func HandleScenario(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func HandleScenarioCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-// }
+	RenderTemplate(w, r, "scenarios/map", nil)
 
-// func HandleImageNew(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-// 	RenderTemplate(w, r, "images/new", nil)
-// }
+}
 
-// func HandleImageCreate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-// 	if r.FormValue("url") != "" {
-// 		HandleImageCreateFromURL(w, r)
-// 		return
+// func HandleScenarioRetrieve(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+// 	var s Scenario
+// 	err := json.NewDecoder(r.Body).Decode(&s)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
 // 	}
+// 	fmt.Println(s.ID)
 
-// 	HandleImageCreateFromFile(w, r)
-// }
-
-// func HandleImageShow(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-// 	image, err := globalImageStore.Find(params.ByName("imageID"))
+// 	err = globalScenarioStore.Delete(s.ID)
 // 	if err != nil {
 // 		panic(err)
 // 	}
-
-// 	// 404
-// 	if image == nil {
-// 		http.NotFound(w, r)
-// 		return
-// 	}
-
-// 	user, err := globalUserStore.Find(image.UserID)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	if user == nil {
-// 		panic(fmt.Errorf("Could not find user %s", image.UserID))
-// 	}
-
-// 	RenderTemplate(w, r, "images/show", map[string]interface{}{
-// 		"Image": image,
-// 		"User":  user,
-// 	})
+// 	fmt.Fprintln(w, "success")
 
 // }

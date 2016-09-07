@@ -23,7 +23,7 @@
                     {{if .Error }} {{if eq .Error "You must supply a username" "That username is taken"}}
                     <div class="form-group has-error has-feedback">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <span class="input-group-addon"><i class="fa fa-user "></i></span>
                             <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control">
                             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <span id="inputError2Status" class="sr-only">(error)</span>
@@ -32,14 +32,14 @@
                     {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <span class="input-group-addon"><i class="fa fa-user "></i></span>
                             <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control">
                         </div>
                     </div>
                     {{end}} {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <span class="input-group-addon"><i class="fa fa-user "></i></span>
                             <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control" placeholder="Username">
                         </div>
                     </div>{{end}}
@@ -47,8 +47,8 @@
                     {{if .Error }} {{if eq .Error "You must supply an email" "That email address has an account"}}
                     <div class="form-group has-error has-feedback">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
-                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                            <input type="email" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
                             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <span id="inputError2Status" class="sr-only">(error)</span>
                         </div>
@@ -56,22 +56,22 @@
                     {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
-                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o "></i></span>
+                            <input type="email" name="email" value="{{.User.Email}}" id="newEmail" class="form-control">
                         </div>
                     </div>
                     {{end}} {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-envelope"></span>
-                            <input type="text" name="email" value="{{.User.Email}}" id="newEmail" class="form-control" placeholder="Email">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o "></i></span>
+                            <input type="email" name="email" value="{{.User.Email}}" id="newEmail" class="form-control" placeholder="Email">
                         </div>
                     </div>{{end}}
                     <!-- password error display -->
                     {{if .Error }} {{if eq .Error "Your password is too short"}}
                     <div class="form-group has-error has-feedback">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <span class="input-group-addon"><i class="fa fa-key "></i></span>
                             <input type="password" name="password" id="newPassword" class="form-control">
                             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <span id="inputError2Status" class="sr-only">(error)</span>
@@ -80,14 +80,14 @@
                     {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <span class="input-group-addon"><i class="fa fa-key "></i></span>
                             <input type="password" name="password" id="newPassword" class="form-control" placeholder="Password">
                         </div>
                     </div>
                     {{end}} {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <span class="input-group-addon"><i class="fa fa-key "></i></span>
                             <input type="password" name="password" id="newPassword" class="form-control" placeholder="Password">
                         </div>
                     </div>{{end}}

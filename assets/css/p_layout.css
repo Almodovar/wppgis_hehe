@@ -1,11 +1,22 @@
+body {
+    position: relative;
+    font-family: Raleway;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+}
+
+
+
 .navbar-brand>img {
     height: 100%;
     width: 100px;
 }
 
 #header {
+    width: 100%;
     padding-left: 15px;
-    padding-right: -15px;
+    padding-right: 15px;
 }
 
 #logowrapper {
@@ -15,9 +26,6 @@
     padding-bottom: 8px;
 }
 
-body {
-    position: relative;
-}
 
 .jumbotron img {
     width: 150%;
@@ -49,13 +57,11 @@ body {
     background-size: cover;
 }
 
-
 #errorMessage {
     text-align: center;
     background-color: rgba(232, 64, 64, 0.6);
     color: white;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    font-weight: bold; 
+    font-weight: bold;
 }
-

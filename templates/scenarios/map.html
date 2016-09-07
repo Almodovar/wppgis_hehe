@@ -1,108 +1,258 @@
-{{define "index/home"}}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-3" style="text-align:center; font-family: Raleway; font-style: normal; font-variant: normal; font-weight: 500; line-height: 26.4px;">
-                <h1 style="padding-top:60px; font-size: 40px">WebPPGIS</h1>
-                <h3 style="padding-top:15px">Step-by-step guide and feature introduction</h3>
+{{define "scenarios/map"}}
+<div class="container-fluid fill">
+    <div class="stepwizard" id="process-control">
+        <div class="stepwizard-row">
+            <div class="liner"></div>
+            <div class="stepwizard-step">
+                <a class="btn icon-btn btn-danger" href="#"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>
+            </div>
+            <div class="stepwizard-step">
+                <a class="btn icon-btn btn-default" href="#"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>
+            </div>
+            <div class="stepwizard-step">
+                <a class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>
+                <p>
+                    <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
+                </p>
+            </div>
+            <div class="stepwizard-step">
+                <a class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Optimiza Scenario</a>
+                <p>
+                    <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
+                </p>
+            </div>
+            <div class="stepwizard-step">
+                <a class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>View the report</a>
             </div>
         </div>
+    </div>
+    <div class="container-fluid fill" id="bmp-select-page">
         <div class="row">
-            <div class="text-center" style="padding-top:15px; text-align:center; font-family: Raleway; font-style: normal; font-variant: normal; font-weight: 500; ">
-                <button type="button" class="btn btn-info" style="font-size:12px; line-height: 25px; padding-left:25px; padding-right:25px;">MANUAL</button>
-                <button type="button" class="btn btn-info" style="font-size:12px; line-height: 25px;padding-left:25px; padding-right:25px;">DEMO</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-3" style="padding-top:80px;text-align:center; font-family: Raleway; font-style: normal; font-variant: normal; font-weight: 500; ">
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-map fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>Open and free map</b>
-                            <br /> Low cost for implementation and no limitation to access
-                        </div>
+            <div class="col-md-9">
+                <div class="row" id="map-tool-bar">
+                    <div class="col-sm-6">
+                        <form class="navbar-form navbar-left" role="search">
+                            <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map"><span class="show-field"></span></button>
+                            <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map"><span class="show-subbasin"></span></button>
+                            <div class="form-group" id="search-field-subbasin">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search for...">
+                                    <span class="input-group-btn">
+                                </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="text-right">
+                                <button class="btn btn-primary result-switch-btn map-btn" type="button" id="show-flow" href="#show-flow">Flow</button>
+                                <button class="btn btn-warning result-switch-btn map-btn" type="button" id="show-sediment" href="#show-sediment">Sediment</button>
+                                <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-n" href="#show-n"><span class="show-n"></span></button>
+                                <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-p" href="#show-p"><span class="show-p"></span></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-cogs fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>Economic analysis</b>
-                            <br /> Integrated ecnomic model for cost-benefit evaluation 
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-area-chart fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>Report generator</b>
-                            <br /> Comprehensive information display for business decision making
-                        </div>
-                    </div>
-                </div>
-                  <div class="clearfix visible-xs-block"></div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-weixin fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>Communication</b>
-                            <br /> Built-in chat server to increase remote communication among decison makers
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-child fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>User-friendly</b>
-                            <br /> Designed for both expert and non expert users. Easy to learn, use and understand
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">
-                            <i class="fa fa-globe fa-4x"></i>
-                            <br />
-                            <br />
-                            <b>Brower compatibility</b>
-                            <br /> Works on Google Chrome, Mozilla Firefox, Safari and even Internet Explorer
-                        </div>
+                <div class="map-size-adjust">
+                    <div id="map" class="map">
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row" style="padding-top:50px">
-            <div class="col-sm-6 col-sm-offset-3" style="border-style: solid; border-width: 1px; border-top-color: #AFAEAE; border-bottom-color: #ffffff; border-left-color: #ffffff;border-right-color: #ffffff">
-                <div class="col-sm-2 col-sm-offset-3">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none; padding-top:10px">
-                        <img src="/assets/images/ontario_logo.gif" alt="...">
+            <div class="col-md-3">
+                <div class="row">
+                    <div id="bmp-selection-way" class="text-right">
+                        <form class="navbar-form navbar-left " role="search ">
+                            <button class="btn btn-success map-switch-btn map-btn" id="manual-select-btn" type="button">Manual</button>
+                            <button class="btn btn-default map-switch-btn map-btn" id="select-all-btn" type="button">Select all</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-sm-2 ">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <div class="caption text-center">   
+                <div class="map-size-adjust">
+                    <div class="row">
+                        <div id="bmp-select-table">
+                            <table class="table table-condensed table-hover">
+                                <tr>
+                                    <th style="padding-top:11px;">ID</th>
+                                    <th style="padding-top:11px;">CC</th>
+                                    <th style="padding-top:11px;">CT</th>
+                                    <th style="padding-top:11px;">NM</th>
+                                    <th style="padding-top:11px;">WasCobs</th>
+                                    <th style="padding-top:11px;">Del</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td class=" deletescenario" style="white-space: nowrap;width: 1%;">
+                                        <a class="btn btn-danger " aria-label="Delete">
+                                            <i class="fa fa-trash-o " aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td style="padding-top:11px;"></td>
+                                    <td class=" deletescenario" style="white-space: nowrap;width: 1%;">
+                                        <a class="btn btn-danger" aria-label="Delete">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-2  ">
-                    <div class="thumbnail" style="border: 0 none;box-shadow: none;">
-                        <img src="/assets/images/logo_transparent.png" alt="..." style="width:70%">
+                    <div class="row">
+                        <div id="model-run">
+                            <div class="text-center">
+                                <a id="model-run-btn" class="btn btn-success" role="button" href="#model-result-page">Run the model</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="container-fluid" id="model-result-page">
+        <div class="row" id="model-result-report">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row" id="resultmap-tool-bar">
+                            <div class="col-md-6">
+                                <form class="navbar-form navbar-left" role="search">
+                                    <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map">Field</button>
+                                    <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map">Subbasin</button>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search for...">
+                                            <span class="input-group-btn">
+                                </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <form class="navbar-form navbar-right" role="search">
+                                    <div class="text-right">
+                                        <button class="btn btn-primary result-switch-btn map-btn" type="button" href="#show-flow">Flow</button>
+                                        <button class="btn btn-warning result-switch-btn map-btn" type="button" href="#show-sediment">Sediment</button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" href="#show-n">TN</button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" href="#show-p">TP</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="model-result-map">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form class="navbar-form navbar-right" role="search">
+                                    <div class="text-right">
+                                        <button class="btn btn-primary result-switch-btn map-btn" type="button">Onsite</button>
+                                        <button class="btn btn-default result-switch-btn map-btn" type="button">Offsite</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="model-result-chart" style="min-width: 310px; height: 250px; margin: 0 auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div id="model-issue-management">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="inputEmail3" placeholder="Title">
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control" id="sel1">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <textarea class="form-control" rows="3"></textarea>
+                            <div class="form-group">
+                                <div class="col-sm-12 text-right">
+                                    <button type="submit" class="btn btn-danger map-btn">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="responsive-timeline">
+                        <div>
+                            <ul class="timeline">
+                                <li class="timeline-inverted">
+                                    <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via v</small></p>
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="timeline-inverted">
+                                    <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via k</small></p>
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="timeline-inverted">
+                                    <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via s</small></p>
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="timeline-inverted">
+                                    <div class="timeline-badge danger"><i class="glyphicon glyphicon-credit-card"></i></div>
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p> mais bolis eu num gostis.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/ol.js" type="text/javascript"></script>
+<!--     <script src="ol-backup.js" type="text/javascript"></script>
+ -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://github.com/highcharts/highcharts/blob/master/js/themes/dark-unica.js"></script>
+<script src="/assets/js/map.js" type="text/javascript" charset="utf-8"></script>
 {{end}}

@@ -22,7 +22,7 @@
                     {{if .Error}}
                     <div class="form-group has-error has-feedback">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+  <span class="input-group-addon"><i class="fa fa-user"></i></span>
                             <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control">
                             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <span id="inputError2Status" class="sr-only">(error)</span>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group has-error has-feedback">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+  <span class="input-group-addon"><i class="fa fa-key "></i></span>
                             <input type="password" name="password" id="newPassword" class="form-control">
                             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <span id="inputError2Status" class="sr-only">(error)</span>
@@ -39,13 +39,13 @@
                     {{else}}
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+  <span class="input-group-addon"><i class="fa fa-user"></i></span>
                             <input type="text" name="username" value="{{.User.Username}}" id="newUsername" class="form-control" placeholder="Username">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group col-sm-8 col-sm-offset-2">
-                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+  <span class="input-group-addon"><i class="fa fa-key"></i></span>
                             <input type="password" name="password" id="newPassword" class="form-control" placeholder="Password">
                         </div>
                     </div>

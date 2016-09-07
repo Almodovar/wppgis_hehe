@@ -12,11 +12,23 @@
       "HashedPassword": "$2a$10$PYkWdLi5yXxwXGV8gAG14.lUTK.owubRYh2gcLV/iPTbAhyGXYuTW",
       "Username": "hahaha"
     },
+    "usr_JiJrDw8zudKhN2jF": {
+      "ID": "usr_JiJrDw8zudKhN2jF",
+      "Email": "hello",
+      "HashedPassword": "$2a$10$A7VYQ85qpJqkyPQYU.y34uxDsK8ChWG1I/T7Y1b9NOyAfOqXV7Rc6",
+      "Username": "mello"
+    },
     "usr_QTy0AS7x16Hr9GiQ": {
       "ID": "usr_QTy0AS7x16Hr9GiQ",
       "Email": "kche3n08@uoguelph.ca",
       "HashedPassword": "$2a$10$qGwo4ArHQG4EKTKX1nVNXOdx2G1kpIWEBRNCPLPVSYmhlJhMOjZP6",
       "Username": "liweidd"
+    },
+    "usr_UskIRoOBBUtUY135": {
+      "ID": "usr_UskIRoOBBUtUY135",
+      "Email": "df",
+      "HashedPassword": "$2a$10$gD7ym8Ypw4sK8m3H63sI1e3xCobddaAJ.UEOmhTHfARFhvNF0WKcy",
+      "Username": "chris"
     },
     "usr_YiPcZASAtA52v3od": {
       "ID": "usr_YiPcZASAtA52v3od",
@@ -35,6 +47,18 @@
       "Email": "delisen@sina.com",
       "HashedPassword": "$2a$10$V14Hzilwc.lJOsR5oB7Hsujz6ox0P5UZEQOx8VY967cf5XodYCc9W",
       "Username": "liwei"
+    },
+    "usr_jqznFYXJLCUBRHkg": {
+      "ID": "usr_jqznFYXJLCUBRHkg",
+      "Email": "kdfkdjf@uoguelph.ca",
+      "HashedPassword": "$2a$10$PoY12FVyk8PF.h/7K063N.fiGXdXVaCqQSwO0HXSOZkMM1WhsPPaa",
+      "Username": "john"
+    },
+    "usr_kMQQgZTS7zoKCgBw": {
+      "ID": "usr_kMQQgZTS7zoKCgBw",
+      "Email": "dfdfdf",
+      "HashedPassword": "$2a$10$5YCaJe5RII0ahBDqDYOuHOmdvOnvH.Aze3Sl4bMuQVTmv5JlnLuCS",
+      "Username": "delisen@sina.com"
     },
     "usr_tNtJkWIH9L4g44tw": {
       "ID": "usr_tNtJkWIH9L4g44tw",

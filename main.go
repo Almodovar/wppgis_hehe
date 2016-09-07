@@ -45,6 +45,7 @@ func main() {
 	)
 
 	secureRouter := NewRouter()
+	secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID", HandleScenarioCreate)
 	secureRouter.Handle("GET", "/userID/:userID", HandleScenarioList)
 	secureRouter.Handle("POST", "/userID/:userID", HandleScenarioShow)
 	secureRouter.Handle("POST", "/deletescenario", HandleScenarioDelete)
