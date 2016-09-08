@@ -25,11 +25,6 @@
       "UserID": "usr_tNtJkWIH9L4g44tw",
       "Expiry": "2016-09-08T11:22:12.8009769-04:00"
     },
-    "sess_DOaNAI9yzuiwEFqqB39a": {
-      "ID": "sess_DOaNAI9yzuiwEFqqB39a",
-      "UserID": "usr_tNtJkWIH9L4g44tw",
-      "Expiry": "2016-09-08T13:05:09.3921359-04:00"
-    },
     "sess_IotN5HcaVuiKzF7tq20j": {
       "ID": "sess_IotN5HcaVuiKzF7tq20j",
       "UserID": "usr_dp22vDnK7I4uoDUC",
@@ -84,6 +79,11 @@
       "ID": "sess_gRvAn5Oso9iJHohJZj4b",
       "UserID": "usr_tNtJkWIH9L4g44tw",
       "Expiry": "2016-08-30T14:27:49.8998703-04:00"
+    },
+    "sess_h4OElCTnt1t7Pt7Pq9Sd": {
+      "ID": "sess_h4OElCTnt1t7Pt7Pq9Sd",
+      "UserID": "usr_tNtJkWIH9L4g44tw",
+      "Expiry": "2016-09-09T10:04:49.5054555-04:00"
     },
     "sess_jE7AYCEv1RZ8E3RnfqHJ": {
       "ID": "sess_jE7AYCEv1RZ8E3RnfqHJ",

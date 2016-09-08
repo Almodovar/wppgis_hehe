@@ -34,7 +34,7 @@
                         <form class="navbar-form navbar-left" role="search">
                             <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map"><span class="show-field"></span></button>
                             <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map"><span class="show-subbasin"></span></button>
-                            <div class="form-group" id="search-field-subbasin">
+                            <div class="form-group search-field-subbasin">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search for...">
                                     <span class="input-group-btn">
@@ -110,7 +110,7 @@
                     <div class="row">
                         <div id="model-run">
                             <div class="text-center">
-                                <a id="model-run-btn" class="btn btn-success" role="button" href="#model-result-page">Run the model</a>
+                                <a id="model-run-btn" class="btn btn-success map-btn" role="button" href="#model-result-page">Run the model</a>
                             </div>
                         </div>
                     </div>
@@ -126,9 +126,9 @@
                         <div class="row" id="resultmap-tool-bar">
                             <div class="col-md-6">
                                 <form class="navbar-form navbar-left" role="search">
-                                    <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map">Field</button>
-                                    <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map">Subbasin</button>
-                                    <div class="form-group">
+                                    <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map"><span class="show-field"></span></button>
+                                    <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map"><span class="show-subbasin"></span></button>
+                                    <div class="form-group search-field-subbasin">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Search for...">
                                             <span class="input-group-btn">
@@ -140,15 +140,17 @@
                             <div class="col-md-6">
                                 <form class="navbar-form navbar-right" role="search">
                                     <div class="text-right">
-                                        <button class="btn btn-primary result-switch-btn map-btn" type="button" href="#show-flow">Flow</button>
-                                        <button class="btn btn-warning result-switch-btn map-btn" type="button" href="#show-sediment">Sediment</button>
-                                        <button class="btn btn-info result-switch-btn map-btn" type="button" href="#show-n">TN</button>
-                                        <button class="btn btn-info result-switch-btn map-btn" type="button" href="#show-p">TP</button>
+                                        <button class="btn btn-primary result-switch-btn map-btn" type="button" id="show-flow" href="#show-flow">Flow</button>
+                                        <button class="btn btn-warning result-switch-btn map-btn" type="button" id="show-sediment" href="#show-sediment">Sediment</button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-n" href="#show-n"><span class="show-n"></span></button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-p" href="#show-p"><span class="show-p"></span></button>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        <div id="model-result-map">
+                        <div class="model-result-map">
+                            <div id="model-result-map">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -162,14 +164,14 @@
                                 </form>
                             </div>
                         </div>
-                        <div id="model-result-chart" style="min-width: 310px; height: 250px; margin: 0 auto">
+                        <div id="model-result-chart">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 scenario-task">
                 <div class="row">
-                    <div id="model-issue-management">
+                    <div class="model-issue-management">
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-md-6">
@@ -184,7 +186,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <textarea class="form-control" rows="3"></textarea>
+                            <textarea class="form-control" rows="2"></textarea>
                             <div class="form-group">
                                 <div class="col-sm-12 text-right">
                                     <button type="submit" class="btn btn-danger map-btn">Submit</button>
@@ -194,7 +196,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="responsive-timeline">
+                    <div id="responsive-timeline" class="col-sm-12">
                         <div>
                             <ul class="timeline">
                                 <li class="timeline-inverted">
@@ -240,8 +242,21 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li class="timeline-inverted">
+                                    <div class="timeline-badge danger"><i class="glyphicon glyphicon-credit-card"></i></div>
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p> mais bolis eu num gostis.</p>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="report-generate col-sm-12 text-right">
+                        <a id="report-generate-btn" class="btn btn-success map-btn" role="button" href="#model-result-page">View the report</a>
                     </div>
                 </div>
             </div>

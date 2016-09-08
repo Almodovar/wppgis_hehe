@@ -3,7 +3,6 @@ body {
 }
 
 
-
 /*--------------------------------*/
 
 
@@ -11,6 +10,7 @@ body {
 
 
 /*--------------------------------*/
+
 .fill {
     min-height: 100%;
     height: 100%;
@@ -121,7 +121,7 @@ body {
     .show-subbasin:before {
         content: 'B';
     }
-    #search-field-subbasin {
+    .search-field-subbasin {
         display: none;
     }
 }
@@ -140,38 +140,31 @@ body {
     padding-left: 3%;
     padding-right: 3%;
     height: 100%;
+    font-size: 12px;
 }
 
 #bmp-select-page form {
     width: 100%;
 }
 
-#bmp-select-page #map-tool-bar .map-btn {
-    font-size: 12px;
-}
-
 #bmp-select-page #map-tool-bar .map-switch-btn:focus {
-    font-size: 12px;
+    /*font-size: 12px;*/
     border: 1px solid red;
 }
 
 #bmp-select-page #map-tool-bar .result-switch-btn:focus {
-    font-size: 12px;
+    /*font-size: 12px;*/
     border: 1px solid red;
 }
 
 #bmp-select-page #map-tool-bar input {
     line-height: 12px;
-    font-size: 12px;
+    /*font-size: 12px;*/
 }
 
 #bmp-select-page .map-size-adjust {
-    font-size: 12px;
+    /*font-size: 12px;*/
     height: 85%;
-}
-
-#bmp-select-page #bmp-selection-way .map-btn {
-    font-size: 12px;
 }
 
 #bmp-select-page table {
@@ -179,9 +172,10 @@ body {
 }
 
 #bmp-select-page #model-run-btn {
-    font-size: 12px;
+    /*font-size: 12px;*/
     width: 70%;
 }
+
 
 /*--------------------------------*/
 
@@ -191,11 +185,28 @@ body {
 
 /*--------------------------------*/
 
+#model-result-page {
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 190px;
+    font-size: 12px;
+}
+
+#responsive-timeline{
+    height: 60%;
+    overflow-y: scroll;
+}
+
+#model-result-page .map-size-adjust {
+    /*font-size: 12px;*/
+    height: 85%;
+}
+
 #model-result-page .timeline {
     list-style: none;
     padding: 20px 0 20px;
     position: relative;
-    font: 12px;
+    /*font: 12px;*/
 }
 
 #model-result-page .timeline:before {
@@ -270,7 +281,7 @@ body {
 }
 
 #model-result-page .timeline .timeline-body {
-    font-size: 12px;
+    /*font-size: 12px;*/
 }
 
 #model-result-page .timeline > li > .timeline-badge {
@@ -375,15 +386,68 @@ body {
     }
 }
 
-#model-issue-management {
+.model-issue-management {
     padding-top: 50px;
 }
 
-#model-issue-management button {
+.model-issue-management button {
     margin-top: 10px;
     width: 150px;
 }
 
-#model-issue-management .map-btn {
-    font-size: 12px;
+#model-result-chart {
+    min-width: 310px;
+    height: 200px;
+    margin: 0 auto
+}
+
+.report-generate{
+    padding-top: 10px;
+    padding-bottom: 9%;
+}
+
+@media screen and (max-height: 800px) {
+    .stepwizard {
+        display: table;
+        width: 100%;
+        position: relative;
+        padding-top: 70px;
+        background: white;
+        height: 15%;
+        font-size: 10px;
+    }
+    .stepwizard .liner {
+        height: 2px;
+        background: #ddd;
+        position: absolute;
+        width: 80%;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 85px;
+    }
+    #bmp-select-page {
+        padding-top: 140px;
+        padding-left: 3%;
+        padding-right: 3%;
+        height: 100%;
+    }
+    #model-result-page {
+        padding-left: 3%;
+        padding-right: 3%;
+        padding-top: 140px;
+    }
+    #model-result-chart {
+        min-width: 310px;
+        height: 140px;
+        margin: 0 auto
+    }
+    #bmp-select-page,
+    #model-result-page {
+        font-size: 10px;
+    }
+    .model-issue-management *{
+        font-size:10px;
+    }
+
 }

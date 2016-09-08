@@ -1,8 +1,9 @@
 $(document).ready(function() {
+
     function setHeight() {
         var windowHeight = $(window).height();
         $('#bmp-select-table').css('height',  $(".map-size-adjust").height() - $("#model-run-btn").height()-20);
-
+         $('.model-result-map').css('height',  $(".scenario-task").height() - $("#model-result-chart").height()-$("#resultmap-tool-bar").height() * 2-20);
     }
     setHeight();
 
