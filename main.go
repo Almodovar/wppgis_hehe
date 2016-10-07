@@ -56,7 +56,7 @@ func main() {
 	middleware.Add(http.HandlerFunc(RequireLogin))
 	middleware.Add(secureRouter)
 
-	log.Fatal(http.ListenAndServe(":3000", middleware))
+	log.Fatal(http.ListenAndServe(":4000", middleware))
 }
 
 // Creates a new router

@@ -6,6 +6,12 @@
       "HashedPassword": "$2a$10$DgiRxpLriMDuJIxLQgFyhO3MHnRTo25nRExQrO0BMJ9r93J3zvrgW",
       "Username": "admin"
     },
+    "usr_BdGVaIPxttO5KPhD": {
+      "ID": "usr_BdGVaIPxttO5KPhD",
+      "Email": "ckjdkdjf@gmail.com",
+      "HashedPassword": "$2a$10$NhgoZxsrcxjVOpfOX4K6DOYh.xBOlykVAGonSI.VxR0VtrZo8CSm2",
+      "Username": "sdsdsdsd"
+    },
     "usr_C6HjCwjUMsRNSQ4p": {
       "ID": "usr_C6HjCwjUMsRNSQ4p",
       "Email": "qqq@qq.com",
@@ -18,6 +24,12 @@
       "HashedPassword": "$2a$10$A7VYQ85qpJqkyPQYU.y34uxDsK8ChWG1I/T7Y1b9NOyAfOqXV7Rc6",
       "Username": "mello"
     },
+    "usr_NS3JrKPCigeT66Tn": {
+      "ID": "usr_NS3JrKPCigeT66Tn",
+      "Email": "ee1@qq.com",
+      "HashedPassword": "$2a$10$jjG2DRaQ9FlOl0nY7RnUOOJ/8tNEpJlkvJRKnPu0zbkY58IRA61Da",
+      "Username": "kunchen123"
+    },
     "usr_QTy0AS7x16Hr9GiQ": {
       "ID": "usr_QTy0AS7x16Hr9GiQ",
       "Email": "kche3n08@uoguelph.ca",
@@ -29,6 +41,12 @@
       "Email": "df",
       "HashedPassword": "$2a$10$gD7ym8Ypw4sK8m3H63sI1e3xCobddaAJ.UEOmhTHfARFhvNF0WKcy",
       "Username": "chris"
+    },
+    "usr_VdPHHXrjNKOOb5Jy": {
+      "ID": "usr_VdPHHXrjNKOOb5Jy",
+      "Email": "hi@123.com",
+      "HashedPassword": "$2a$10$P4R/Hg2VGrsmzaAwvhSfO.MmXdTfFIGyRrEqjFmwjV8skJP0jkbNu",
+      "Username": "hi"
     },
     "usr_YiPcZASAtA52v3od": {
       "ID": "usr_YiPcZASAtA52v3od",
