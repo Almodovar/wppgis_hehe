@@ -31,12 +31,12 @@
             <div class="col-md-9">
                 <div class="row map-tool-bar">
                     <div class="col-sm-6">
-                        <form class="navbar-form navbar-left" role="search">
+                        <form class="navbar-form navbar-left" role="search" id="search-prevent">
                             <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map" href="#field-map"><span class="show-field"></span></button>
                             <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map" href="#subbasin-map" disabled><span class="show-subbasin"></span></button>
                             <div class="form-group search-field-subbasin">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
+                                    <input id="search-feature" type="text" class="form-control" placeholder="Search for...">
                                     <span class="input-group-btn">
                                 </span>
                                 </div>
@@ -84,6 +84,8 @@
                             <button type="button" class="btn btn-primary" id="bmp-submit">Confirm</button>
                         </div>
                     </div>
+                    <div id="feature-info">
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -99,7 +101,7 @@
                     <div class="row">
                         <div id="bmp-select-table" class="col-sm-12" >
                             <table class="table table-condensed table-hover" >
-                                <tr>
+                                <tr class="table-title">
                                     <th style="padding-top:11px;">ID</th>
                                     <th style="padding-top:11px;">CC</th>
                                     <th style="padding-top:11px;">CT</th>
@@ -107,7 +109,7 @@
                                     <th style="padding-top:11px;">WasCobs</th>
                                     <th style="padding-top:11px;">Del</th>
                                 </tr>
-                                <tr>
+<!--                                 <tr class="table-data">
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
@@ -119,7 +121,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="table-data">
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
@@ -130,7 +132,7 @@
                                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                                         </a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </table>
                         </div>
                     </div>

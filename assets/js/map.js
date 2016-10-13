@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
 
+    $.fn.editable.defaults.mode = 'popup';
+    $('.table-edit').editable();
+
 
 
     // ****************************************************
@@ -73,7 +76,7 @@ $(document).ready(function() {
 
     var subbasinStyle = new ol.style.Style({
         fill: new ol.style.Fill({
-            color: 'rgba(10,8,114,0.6)'
+            color: 'rgba(17,34,68,0.8)'
         }),
         stroke: new ol.style.Stroke({
             color: 'white'
@@ -106,7 +109,7 @@ $(document).ready(function() {
 
     var fieldStyle = new ol.style.Style({
         fill: new ol.style.Fill({
-            color: 'rgba(47,195,96,0.6)'
+            color: 'rgba(87,178,47,0.8)'
         }),
         stroke: new ol.style.Stroke({
             color: 'white'
@@ -219,6 +222,16 @@ $(document).ready(function() {
     });
 
     map.addOverlay(bmpOverlay);
+
+    var element = document.getElementById('feature-info');
+
+    var infoOverlay = new ol.Overlay({
+        element: document.getElementById('feature-info'),
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+
+    map.addOverlay(infoOverlay);
     // ****************************************************
     // create a map instance, add layers to the map, set 
     // map center and add the dragAndDrop interaction to
@@ -274,6 +287,16 @@ $(document).ready(function() {
         })
     });
 
+    var searchedStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(0, 108, 23, 1)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: 'white',
+            width: 2
+        })
+    });
+
 
     $("#manual-select-btn").on('click', function(event) {
         $(this).removeClass('btn-default').addClass('btn-success');
@@ -306,42 +329,17 @@ $(document).ready(function() {
         $("#model-optimize-page").css('visibility', 'visible');
     });
 
-    var fieldTable = '<table class="table table-condensed table-hover" ><tr><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr>';
-    var subbasinTable = '<table class="table table-condensed table-hover" ><tr><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr>';
-
-    $("#show-field-map").click(function(event) {
-        $("#bmp-select-tool").hide();
-        subbasinTable = $('#bmp-select-table').html();
-        alert(subbasinTable);
-
-        selectSingleClick.getFeatures().clear();
-        map.removeLayer(subbasinJsonp);
-        map.addLayer(fieldJsonp);
-        $('#show-subbasin-map').attr("disabled", false);
-        $('#show-field-map').attr("disabled", true);
-        $("#bmp-select-table").html(fieldTable);
-
-    });
 
 
-    $("#show-subbasin-map").click(function(event) {
-        $("#bmp-select-tool").hide();
-        fieldTable = $('#bmp-select-table').html();
-        alert(fieldTable);
-        selectSingleClick.getFeatures().clear();
-        map.removeLayer(fieldJsonp);
-        map.addLayer(subbasinJsonp);
-        $('#show-field-map').attr("disabled", false);
-        $('#show-subbasin-map').attr("disabled", true);
-        $("#bmp-select-table").html(subbasinTable);
-    });
-
-
-
-
-
+    var fieldTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
+    var subbasinTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
+    var searchedFeature = null;
     var selectedFeature;
+    var featureCenter;
     selectSingleClick.on('select', function(event) {
+        $(element).hide();
+
+        $("#bmp-select-table table tr").removeClass('rowSelected');
         selectedFeature = event.selected[0];
         if (selectedFeature) {
             $("#bmp-select-tool").css('visibility', 'visible');
@@ -350,68 +348,328 @@ $(document).ready(function() {
             var coordinate = ol.extent.getCenter(selectedFeature.getGeometry().getExtent());
             var offsetCoordinate = [coordinate[0] + 400, coordinate[1] + 400];
             bmpOverlay.setPosition(offsetCoordinate);
+
+            if (searchedFeature) {
+                if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                    searchedFeature.setStyle(selectedStyle);
+                } else {
+                    searchedFeature.setStyle(null);
+                }
+            }
+            searchedFeature = selectedFeature;
+            if (searchedFeature) {
+                if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                    searchedFeature.setStyle(searchedStyle);
+                    $("#bmp-select-table table tr").removeClass('rowSelected');
+                    $('#bmp-select-table table .selectedFeatureID').each(function() {
+                        if ($(this).html() == selectedFeature.getProperties().Name) {
+                            $(this).closest('tr').addClass('rowSelected');
+                        }
+                    });
+
+                } else {
+                    searchedFeature.setStyle(selectedStyle);
+                    searchedFeature = null;
+                }
+            }
         } else {
             bmpOverlay.setPosition(undefined);
         }
     });
 
+    var hoveredFeature;
+    selectPointerMove.on('select', function(event) {
 
+        hoveredFeature = event.selected[0];
 
-    $("#bmp-select-tool button").click(function(event) {
-        var bmpCode;
-        var ccSelected, ctSelected, nmSelected;
-        var selectedID = selectedFeature.getProperties().Name;
-        if ($("#ct").prop("checked") && $("#nm").prop("checked") && $("#cc").prop("checked")) {
-            bmpCode = 9;
-            ctSelected = true;
-            nmSelected = true;
-            ccSelected = true;
-        } else if ($("#ct").prop("checked") && $("#nm").prop("checked")) {
-            bmpCode = 6;
-            ctSelected = true;
-            nmSelected = true;
-        } else if ($("#ct").prop("checked") && $("#cc").prop("checked")) {
-            bmpCode = 7;
-            ctSelected = true;
-            ccSelected = true;
-        } else if ($("#nm").prop("checked") && $("#cc").prop("checked")) {
-            bmpCode = 8;
-            nmSelected = true;
-        } else if ($("#ct").prop("checked")) {
-            bmpCode = 3;
-            ctSelected = true;
-        } else if ($("#nm").prop("checked")) {
-            bmpCode = 4;
-            nmSelected = true;
-        } else if ($("#cc").prop("checked")) {
-            bmpCode = 5;
-            ccSelected = true;
-        } else bmpCode = null;
-
-        var bmpAssignment = [selectedID, bmpCode];
-        featureBMPAssignments.push(bmpAssignment);
-        // alert(bmpCode + selectedID);
-        // alert(featureBMPAssignments.length);
-
-        if (bmpCode != null) {
-            $('#bmp-select-table table').append('<tr><td style="padding-top:11px;">' + selectedID + '</td><td style="padding-top:11px;">' + ccSelected + '</td><td style="padding-top:11px;">' + ctSelected + '</td><td style="padding-top:11px;">' + nmSelected + '</td><td style="padding-top:11px;">' + '</td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td></tr>');
-            $("#bmp-select-tool").hide();
-            selectedFeature.setStyle(selectedStyle);
-            $("#bmp-select-table tr").click(function() {
-                $(this).addClass('rowSelected').siblings().removeClass('rowSelected');
-            });
-            $(".deleteScenario").click(function(event) {
-                alert("hello");
-                $(this).closest('tr').remove();
-            });
+        if (hoveredFeature) {
+            // $("#feature-info").css('visibility', 'visible');
+            var coordinate = ol.extent.getCenter(hoveredFeature.getGeometry().getExtent());
+            var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
+            infoOverlay.setPosition(offsetCoordinate);
+            $(element).html("FeatureID: " + hoveredFeature.getProperties().Name);
+            $(element).show();
+            infoOverlay.setPosition(offsetCoordinate);
+            // $(element).popover({
+            //     'placement': 'top',
+            //     'html': true,
+            //     'content': "FeatureID is" + hoveredFeature.getProperties().Name
+            // });
+            // $(element).popover('show');
         } else {
-            $("#bmp-select-tool").hide();
+            $(element).hide();
+            // $(element).popover('destroy');
         }
     });
 
 
+    $('#search-prevent').submit(function(e) {
+        e.preventDefault();
+    });
+
+    $('#search-feature').keyup(function(e) {
+        if (e.keyCode == 13) {
+            var id = $(this).val();
+            $("#bmp-select-table table tr").removeClass('rowSelected');
+            var feature = findFeature(id);
+            if (searchedFeature) {
+                if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                    searchedFeature.setStyle(selectedStyle);
+                } else {
+                    searchedFeature.setStyle(null);
+                }
+                feature.setStyle(searchedStyle);
+                searchedFeature = feature;
+            } else {
+                feature.setStyle(searchedStyle);
+                searchedFeature = feature;
+            }
+
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                if ($(this).html() == id) {
+                    $(this).closest('tr').addClass('rowSelected');
+                }
+            });
+        }
+    });
 
 
+    function addTableEvent() {
+
+        $('.table-edit').editable();
+        $("#bmp-select-table tr").not(':first').hover(
+            function() {
+                $(this).css({
+                    'background-color': 'rgba(195, 195, 195, 1)',
+                    'color':'white'
+                });
+            },
+            function() {
+                $(this).css({
+                    'background-color': '',
+                    'color':''
+                });            }
+        );
+
+        $("#bmp-select-table .table-data").click(function() {
+            if (searchedFeature !== null) {
+                if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                    searchedFeature.setStyle(selectedStyle);
+                } else {
+                    searchedFeature.setStyle(null);
+                }
+            }
+            $(this).addClass('rowSelected').siblings().removeClass('rowSelected');
+            var id = $(this).children(':first').html();
+            if ($('#show-subbasin-map').prop("disabled") === true) {
+                for (i = 0; i < subbasinArray.length; i++) {
+                    if (subbasinArray[i].id == id) {
+                        subbasinArray[i].feature.setStyle(searchedStyle);
+                        searchedFeature = subbasinArray[i].feature;
+                    }
+                }
+            } else {
+                for (i = 0; i < fieldArray.length; i++) {
+                    if (fieldArray[i].id == id) {
+                        fieldArray[i].feature.setStyle(searchedStyle);
+                        searchedFeature = fieldArray[i].feature;
+                    }
+                }
+            }
+        });
+
+        $(".deleteScenario").click(function(event) {
+            $(this).closest('tr').remove();
+            var id = $(this).siblings(":first").text();
+            var feature = findFeature(id);
+            feature.setStyle(null);
+            if (feature == searchedFeature) {
+                searchedFeature = null;
+            }
+            $("#bmp-select-tool").hide();
+
+            selectSingleClick.getFeatures().clear();
+        });
+    }
+
+    function findFeature(id) {
+        if ($('#show-subbasin-map').prop("disabled") === true) {
+            for (i = 0; i < subbasinArray.length; i++) {
+                if (subbasinArray[i].id == id) {
+                    return subbasinArray[i].feature;
+                }
+            }
+        } else {
+            for (i = 0; i < fieldArray.length; i++) {
+                if (fieldArray[i].id == id) {
+                    return fieldArray[i].feature;
+                }
+            }
+        }
+
+    }
+
+    $("#show-field-map").click(function(event) {
+        $("#bmp-select-tool").hide();
+        subbasinTable = $('#bmp-select-table').html();
+        // alert(subbasinTable);
+
+        selectSingleClick.getFeatures().clear();
+        map.removeLayer(subbasinJsonp);
+        map.addLayer(fieldJsonp);
+        $('#show-subbasin-map').attr("disabled", false);
+        $('#show-field-map').attr("disabled", true);
+        $("#bmp-select-table").html(fieldTable);
+        addTableEvent();
+    });
+
+
+    $("#show-subbasin-map").click(function(event) {
+        $("#bmp-select-tool").hide();
+        fieldTable = $('#bmp-select-table').html();
+        // alert(fieldTable);
+        selectSingleClick.getFeatures().clear();
+        map.removeLayer(fieldJsonp);
+        map.addLayer(subbasinJsonp);
+        $('#show-field-map').attr("disabled", false);
+        $('#show-subbasin-map').attr("disabled", true);
+        $("#bmp-select-table").html(subbasinTable);
+        addTableEvent();
+    });
+
+
+    var selectedFeatureID = [];
+
+    $("#bmp-select-tool button").click(function(event) {
+        selectedFeatureID.length = 0;
+
+        $(element).hide();
+        var bmpCode;
+        var ccSelected = 'F';
+        var ctSelected = 'F';
+        var nmSelected = 'F';
+        var selectedID = selectedFeature.getProperties().Name;
+        if ($("#ct").prop("checked") && $("#nm").prop("checked") && $("#cc").prop("checked")) {
+            bmpCode = 9;
+            ctSelected = 'T';
+            nmSelected = 'T';
+            ccSelected = 'T';
+        } else if ($("#ct").prop("checked") && $("#nm").prop("checked")) {
+            bmpCode = 6;
+            ctSelected = 'T';
+            nmSelected = 'T';
+        } else if ($("#ct").prop("checked") && $("#cc").prop("checked")) {
+            bmpCode = 7;
+            ctSelected = 'T';
+            ccSelected = 'T';
+        } else if ($("#nm").prop("checked") && $("#cc").prop("checked")) {
+            bmpCode = 8;
+            nmSelected = 'T';
+            ccSelected = 'T';
+        } else if ($("#ct").prop("checked")) {
+            bmpCode = 3;
+            ctSelected = 'T';
+        } else if ($("#nm").prop("checked")) {
+            bmpCode = 4;
+            nmSelected = 'T';
+        } else if ($("#cc").prop("checked")) {
+            bmpCode = 5;
+            ccSelected = 'T';
+        } else bmpCode = null;
+
+        var bmpAssignment = [selectedID, bmpCode];
+        featureBMPAssignments.push(bmpAssignment);
+        var exist;
+        if (bmpCode !== null) {
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                var m = $(this).html();
+                if (m == selectedID) {
+                    exist = true;
+                    $(this).closest('tr').remove();
+                }
+            });
+            if (exist === true) {
+                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td></tr>');
+            } else {
+                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td></tr>');
+
+            }
+
+            $("#bmp-select-tool").hide();
+            addTableEvent();
+            selectSingleClick.getFeatures().clear();
+        } else {
+            $("#bmp-select-tool").hide();
+            selectedFeature.setStyle(null);
+            $("#bmp-select-table table tr").removeClass('rowSelected');
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                var m = $(this).html();
+                if (m == selectedID) {
+                    $(this).closest('tr').remove();
+                }
+            });
+
+            selectSingleClick.getFeatures().clear();
+        }
+        // if (searchedFeature) {
+        //     if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+        //         searchedFeature.setStyle(selectedStyle);
+        //     } else {
+        //         searchedFeature.setStyle(null);
+        //     }
+        // }
+    });
+
+    function searchedFeatureStyle(id) {
+        var searchedFeatureSelectedFlag;
+        if (searchedFeature !== null) {
+            selectedFeatureID.length = 0;
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                var m = $(this).html();
+                selectedFeatureID.push(m);
+            });
+            for (m = 0; m < selectedFeatureID.length; m++) {
+                if (id === selectedFeatureID[m]) {
+                    searchedFeatureSelectedFlag = true;
+                }
+            }
+            if (searchedFeatureSelectedFlag === true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    map.on('click', function(event) {
+        var pixel = map.getEventPixel(event.originalEvent);
+        var hit = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            return true;
+        });
+        if (hit !== true) {
+            if (searchedFeature) {
+                if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                    searchedFeature.setStyle(selectedStyle);
+                } else {
+                    searchedFeature.setStyle(null);
+                }
+                searchedFeature = null;
+            } else {
+                if (selectedFeature) {
+                    searchedFeature = selectedFeature;
+                    if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
+                        searchedFeature.setStyle(selectedStyle);
+                    } else {
+                        searchedFeature.setStyle(null);
+                    }
+                }
+                searchedFeature = null;
+            }
+            $("#bmp-select-tool").hide();
+            selectSingleClick.getFeatures().clear();
+            $("#bmp-select-table table tr").removeClass('rowSelected');
+        }
+    });
 
     $(document).on('click', 'a', function(event) {
         event.preventDefault();

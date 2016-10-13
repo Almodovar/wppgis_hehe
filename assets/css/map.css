@@ -210,14 +210,29 @@ body {
     margin-top: 0px;
 }
 
-.rowSelected {
-    background-color: rgba(0, 108, 23, 0.6);
-    color: #FFF;
+#feature-info {
+    background-color: white;
+    width: 100px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    padding-left: 10px;
+    font-size: 10px;
 }
 
-#bmp-select-table tr:hover {
+.rowSelected {
     background-color: rgba(0, 108, 23, 0.6);
-    color: #FFF;
+}
+
+#bmp-select-table tr:first-child:hover{
+    background-color: #FFF;
+    color: #000000;
+
+}
+
+
+#bmp-select-table .table-edit {
+    cursor: pointer;
 }
 
 
