@@ -1,4 +1,33 @@
 {{define "scenarios/map"}}
+<div id="loading-page">
+    <div id="loading-info">
+        <div class="row">
+            <div class="col-sm-8 col-sm-push-2">
+                <div class="row" style="margin-top: 150px;">
+                    <div class="col-sm-4 text-right">
+                        <img src="/assets/images/loading.gif" alt="">
+                    </div>
+                    <div class="col-sm-7 col-sm-push-1">
+                        <div id="progress-info">
+                            <div id="box1">
+                                <p><span> Preparing modeling files ... </span></p>
+                            </div>
+                            <div id="box2">
+                                <p><span> Modeling BMPs ... </span></p>
+                            </div>     
+                            <div id="box3">
+                                <p><span> Writing results to database ... </span></p>
+                            </div>    
+                            <div id="box4">
+                                <p><span> Visualizing the output ... </span></p>
+                            </div>                                                                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <div class="stepwizard" id="process-control">
         <div class="stepwizard-row">
@@ -58,7 +87,7 @@
                     <div id="map" class="map">
                     </div>
                     <div id="bmp-select-tool">
-                        <table class="table" >
+                        <table class="table">
                             <tr>
                                 <td><a href="#" data-toggle="tooltip" title="Conservation Tillage!">CT</a></td>
                                 <td>
@@ -99,8 +128,8 @@
                 </div>
                 <div class="map-size-adjust">
                     <div class="row">
-                        <div id="bmp-select-table" class="col-sm-12" >
-                            <table class="table table-condensed table-hover" >
+                        <div id="bmp-select-table" class="col-sm-12">
+                            <table class="table table-condensed table-hover">
                                 <tr class="table-title">
                                     <th style="padding-top:11px;">ID</th>
                                     <th style="padding-top:11px;">CC</th>
@@ -109,7 +138,7 @@
                                     <th style="padding-top:11px;">WasCobs</th>
                                     <th style="padding-top:11px;">Del</th>
                                 </tr>
-<!--                                 <tr class="table-data">
+                                <!--                                 <tr class="table-data">
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
                                     <td style="padding-top:11px;"></td>
@@ -139,7 +168,7 @@
                     <div class="row">
                         <div id="model-run" class="col-sm-12">
                             <div class="text-center">
-                                <a id="model-run-btn" class="btn btn-success map-btn" role="button" href="#model-result-page">Run the model</a>
+                                <a id="model-run-btn" class="btn btn-success map-btn" role="button">Run the model</a>
                             </div>
                         </div>
                     </div>

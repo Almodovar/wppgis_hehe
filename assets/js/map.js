@@ -1,28 +1,29 @@
 $(document).ready(function() {
 
-
-    $.fn.editable.defaults.mode = 'popup';
-    $('.table-edit').editable();
-
-
-
     // ****************************************************
     //              Dimension calculation
     //   calculate the height for pages and sections
     // ****************************************************
-
     function setHeight() {
         var windowHeight = $(window).height();
+
         $('#bmp-select-table').css('height', $(".map-size-adjust").height() - $("#model-run-btn").height() - 20);
         $('.model-result-map').css('height', $(".scenario-task").height() - $("#model-result-chart").height() - $(".map-tool-bar").height() * 2 - 20);
         $('#accordianmenu').css('height', $(".map-size-adjust").height() - $("#model-compare-btn").height() - 50);
         $('#bmp-optimize-table').css('height', $(".model-result-map").height() + $("#model-optimize-chart").height() - $("#model-optimize-input").height() - $(".report-generate").height() - 60);
+        $("#loading-page").css('height', $("#bmp-select-page").height() + 150);
+        $("#loading-info").css('margin-top', ($("#loading-page").height() - 400) / 2);
+
     }
     setHeight();
 
     $(window).resize(function() {
         setHeight();
     });
+
+
+
+
 
     // ****************************************************
     //              BOOTSTRAP PLUGINS
@@ -32,11 +33,12 @@ $(document).ready(function() {
 
     $("[name='my-checkbox']").bootstrapSwitch();
     $('[data-toggle="tooltip"]').tooltip();
+    $.fn.editable.defaults.mode = 'popup';
+    $('.table-edit').editable();
 
     // ****************************************************
     //          VARIABLE DECLARETION
     // ****************************************************
-
 
     var fieldArray = [];
     var subbasinArray = [];
@@ -293,7 +295,7 @@ $(document).ready(function() {
         }),
         stroke: new ol.style.Stroke({
             color: 'white',
-            width: 2
+            width: 4
         })
     });
 
@@ -335,12 +337,18 @@ $(document).ready(function() {
     var subbasinTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
     var searchedFeature = null;
     var selectedFeature;
+    var preselectedFeature = null;
     var featureCenter;
     selectSingleClick.on('select', function(event) {
         $(element).hide();
 
         $("#bmp-select-table table tr").removeClass('rowSelected');
+        if (selectedFeature) {
+            selectedFeature.setStyle(null);
+        }
+
         selectedFeature = event.selected[0];
+
         if (selectedFeature) {
             $("#bmp-select-tool").css('visibility', 'visible');
             $("#bmp-select-tool").show();
@@ -436,19 +444,29 @@ $(document).ready(function() {
 
     function addTableEvent() {
 
-        $('.table-edit').editable();
+
+
+        $('.table-edit').editable({
+            value: 2,
+            source: [
+                { value: 1, text: 'Y' },
+                { value: 2, text: 'N' },
+            ]
+        });
+
         $("#bmp-select-table tr").not(':first').hover(
             function() {
                 $(this).css({
-                    'background-color': 'rgba(195, 195, 195, 1)',
-                    'color':'white'
+                    'background-color': 'rgba(195, 195, 195, 0.6)',
+                    'color': ''
                 });
             },
             function() {
                 $(this).css({
                     'background-color': '',
-                    'color':''
-                });            }
+                    'color': ''
+                });
+            }
         );
 
         $("#bmp-select-table .table-data").click(function() {
@@ -542,43 +560,40 @@ $(document).ready(function() {
 
     $("#bmp-select-tool button").click(function(event) {
         selectedFeatureID.length = 0;
-
         $(element).hide();
         var bmpCode;
-        var ccSelected = 'F';
-        var ctSelected = 'F';
-        var nmSelected = 'F';
+        var ccSelected = 'N';
+        var ctSelected = 'N';
+        var nmSelected = 'N';
         var selectedID = selectedFeature.getProperties().Name;
         if ($("#ct").prop("checked") && $("#nm").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 9;
-            ctSelected = 'T';
-            nmSelected = 'T';
-            ccSelected = 'T';
+            ctSelected = 'Y';
+            nmSelected = 'Y';
+            ccSelected = 'Y';
         } else if ($("#ct").prop("checked") && $("#nm").prop("checked")) {
             bmpCode = 6;
-            ctSelected = 'T';
-            nmSelected = 'T';
+            ctSelected = 'Y';
+            nmSelected = 'Y';
         } else if ($("#ct").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 7;
-            ctSelected = 'T';
-            ccSelected = 'T';
+            ctSelected = 'Y';
+            ccSelected = 'Y';
         } else if ($("#nm").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 8;
-            nmSelected = 'T';
-            ccSelected = 'T';
+            nmSelected = 'Y';
+            ccSelected = 'Y';
         } else if ($("#ct").prop("checked")) {
             bmpCode = 3;
-            ctSelected = 'T';
+            ctSelected = 'Y';
         } else if ($("#nm").prop("checked")) {
             bmpCode = 4;
-            nmSelected = 'T';
+            nmSelected = 'Y';
         } else if ($("#cc").prop("checked")) {
             bmpCode = 5;
-            ccSelected = 'T';
+            ccSelected = 'Y';
         } else bmpCode = null;
 
-        var bmpAssignment = [selectedID, bmpCode];
-        featureBMPAssignments.push(bmpAssignment);
         var exist;
         if (bmpCode !== null) {
             $('#bmp-select-table table .selectedFeatureID').each(function() {
@@ -589,9 +604,9 @@ $(document).ready(function() {
                 }
             });
             if (exist === true) {
-                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td></tr>');
+                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
             } else {
-                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="text">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td></tr>');
+                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
 
             }
 
@@ -611,6 +626,8 @@ $(document).ready(function() {
 
             selectSingleClick.getFeatures().clear();
         }
+        selectedFeature = null;
+
         // if (searchedFeature) {
         //     if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
         //         searchedFeature.setStyle(selectedStyle);
@@ -647,6 +664,10 @@ $(document).ready(function() {
             return true;
         });
         if (hit !== true) {
+            if (selectedFeature) {
+                selectedFeature.setStyle(null);
+                selectedFeature = null;
+            }
             if (searchedFeature) {
                 if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
                     searchedFeature.setStyle(selectedStyle);
@@ -671,13 +692,76 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('click', 'a', function(event) {
-        event.preventDefault();
 
-        $('html, body').animate({
-            scrollTop: $($.attr(this, 'href')).offset().top
-        }, 1000);
+    $(document).on('show-loading-page', function() {
+
+        $("#loading-page").css("visibility", "visible");
+        var fadeoutBox = $("#box1");
+        var fadeinBox = $("#box2");
+        var nextfadeinBox = $("#box3");
+        var lastfadeinBox = $("#box4");
+
+
+        setTimeout(function fade() {
+            fadeinBox.stop(true, true).fadeIn(2000);
+            fadeoutBox.stop(true, true).fadeOut(2000, function() {
+                var temp = fadeinBox;
+                fadeinBox = nextfadeinBox;
+                nextfadeinBox = lastfadeinBox;
+                lastfadeinBox = fadeoutBox;
+                fadeoutBox = temp;
+                setTimeout(fade, 9000);
+            });
+        }, 9000);
     });
+
+    $("#model-run-btn").click(function(event) {
+
+
+        $(document).trigger('show-loading-page');
+
+
+
+        var bmpAssignmentArray = [];
+        $('#bmp-select-table table tr').not(":first").each(function() {
+            var bmpAssignment = new Object();
+            var m = $("td:nth-child(7)", this).text();
+            var n = $("td:nth-child(1)", this).text();
+            bmpAssignment.featureID = parseInt(n);
+            bmpAssignment.bmpCode = parseInt(m);
+            bmpAssignmentArray.push(bmpAssignment);
+        });
+
+        // alert(bmpAssignmentArray[0].bmpCode);
+
+        var jsonArray = JSON.stringify(bmpAssignmentArray);
+
+        $.ajax({
+            url: '/runmodel',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: jsonArray,
+            dataType: 'json',
+            success: function(r) {
+
+                $("#loading-page").css("visibility", "hidden");
+
+
+                $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
+                // alert(r);
+                $("#progress-info").empty();
+             $("#progress-info").append('<div id="box1"><p><span> Preparing modeling files ... </span></p></div><div id="box2"><p><span> Modeling BMPs ... </span></p></div>  <div id="box3"><p><span> Writing results to database ... </span></p></div>  <div id="box4"><p><span> Visualizing the output ... </span></p></div>  ')   
+            }
+        });
+    });
+
+    // $(document).on('click', 'a', function(event) {
+    //     event.preventDefault();
+
+    //     $('html, body').animate({
+    //         scrollTop: $($.attr(this, 'href')).offset().top
+    //     }, 1000);
+    // });
 
     $("#accordianmenu p").click(function() {
         $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
