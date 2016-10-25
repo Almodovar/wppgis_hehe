@@ -199,12 +199,11 @@ body {
 
 #bmp-select-page .map-tool-bar .map-switch-btn:focus {
     /*font-size: 12px;*/
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 #bmp-select-page .map-tool-bar .map-switch-btn:disabled {
     /*font-size: 12px;*/
-    border: 2px solid green;
     cursor: pointer;
 }
 
@@ -493,6 +492,11 @@ body {
     border: 1px solid red;
 }
 
+#model-result-page .map-tool-bar .map-switch-btn:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
+}
+
 #model-result-page .map-tool-bar .result-switch-btn:focus {
     /*font-size: 12px;*/
     border: 1px solid red;
@@ -501,6 +505,11 @@ body {
 #model-result-page .map-tool-bar input {
     line-height: 12px;
     /*font-size: 12px;*/
+}
+
+#model-result-page .map-tool-bar .result-switch-btn:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
 }
 
 #model-result-page .model-issue-management {
@@ -522,6 +531,7 @@ body {
     padding-top: 10px;
     padding-bottom: 9%;
 }
+
 
 
 /*--------------------------------*/

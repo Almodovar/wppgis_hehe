@@ -36,7 +36,7 @@ $(document).ready(function() {
     // ****************************************************
     //          VARIABLE DECLARETION
     // ****************************************************
-
+    var selectedLayer = "";
     var fieldArray = [];
     var subbasinArray = [];
 
@@ -203,6 +203,8 @@ $(document).ready(function() {
         })
     });
 
+    selectedLayer = "subbasin";
+
     map.addInteraction(dragAndDrop);
     map.addInteraction(selectSingleClick);
     map.addInteraction(selectPointerMove);
@@ -237,6 +239,138 @@ $(document).ready(function() {
     // map center and add the dragAndDrop interaction to
     // the map 
     // ****************************************************
+    var Great = [53, 191, 0, 1];
+    var Good = [115, 197, 0, 1];
+    var Normal = [181, 203, 0, 1];
+    var Slight = [210, 168, 0, 1];
+    var Bad = [216, 170, 0, 1];
+    var Severe = [229, 0, 26, 1];
+
+    var SeverityLevel = {
+        "Great": Great,
+        "Good": Good,
+        "Normal": Normal,
+        "Slight": Slight,
+        "Bad": Bad,
+        "Severe": Severe
+    };
+
+    var defaultStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: [250, 250, 250, 1]
+        }),
+        stroke: new ol.style.Stroke({
+            color: [220, 220, 220, 1],
+            width: 1
+        })
+    });
+
+    var styleCache = {};
+
+    function styleSedimentFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().sedimentlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleFlowFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().flowlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleTpFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().tplevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleTnFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().tnlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+    
+    var fieldOutput = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/fieldoutput.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
+
+    var subbasinOutput = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/basinoutput.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
+
+    var resultMapSingleClick = new ol.interaction.Select({
+        layers: [fieldOutput, subbasinOutput],
+        condition: ol.events.condition.pointerMove
+    });
+
+    var resultMapPointerMove = new ol.interaction.Select({
+        layers: [fieldOutput, subbasinOutput],
+    });
 
     var resultMap = new ol.Map({
         target: 'model-result-map',
@@ -246,6 +380,9 @@ $(document).ready(function() {
             zoom: 13
         })
     });
+
+    resultMap.addInteraction(resultMapSingleClick);
+    resultMap.addInteraction(resultMapPointerMove);
 
     var compareMap = new ol.Map({
         target: 'model-compare-map',
@@ -522,6 +659,7 @@ $(document).ready(function() {
         selectSingleClick.getFeatures().clear();
         map.removeLayer(subbasinJsonp);
         map.addLayer(fieldJsonp);
+        selectedLayer = "field";
         $('#show-subbasin-map').attr("disabled", false);
         $('#show-field-map').attr("disabled", true);
         $("#bmp-select-table").html(fieldTable);
@@ -536,6 +674,8 @@ $(document).ready(function() {
         selectSingleClick.getFeatures().clear();
         map.removeLayer(fieldJsonp);
         map.addLayer(subbasinJsonp);
+        selectedLayer = "subbasin";
+
         $('#show-field-map').attr("disabled", false);
         $('#show-subbasin-map').attr("disabled", true);
         $("#bmp-select-table").html(subbasinTable);
@@ -703,121 +843,11 @@ $(document).ready(function() {
     });
 
 
-    var fieldOutput = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            url: '/assets/data/geojson/fieldoutput.json',
-            format: new ol.format.GeoJSON()
-        }),
-        style: styleFunction
-    });
 
-    var Great = [53, 191, 0, 1];
-    var Good = [115, 197, 0, 1];
-    var Normal = [181, 203, 0, 1];
-    var Slight = [210, 168, 0, 1];
-    var Bad = [216, 170, 0, 1];
-    var Severe = [229, 0, 26, 1];
 
-    var SeverityLevel = {
-        "Great": Great,
-        "Good": Good,
-        "Normal": Normal,
-        "Slight": Slight,
-        "Bad": Bad,
-        "Severe": Severe
-    };
 
-    var defaultStyle = new ol.style.Style({
-        fill: new ol.style.Fill({
-            color: [250, 250, 250, 1]
-        }),
-        stroke: new ol.style.Stroke({
-            color: [220, 220, 220, 1],
-            width: 1
-        })
-    });
 
-    var styleCache = {};
 
-    function styleFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().sedimentlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleFlowFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().flowlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleTpFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().tplevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleTnFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().tnlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
 
     $("#model-run-btn").click(function(event) {
 
@@ -825,18 +855,45 @@ $(document).ready(function() {
         $(document).trigger('show-loading-page');
 
         var bmpAssignmentArray = [];
-        $('#bmp-select-table table tr').not(":first").each(function() {
+        // $('#bmp-select-table table tr').not(":first").each(function() {
+        //     var bmpAssignment = new Object();
+        //     var m = $("td:nth-child(7)", this).text();
+        //     var n = $("td:nth-child(1)", this).text();
+        //     bmpAssignment.featureID = parseInt(n);
+        //     bmpAssignment.bmpCode = parseInt(m);
+
+        //     bmpAssignment.featureType = selectedLayer;
+        //     bmpAssignmentArray.push(bmpAssignment);
+        // });
+
+        // alert(bmpAssignmentArray);
+
+
+        $('#bmp-select-table table .selectedFeatureID').each(function(index, el) {
             var bmpAssignment = new Object();
-            var m = $("td:nth-child(7)", this).text();
-            var n = $("td:nth-child(1)", this).text();
-            bmpAssignment.featureID = parseInt(n);
-            bmpAssignment.bmpCode = parseInt(m);
-            
-            // bmpAssignment.featureType = 
+            bmpAssignment.featureID = parseInt($(this).text());
+            var cc, ct, nm, wascob;
+            cc = $(this).next().text();
+            ct = $(this).next().next().text();
+            nm = $(this).next().next().next().text();
+            if (cc === 'Y' && nm === 'Y' && ct === 'Y') {
+                bmpAssignment.bmpCode = 9;
+            } else if (cc === 'N' && nm === 'Y' && ct === 'Y') {
+                bmpAssignment.bmpCode = 6;
+            } else if (cc === 'Y' && nm === 'N' && ct === 'Y') {
+                bmpAssignment.bmpCode = 7;
+            } else if (cc === 'Y' && nm === 'Y' && ct === 'N') {
+                bmpAssignment.bmpCode = 8;
+            } else if (cc === 'N' && nm === 'N' && ct === 'Y') {
+                bmpAssignment.bmpCode = 3;
+            } else if (cc === 'N' && nm === 'Y' && ct === 'N') {
+                bmpAssignment.bmpCode = 4;
+            } else if (cc === 'Y' && nm === 'N' && ct === 'N') {
+                bmpAssignment.bmpCode = 5;
+            } else bmpAssignment.bmpCode = null;
+            bmpAssignment.featureType = selectedLayer;
             bmpAssignmentArray.push(bmpAssignment);
         });
-
-        // alert(bmpAssignmentArray[0].bmpCode);
 
         var jsonArray = JSON.stringify(bmpAssignmentArray);
         $.ajax({
@@ -847,8 +904,24 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(r) {
 
-                resultMap.removeLayer(fieldJsonp);
-                resultMap.addLayer(fieldOutput);
+                resultMap.removeLayer(resultMap.getLayers().getArray()[1]);
+
+                if ($('#show-field-map').prop("disabled") === true) {
+                    resultMap.addLayer(fieldOutput);
+                    $("#show-field-map-result").attr('disabled', true);
+                    $("#show-subbasin-map-result").attr('disabled', false);
+                    $('#show-flow-result').attr("disabled", true);
+                    $('#show-flow-result').siblings().attr("disabled", false);
+
+                }
+                if ($('#show-subbasin-map').prop("disabled") === true) {
+                    resultMap.addLayer(subbasinOutput);
+                    $("#show-subbasin-map-result").attr('disabled', true);
+                    $("#show-field-map-result").attr('disabled', false);
+                    $('#show-flow-result').attr("disabled", true);
+                    $('#show-flow-result').siblings().attr("disabled", false);
+                }
+
 
                 $("#loading-page").css("visibility", "hidden");
                 $("#model-result-page").css('visibility', 'visible');
@@ -885,26 +958,66 @@ $(document).ready(function() {
 
     $("#show-flow-result").click(function(event) {
         /* Act on the event */
+        // if ($('#show-field-map').prop("disabled") === true) {
+        //     resultMap.removeLayer(subbasinOutput);
+        //     resultMap.addLayer(fieldOutput);
+        // }
+        // if ($('#show-subbasin-map').prop("disabled") === true) {
+        //     resultMap.removeLayer(fieldOutput);
+        //     resultMap.addLayer(subbasinOutput);
+        // }
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleFlowFunction);
+        $('#show-flow-result').attr("disabled", true);
+        $('#show-flow-result').siblings().attr("disabled", false);
+
     });
     $("#show-sediment-result").click(function(event) {
         /* Act on the event */
+
         var a = resultMap.getLayers().getArray()[1];
-        a.setStyle(styleFunction);
+        a.setStyle(styleSedimentFunction);
+        $('#show-sediment-result').attr("disabled", true);
+        $('#show-sediment-result').siblings().attr("disabled", false);
+
     });
     $("#show-n-result").click(function(event) {
         /* Act on the event */
+
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTnFunction);
+        $('#show-n-result').attr("disabled", true);
+        $('#show-n-result').siblings().attr("disabled", false);
+
     });
     $("#show-p-result").click(function(event) {
         /* Act on the event */
+
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTpFunction);
+        $('#show-p-result').attr("disabled", true);
+        $('#show-p-result').siblings().attr("disabled", false);
     });
 
 
+    $("#show-field-map-result").click(function(event) {
+        resultMap.removeLayer(subbasinOutput);
+        resultMap.addLayer(fieldOutput);
+        $('#show-subbasin-map-result').attr("disabled", false);
+        $('#show-field-map-result').attr("disabled", true);
+        $('#show-flow-result').attr("disabled", true);
+        $('#show-flow-result').siblings().attr("disabled", false);
+    });
+
+    $("#show-subbasin-map-result").click(function(event) {
+        resultMap.removeLayer(fieldOutput);
+        resultMap.addLayer(subbasinOutput);
+        $('#show-subbasin-map-result').attr("disabled", true);
+        $('#show-field-map-result').attr("disabled", false);
+        $('#show-flow-result').attr("disabled", true);
+        $('#show-flow-result').siblings().attr("disabled", false);
+        /* Act on the event */
+    });
     // ****************************************************
     //                      DRAW CHART
     // ****************************************************

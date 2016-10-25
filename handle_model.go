@@ -16,8 +16,9 @@ import (
 )
 
 type BMPCodeFeature struct {
-	FeatureID int
-	BMPCode   int
+	FeatureID   int
+	BMPCode     int
+	FeatureType string
 }
 
 type BMPCodeHRU struct {
@@ -113,9 +114,65 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	fmt.Println(d[0].FeatureID)
 	fmt.Println(d[0].BMPCode)
+	fmt.Println(d[0].FeatureType)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
+
+	if d[0].FeatureType == "field" {
+		for _, i := range d {
+			var id = i.FeatureID
+
+			rows, err := dbSpatial.Query("SELECT subbasin, field FROM field_subbasin")
+			checkErr(err)
+
+			for rows.Next() {
+				var fieldID int
+				var subbasinID int
+				err = rows.Scan(&subbasinID, &fieldID)
+				checkErr(err)
+
+				if fieldID == id {
+					var x = new(BMPCodeFeature)
+					x.BMPCode = i.BMPCode
+					x.FeatureID = subbasinID
+					x.FeatureType = "subbasin"
+					d = append(d, *x)
+				}
+			}
+		}
+
+		// for x, i := range d {
+		// 	if x < len(d)-1 {
+		// 		if i.FeatureType == "field" {
+		// 			d = append(d[:x], d[x+1:]...)
+		// 		}
+		// 	} else if d[len(d)-1].FeatureType == "field" {
+		// 		d = d[:len(d)-1]
+		// 	}
+		// }
+
+		var s = make(map[int]int)
+
+		for _, x := range d {
+			if x.FeatureType == "subbasin" {
+				var flag = false
+				if _, ok := s[x.FeatureID]; ok {
+					if x.BMPCode > s[x.FeatureID] {
+						s[x.FeatureID] = x.BMPCode
+					}
+					flag = true
+				}
+				if !flag {
+					s[x.FeatureID] = x.BMPCode
+				}
+			}
+
+		}
+		fmt.Println(s)
+	}
+
+	fmt.Println(d)
 
 	for _, i := range d {
 		var id = i.FeatureID
@@ -134,7 +191,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 				var a BMPCodeHRU
 				a.BMPCode = bmpCode
 				a.HRUID = hruID
-				fmt.Println(a.HRUID)
+				// fmt.Println(a.HRUID)
 				x = append(x, a)
 				BMPCodeArray[hruID-1] = bmpCode
 			}
@@ -188,9 +245,56 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	<-done
 	fmt.Println("done")
+	BasintoField()
+	// var featureCollection = new(MapFeature)
+	// configFile, err := os.Open("./assets/data/geojson/field.json")
+	// if err != nil {
+	// 	fmt.Println("fail 1")
+	// }
 
+	// jsonParser := json.NewDecoder(configFile)
+	// if err = jsonParser.Decode(&featureCollection); err != nil {
+	// 	fmt.Println("fail 2")
+	// }
+
+	//
+	// Quartile(fieldAverage)
+
+	// // var temp int
+
+	// for id := range fieldAverage {
+	// 	for i := 0; i < len(featureCollection.Features); i++ {
+	// 		if strconv.Itoa(id) == featureCollection.Features[i].Properties.Name {
+	// 			featureCollection.Features[i].Properties.Flow = fieldAverage[id].Water
+	// 			featureCollection.Features[i].Properties.Sediment = fieldAverage[id].Sediment
+	// 			featureCollection.Features[i].Properties.Tp = fieldAverage[id].Tp
+	// 			featureCollection.Features[i].Properties.Tn = fieldAverage[id].Tn
+	// 			featureCollection.Features[i].Properties.FlowLevel = SelectLevel(fieldAverage[id].Water, FlowQuartile)
+	// 			featureCollection.Features[i].Properties.SedimentLevel = SelectLevel(fieldAverage[id].Sediment, SedimentQuartile)
+	// 			featureCollection.Features[i].Properties.TpLevel = SelectLevel(fieldAverage[id].Tp, TpQuartile)
+	// 			featureCollection.Features[i].Properties.TnLevel = SelectLevel(fieldAverage[id].Tn, TnQuartile)
+	// 		}
+	// 	}
+	// }
+
+	// b, err := json.MarshalIndent(featureCollection, "", "  ")
+	// // var i = len(featureCollection.Features)
+	// err = ioutil.WriteFile("./assets/data/geojson/fieldoutput.json", b, 0644)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	GenerateResultJsonFile("field", fieldAverage)
+	GenerateResultJsonFile("basin", subbasinAverage)
+
+	a, err := json.Marshal(BMPCodeArray)
+	w.Write(a)
+
+}
+
+func GenerateResultJsonFile(s string, array map[int]*Result) {
 	var featureCollection = new(MapFeature)
-	configFile, err := os.Open("./assets/data/geojson/field.json")
+	configFile, err := os.Open("./assets/data/geojson/" + s + ".json")
 	if err != nil {
 		fmt.Println("fail 1")
 	}
@@ -200,38 +304,33 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		fmt.Println("fail 2")
 	}
 
-	BasintoField()
-	Quartile(fieldAverage)
+	Quartile(array)
 
 	// var temp int
 
-	for id := range fieldAverage {
+	for id := range array {
 		for i := 0; i < len(featureCollection.Features); i++ {
 			if strconv.Itoa(id) == featureCollection.Features[i].Properties.Name {
-				featureCollection.Features[i].Properties.Flow = fieldAverage[id].Water
-				featureCollection.Features[i].Properties.Sediment = fieldAverage[id].Sediment
-				featureCollection.Features[i].Properties.Tp = fieldAverage[id].Tp
-				featureCollection.Features[i].Properties.Tn = fieldAverage[id].Tn
-				featureCollection.Features[i].Properties.FlowLevel = SelectLevel(fieldAverage[id].Water, FlowQuartile)
-				featureCollection.Features[i].Properties.SedimentLevel = SelectLevel(fieldAverage[id].Sediment, SedimentQuartile)
-				featureCollection.Features[i].Properties.TpLevel = SelectLevel(fieldAverage[id].Tp, TpQuartile)
-				featureCollection.Features[i].Properties.TnLevel = SelectLevel(fieldAverage[id].Tn, TnQuartile)
+				featureCollection.Features[i].Properties.Flow = array[id].Water
+				featureCollection.Features[i].Properties.Sediment = array[id].Sediment
+				featureCollection.Features[i].Properties.Tp = array[id].Tp
+				featureCollection.Features[i].Properties.Tn = array[id].Tn
+				featureCollection.Features[i].Properties.FlowLevel = SelectLevel(array[id].Water, FlowQuartile)
+				featureCollection.Features[i].Properties.SedimentLevel = SelectLevel(array[id].Sediment, SedimentQuartile)
+				featureCollection.Features[i].Properties.TpLevel = SelectLevel(array[id].Tp, TpQuartile)
+				featureCollection.Features[i].Properties.TnLevel = SelectLevel(array[id].Tn, TnQuartile)
 			}
 		}
 	}
+
 	b, err := json.MarshalIndent(featureCollection, "", "  ")
 	// var i = len(featureCollection.Features)
-	err = ioutil.WriteFile("./assets/data/geojson/fieldoutput.json", b, 0644)
-
+	err = ioutil.WriteFile("./assets/data/geojson/"+s+"output.json", b, 0644)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("success")
-
-	a, err := json.Marshal(BMPCodeArray)
-	w.Write(a)
-
 }
 
 func BasintoField() {
