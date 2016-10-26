@@ -532,7 +532,14 @@ body {
     padding-bottom: 9%;
 }
 
-
+#result-feature-info {
+    background-color: white;
+    width: 100px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    font-size: 10px;
+}
 
 /*--------------------------------*/
 

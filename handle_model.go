@@ -94,6 +94,8 @@ var subbasinAverage = make(map[int]*Result)
 
 var fieldAverage = make(map[int]*Result)
 
+var outletArray = make(map[string][]float64)
+
 func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	var err error
@@ -287,9 +289,88 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	GenerateResultJsonFile("field", fieldAverage)
 	GenerateResultJsonFile("basin", subbasinAverage)
 
+	// OutletResultArray()
+
 	a, err := json.Marshal(BMPCodeArray)
 	w.Write(a)
 
+}
+
+type FeatureResultType struct {
+	ID         int
+	Type       string
+	ResultType string
+}
+
+func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d FeatureResultType
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	fmt.Println(d.ID)
+	fmt.Println(d.Type)
+	fmt.Println(d.ResultType)
+
+	var arrayDataFeatureResultType []float64
+	if d.Type == "subbasin" {
+		if d.ResultType == "flow" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinArray[d.ID][i].Water)
+			}
+		}
+		if d.ResultType == "sediment" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinArray[d.ID][i].Sediment)
+			}
+		}
+
+		if d.ResultType == "tp" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinArray[d.ID][i].Tp)
+			}
+		}
+		if d.ResultType == "tn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinArray[d.ID][i].Tn)
+			}
+		}
+	}
+
+	if d.Type == "field" {
+		if d.ResultType == "flow" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldArray[d.ID][i].Water)
+			}
+		}
+		if d.ResultType == "sediment" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldArray[d.ID][i].Sediment)
+			}
+		}
+
+		if d.ResultType == "tp" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldArray[d.ID][i].Tp)
+			}
+		}
+		if d.ResultType == "tn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldArray[d.ID][i].Tn)
+			}
+		}
+	}
+
+	fmt.Println(len(arrayDataFeatureResultType))
+	fmt.Println(arrayDataFeatureResultType)
+
+	// create json response from struct
+	a, err := json.Marshal(arrayDataFeatureResultType)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(a)
 }
 
 func GenerateResultJsonFile(s string, array map[int]*Result) {
@@ -535,4 +616,47 @@ func checkErr(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func OutletResultArray() {
+
+	var outletSedimentArray []float64
+	var outletWaterArray []float64
+	var outletTnArray []float64
+	var outletTpArray []float64
+
+	db, err := sql.Open("sqlite3", "./assets/swat/result.db3")
+	checkErr(err)
+
+	//查询数据
+	rows, err := db.Query("SELECT id,year,water,sediment,TP,TN FROM rch ")
+	checkErr(err)
+
+	for rows.Next() {
+		var id int
+		var year int
+		var water float64
+		var sediment float64
+		var tp float64
+		var tn float64
+		err = rows.Scan(&id, &year, &water, &sediment, &tp, &tn)
+		checkErr(err)
+
+		for i := 2002; i <= 2011; i++ {
+			if id == 33 && year == i {
+				outletSedimentArray = append(outletSedimentArray, sediment)
+				outletTnArray = append(outletTnArray, tn)
+				outletTpArray = append(outletTpArray, tp)
+				outletWaterArray = append(outletWaterArray, water)
+			}
+		}
+	}
+
+	outletArray["sediment"] = outletSedimentArray
+	outletArray["tn"] = outletTnArray
+	outletArray["tp"] = outletTpArray
+	outletArray["water"] = outletWaterArray
+
+	db.Close()
+
 }

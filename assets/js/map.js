@@ -61,12 +61,35 @@ $(document).ready(function() {
     var featureBMPAssignments = [];
 
     // ****************************************************
+    //                  EVENT HANDLER
+    // ****************************************************
+
+    $("#bmp-compare-btn").click(function(event) {
+        $("#bmp-compare-page").css('visibility', 'visible');
+    });
+
+    $("#model-compare-btn").click(function(event) {
+        $("#model-compare-page").css('visibility', 'visible');
+    });
+
+    $("#model-optimize-btn").click(function(event) {
+        $("#model-optimize-page").css('visibility', 'visible');
+    });
+
+    // ****************************************************
     // Basemap using openstreet map with projection EPSG:3857
     // ****************************************************
 
     var tiledRaster = new ol.layer.Tile({
         source: new ol.source.OSM()
     });
+
+    // ************************************************************************************************************************************************************
+    //
+    //                                                                      BMP SELECT PAGE
+    //                                  
+    // ************************************************************************************************************************************************************
+
     // ****************************************************
     // Subbasin layer loaded from geoserver in Jsonp format
     // Be sure to enable the Jsonp function in the web.xml
@@ -174,7 +197,6 @@ $(document).ready(function() {
         ]
     });
 
-
     dragAndDrop.on('addfeatures', function(event) {
         var vectorSource = new ol.source.Vector({
             features: event.features,
@@ -235,185 +257,18 @@ $(document).ready(function() {
     map.addOverlay(infoOverlay);
 
     // ****************************************************
-    // create a map instance, add layers to the map, set 
-    // map center and add the dragAndDrop interaction to
-    // the map 
+    //
+    //            BMP SELECT PAGE EVENT HANDLER
+    //
     // ****************************************************
-    var Great = [53, 191, 0, 1];
-    var Good = [115, 197, 0, 1];
-    var Normal = [181, 203, 0, 1];
-    var Slight = [210, 168, 0, 1];
-    var Bad = [216, 170, 0, 1];
-    var Severe = [229, 0, 26, 1];
+    var fieldTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
+    var subbasinTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
+    var searchedFeature = null;
+    var selectedFeature;
+    var preselectedFeature = null;
+    var featureCenter;
+    var hoveredFeature;
 
-    var SeverityLevel = {
-        "Great": Great,
-        "Good": Good,
-        "Normal": Normal,
-        "Slight": Slight,
-        "Bad": Bad,
-        "Severe": Severe
-    };
-
-    var defaultStyle = new ol.style.Style({
-        fill: new ol.style.Fill({
-            color: [250, 250, 250, 1]
-        }),
-        stroke: new ol.style.Stroke({
-            color: [220, 220, 220, 1],
-            width: 1
-        })
-    });
-
-    var styleCache = {};
-
-    function styleSedimentFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().sedimentlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleFlowFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().flowlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleTpFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().tplevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-
-    function styleTnFunction(feature, resolution) {
-        var properties = feature.getProperties();
-        var level = feature.getProperties().tnlevel;
-        if (!level || !SeverityLevel[level]) {
-            return [defaultStyle];
-        }
-        if (!styleCache[level]) {
-            styleCache[level] = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: SeverityLevel[level]
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 1
-                })
-            });
-        }
-        return [styleCache[level]];
-    }
-    
-    var fieldOutput = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            url: '/assets/data/geojson/fieldoutput.json',
-            format: new ol.format.GeoJSON()
-        }),
-        style: styleFlowFunction
-    });
-
-    var subbasinOutput = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            url: '/assets/data/geojson/basinoutput.json',
-            format: new ol.format.GeoJSON()
-        }),
-        style: styleFlowFunction
-    });
-
-    var resultMapSingleClick = new ol.interaction.Select({
-        layers: [fieldOutput, subbasinOutput],
-        condition: ol.events.condition.pointerMove
-    });
-
-    var resultMapPointerMove = new ol.interaction.Select({
-        layers: [fieldOutput, subbasinOutput],
-    });
-
-    var resultMap = new ol.Map({
-        target: 'model-result-map',
-        layers: [tiledRaster, fieldJsonp],
-        view: new ol.View({
-            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 13
-        })
-    });
-
-    resultMap.addInteraction(resultMapSingleClick);
-    resultMap.addInteraction(resultMapPointerMove);
-
-    var compareMap = new ol.Map({
-        target: 'model-compare-map',
-        layers: [tiledRaster, fieldJsonp],
-        view: new ol.View({
-            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 13
-        })
-    });
-
-    var compareresultMap = new ol.Map({
-        target: 'compare-result-map',
-        layers: [tiledRaster, fieldJsonp],
-        view: new ol.View({
-            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 13
-        })
-    });
-
-    var optimizeresultMap = new ol.Map({
-        target: 'optimize-result-map',
-        layers: [tiledRaster, fieldJsonp],
-        view: new ol.View({
-            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 13
-        })
-    });
-
-    // ****************************************************
-    //                  REGISTER EVENT
-    // ****************************************************
 
     var selectedStyle = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -446,40 +301,17 @@ $(document).ready(function() {
         $("#manual-select-btn").removeClass('btn-success').addClass('btn-default');
     });
 
-    $("#bmp-compare-btn").click(function(event) {
-        $("#bmp-compare-page").css('visibility', 'visible');
-    });
 
-    $("#model-compare-btn").click(function(event) {
-        $("#model-compare-page").css('visibility', 'visible');
-    });
-
-    $("#model-optimize-btn").click(function(event) {
-        $("#model-optimize-page").css('visibility', 'visible');
-    });
-
-
-
-    var fieldTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
-    var subbasinTable = '<table class="table table-condensed table-hover" ><tr class="table-title"><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th><th style="padding-top:11px;">Del</th></tr></table>';
-    var searchedFeature = null;
-    var selectedFeature;
-    var preselectedFeature = null;
-    var featureCenter;
     selectSingleClick.on('select', function(event) {
         $(element).hide();
-
         $("#bmp-select-table table tr").removeClass('rowSelected');
         if (selectedFeature) {
             selectedFeature.setStyle(null);
         }
-
         selectedFeature = event.selected[0];
-
         if (selectedFeature) {
             $("#bmp-select-tool").css('visibility', 'visible');
             $("#bmp-select-tool").show();
-
             var coordinate = ol.extent.getCenter(selectedFeature.getGeometry().getExtent());
             var offsetCoordinate = [coordinate[0] + 400, coordinate[1] + 400];
             bmpOverlay.setPosition(offsetCoordinate);
@@ -501,7 +333,6 @@ $(document).ready(function() {
                             $(this).closest('tr').addClass('rowSelected');
                         }
                     });
-
                 } else {
                     searchedFeature.setStyle(selectedStyle);
                     searchedFeature = null;
@@ -512,30 +343,20 @@ $(document).ready(function() {
         }
     });
 
-    var hoveredFeature;
     selectPointerMove.on('select', function(event) {
-
         hoveredFeature = event.selected[0];
-
         if (hoveredFeature) {
-            // $("#feature-info").css('visibility', 'visible');
             var coordinate = ol.extent.getCenter(hoveredFeature.getGeometry().getExtent());
             var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
             infoOverlay.setPosition(offsetCoordinate);
             $(element).html("FeatureID: " + hoveredFeature.getProperties().Name);
             $(element).show();
             infoOverlay.setPosition(offsetCoordinate);
-            // $(element).popover({
-            //     'placement': 'top',
-            //     'html': true,
-            //     'content': "FeatureID is" + hoveredFeature.getProperties().Name
-            // });
-            // $(element).popover('show');
         } else {
             $(element).hide();
-            // $(element).popover('destroy');
         }
     });
+
 
 
     $('#search-prevent').submit(function(e) {
@@ -682,9 +503,7 @@ $(document).ready(function() {
         addTableEvent();
     });
 
-
     var selectedFeatureID = [];
-
     $("#bmp-select-tool button").click(function(event) {
         selectedFeatureID.length = 0;
         $(element).hide();
@@ -755,13 +574,6 @@ $(document).ready(function() {
         }
         selectedFeature = null;
 
-        // if (searchedFeature) {
-        //     if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
-        //         searchedFeature.setStyle(selectedStyle);
-        //     } else {
-        //         searchedFeature.setStyle(null);
-        //     }
-        // }
     });
 
     function searchedFeatureStyle(id) {
@@ -843,17 +655,8 @@ $(document).ready(function() {
     });
 
 
-
-
-
-
-
-
     $("#model-run-btn").click(function(event) {
-
-
         $(document).trigger('show-loading-page');
-
         var bmpAssignmentArray = [];
         // $('#bmp-select-table table tr').not(":first").each(function() {
         //     var bmpAssignment = new Object();
@@ -867,8 +670,6 @@ $(document).ready(function() {
         // });
 
         // alert(bmpAssignmentArray);
-
-
         $('#bmp-select-table table .selectedFeatureID').each(function(index, el) {
             var bmpAssignment = new Object();
             bmpAssignment.featureID = parseInt($(this).text());
@@ -923,6 +724,7 @@ $(document).ready(function() {
                 }
 
 
+
                 $("#loading-page").css("visibility", "hidden");
                 $("#model-result-page").css('visibility', 'visible');
 
@@ -942,30 +744,349 @@ $(document).ready(function() {
     //     }, 1000);
     // });
 
-    $("#accordianmenu p").click(function() {
-        $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
-        $(this).css({ "background-color": "rgb(66,139,202)", "color": "white" });
-        $("#accordianmenu ul ul").slideUp();
-        if (!$(this).next().next().is(":visible")) {
-            $(this).next().next().slideDown();
-        }
+
+
+
+    // ************************************************************************************************************************************************************
+    //
+    //                                                                      BMP RESULT PAGE
+    //                                  
+    // ************************************************************************************************************************************************************
+    var Great = [53, 191, 0, 1];
+    var Good = [115, 197, 0, 1];
+    var Normal = [181, 203, 0, 1];
+    var Slight = [210, 168, 0, 1];
+    var Bad = [216, 170, 0, 1];
+    var Severe = [229, 0, 26, 1];
+
+    var SeverityLevel = {
+        "Great": Great,
+        "Good": Good,
+        "Normal": Normal,
+        "Slight": Slight,
+        "Bad": Bad,
+        "Severe": Severe
+    };
+
+    var defaultStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: [250, 250, 250, 1]
+        }),
+        stroke: new ol.style.Stroke({
+            color: [220, 220, 220, 1],
+            width: 1
+        })
     });
 
+    var styleCache = {};
+
+    function styleSedimentFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().sedimentlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleFlowFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().flowlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleTpFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().tplevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleTnFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().tnlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    var fieldOutput = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/fieldoutput.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
+
+    var subbasinOutput = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/basinoutput.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
+
+    var resultMapPointerMove = new ol.interaction.Select({
+        layers: [fieldOutput, subbasinOutput],
+        condition: ol.events.condition.pointerMove
+    });
+
+    var resultMapSingleClick = new ol.interaction.Select({
+        layers: [fieldOutput, subbasinOutput],
+    });
+
+    var resultMap = new ol.Map({
+        target: 'model-result-map',
+        layers: [tiledRaster, fieldJsonp],
+        view: new ol.View({
+            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 13
+        })
+    });
+
+    resultMap.addInteraction(resultMapSingleClick);
+    resultMap.addInteraction(resultMapPointerMove);
+
+    var resultInfo = document.getElementById('result-feature-info');
+
+    var resultInfoOverlay = new ol.Overlay({
+        element: document.getElementById('result-feature-info'),
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+
+    resultMap.addOverlay(resultInfoOverlay);
 
     // ****************************************************
     //              ResultMap Event Handler
     // ****************************************************
 
+
+    // Map hover event, when hovering the map and feature existis, show the result information by the type of selected category
+
+    var hoveredResultFeature;
+    resultMapPointerMove.on('select', function(event) {
+        hoveredResultFeature = event.selected[0];
+        var num;
+        if (hoveredResultFeature) {
+            var coordinate = ol.extent.getCenter(hoveredResultFeature.getGeometry().getExtent());
+            var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
+            resultInfoOverlay.setPosition(offsetCoordinate);
+            if ($('#show-flow-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().flow;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Flow " + num);
+            }
+            if ($('#show-sediment-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().sediment;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Sediment " + num);
+            }
+            if ($('#show-n-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().tn;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Total N " + num);
+            }
+            if ($('#show-p-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().tp;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Total P " + num);
+            }
+
+            $(resultInfo).show();
+            resultInfoOverlay.setPosition(offsetCoordinate);
+        } else {
+            $(resultInfo).hide();
+        }
+    });
+
+    // Map select event, when select a feature, draw chart and show the feature ID to the task creation panel 
+    var selectedResultFeature;
+    resultMapSingleClick.on('select', function(event) {
+
+        selectedResultFeature = event.selected[0];
+        if (selectedResultFeature) {
+            var feature = new Object();
+            feature.ID = parseInt(selectedResultFeature.getProperties().name);
+            feature.Type = determineFeatureType();
+            feature.ResultType = determineFeatureResultType();
+
+            var featureJson = JSON.stringify(feature);
+            $.ajax({
+                url: '/chart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: featureJson,
+                dataType: 'json',
+                success: function(r) {
+                    var dataArray = [];
+
+                    for (var i = 0; i < r.length; i++) {
+                        r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(1);
+                        dataArray[i] = parseFloat(r[i]);
+                    }
+                    // alert(r);
+
+                    var average = [];
+                    var averageNum;
+
+                    if (feature.ResultType == "sediment") {
+                        averageNum = selectedResultFeature.getProperties().sediment;
+                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                        averageNum = parseFloat(averageNum);
+                        for (i = 0; i < 10; i++) {
+                            average[i] = averageNum;
+                        }
+                    }
+                    if (feature.ResultType == "flow") {
+                        averageNum = selectedResultFeature.getProperties().flow;
+                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                        averageNum = parseFloat(averageNum);
+                        for (i = 0; i < 10; i++) {
+                            average[i] = selectedResultFeature.getProperties().flow;
+                        }
+                    }
+                    if (feature.ResultType == "tn") {
+                        averageNum = selectedResultFeature.getProperties().tn;
+                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                        averageNum = parseFloat(averageNum);
+                        for (i = 0; i < 10; i++) {
+                            average[i] = selectedResultFeature.getProperties().tn;
+                        }
+                    }
+                    if (feature.ResultType == "tp") {
+                        averageNum = selectedResultFeature.getProperties().tp;
+                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                        averageNum = parseFloat(averageNum);
+                        for (i = 0; i < 10; i++) {
+                            average[i] = selectedResultFeature.getProperties().tp;
+                        }
+                    }
+
+
+                    $('#model-result-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( " + feature.Type + feature.ID + " )"
+                            },
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Average',
+                            data: average
+                        }, {
+                            name: 'Yr',
+                            data: dataArray
+                        }]
+                    });
+
+                }
+            });
+
+
+        } else {
+            resultMapSingleClick.getFeatures().clear();
+        }
+    });
+
+
+    function determineFeatureType() {
+        if ($('#show-field-map-result').prop("disabled") === true) {
+            return "field";
+        } else
+            return "subbasin";
+    }
+
+    function determineFeatureResultType() {
+        if ($('#show-flow-result').prop("disabled") === true) {
+            return "flow";
+        }
+        if ($('#show-sediment-result').prop("disabled") === true) {
+            return "sediment";
+        }
+        if ($('#show-n-result').prop("disabled") === true) {
+            return "tn";
+        }
+        if ($('#show-p-result').prop("disabled") === true) {
+            return "tp";
+        }
+    }
+
     $("#show-flow-result").click(function(event) {
-        /* Act on the event */
-        // if ($('#show-field-map').prop("disabled") === true) {
-        //     resultMap.removeLayer(subbasinOutput);
-        //     resultMap.addLayer(fieldOutput);
-        // }
-        // if ($('#show-subbasin-map').prop("disabled") === true) {
-        //     resultMap.removeLayer(fieldOutput);
-        //     resultMap.addLayer(subbasinOutput);
-        // }
+        resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleFlowFunction);
         $('#show-flow-result').attr("disabled", true);
@@ -974,16 +1095,15 @@ $(document).ready(function() {
     });
     $("#show-sediment-result").click(function(event) {
         /* Act on the event */
-
+        resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleSedimentFunction);
         $('#show-sediment-result').attr("disabled", true);
         $('#show-sediment-result').siblings().attr("disabled", false);
-
     });
     $("#show-n-result").click(function(event) {
         /* Act on the event */
-
+        resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTnFunction);
         $('#show-n-result').attr("disabled", true);
@@ -992,7 +1112,7 @@ $(document).ready(function() {
     });
     $("#show-p-result").click(function(event) {
         /* Act on the event */
-
+        resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTpFunction);
         $('#show-p-result').attr("disabled", true);
@@ -1001,6 +1121,7 @@ $(document).ready(function() {
 
 
     $("#show-field-map-result").click(function(event) {
+        resultMapSingleClick.getFeatures().clear();
         resultMap.removeLayer(subbasinOutput);
         resultMap.addLayer(fieldOutput);
         $('#show-subbasin-map-result').attr("disabled", false);
@@ -1010,6 +1131,7 @@ $(document).ready(function() {
     });
 
     $("#show-subbasin-map-result").click(function(event) {
+        resultMapSingleClick.getFeatures().clear();
         resultMap.removeLayer(fieldOutput);
         resultMap.addLayer(subbasinOutput);
         $('#show-subbasin-map-result').attr("disabled", true);
@@ -1018,36 +1140,104 @@ $(document).ready(function() {
         $('#show-flow-result').siblings().attr("disabled", false);
         /* Act on the event */
     });
+    // ************************************************************************************************************************************************************
+    //
+    //                                                                      BMP COMPARE PAGE
+    //                                  
+    // ************************************************************************************************************************************************************
+
+    var compareMap = new ol.Map({
+        target: 'model-compare-map',
+        layers: [tiledRaster, fieldJsonp],
+        view: new ol.View({
+            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 13
+        })
+    });
+
+    $("#accordianmenu p").click(function() {
+        $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
+        $(this).css({ "background-color": "rgb(66,139,202)", "color": "white" });
+        $("#accordianmenu ul ul").slideUp();
+        if (!$(this).next().next().is(":visible")) {
+            $(this).next().next().slideDown();
+        }
+    });
+
+    // ************************************************************************************************************************************************************
+    //
+    //                                                                      COMPARE RESULT PAGE
+    //                                  
+    // ************************************************************************************************************************************************************
+
+    var compareresultMap = new ol.Map({
+        target: 'compare-result-map',
+        layers: [tiledRaster, fieldJsonp],
+        view: new ol.View({
+            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 13
+        })
+    });
+
+    // ************************************************************************************************************************************************************
+    //
+    //                                                                      BMP OPTIMIZE PAGE
+    //                                  
+    // ************************************************************************************************************************************************************
+
+    var optimizeresultMap = new ol.Map({
+        target: 'optimize-result-map',
+        layers: [tiledRaster, fieldJsonp],
+        view: new ol.View({
+            center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 13
+        })
+    });
+
+
+
+
     // ****************************************************
     //                      DRAW CHART
     // ****************************************************
 
+
     $('#model-result-chart').highcharts({
-        legend: {
-            enabled: false
-        },
-        chart: {
-            type: 'column'
-        },
         title: {
-            text: null
+            text: '',
+            x: -20 //center
         },
+
         xAxis: {
-            categories: ['Flow', 'Sediment', 'Phosphorus', 'Nitrigen']
+            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                '2008', '2009', '2010', '2011'
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Value' + " ( " + feature.Type + feature.ID + " )"
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
         },
         credits: {
             enabled: false
         },
-
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            enabled: false
+        },
         series: [{
-            name: 'John',
-            data: [5, 3, 4, 7]
+            name: 'Average',
+            data: []
         }, {
-            name: 'Jane',
-            data: [2, -2, -3, 2]
-        }, {
-            name: 'Joe',
-            data: [3, 4, 4, -2]
+            name: 'Yr',
+            data: []
         }]
     });
 
