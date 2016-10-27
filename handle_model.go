@@ -94,7 +94,12 @@ var subbasinAverage = make(map[int]*Result)
 
 var fieldAverage = make(map[int]*Result)
 
-var outletArray = make(map[string][]float64)
+type OutletResultTypeArray struct {
+	ResultType string
+	ResultData []float64
+}
+
+var outletArray []*OutletResultTypeArray
 
 func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
@@ -289,9 +294,9 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	GenerateResultJsonFile("field", fieldAverage)
 	GenerateResultJsonFile("basin", subbasinAverage)
 
-	// OutletResultArray()
+	OutletResultArray()
 
-	a, err := json.Marshal(BMPCodeArray)
+	a, err := json.Marshal(outletArray)
 	w.Write(a)
 
 }
@@ -441,6 +446,8 @@ func BasintoField() {
 
 	db.Close()
 
+	fieldArray = make(map[int]map[int]*Result)
+
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 
 	subbasinAreaSearch, err := dbSpatial.Query("SELECT id,area FROM subbasin_area ")
@@ -499,33 +506,24 @@ func BasintoField() {
 	}
 	dbSpatial.Close()
 
-	fmt.Println("the length of subbasinArray is " + strconv.Itoa(len(subbasinArray)))
 	for k := range subbasinArray {
 		var result = new(Result)
-
 		for m := range subbasinArray[k] {
 			result.Water = subbasinArray[k][m].Water + result.Water
 			result.Sediment = subbasinArray[k][m].Sediment + result.Sediment
 			result.Tn = subbasinArray[k][m].Tn + result.Tn
 			result.Tp = subbasinArray[k][m].Tp + result.Tp
 		}
-
 		subbasinAverage[k] = new(Result)
-
 		subbasinAverage[k].Sediment = result.Sediment / 10
 		subbasinAverage[k].Water = result.Water / 10
 		subbasinAverage[k].Tn = result.Tn / 10
 		subbasinAverage[k].Tp = result.Tp / 10
-		// fmt.Println("subbasin" + strconv.Itoa(k))
-		// fmt.Println(subbasinAverage[k])
-
 	}
-
-	fmt.Println("the length of fieldArray is " + strconv.Itoa(len(fieldArray)))
 
 	for k := range fieldArray {
 		var result = new(Result)
-
+		fmt.Println(fieldArray[k])
 		for m := range fieldArray[k] {
 			result.Water = fieldArray[k][m].Water + result.Water
 			result.Sediment = fieldArray[k][m].Sediment + result.Sediment
@@ -539,6 +537,7 @@ func BasintoField() {
 		fieldAverage[k].Water = result.Water / 10
 		fieldAverage[k].Tn = result.Tn / 10
 		fieldAverage[k].Tp = result.Tp / 10
+		fmt.Println(fieldAverage[k])
 	}
 
 }
@@ -651,11 +650,25 @@ func OutletResultArray() {
 			}
 		}
 	}
+	var sedimentdataArray = new(OutletResultTypeArray)
+	sedimentdataArray.ResultType = "sediment"
+	sedimentdataArray.ResultData = outletSedimentArray
+	outletArray = append(outletArray, sedimentdataArray)
 
-	outletArray["sediment"] = outletSedimentArray
-	outletArray["tn"] = outletTnArray
-	outletArray["tp"] = outletTpArray
-	outletArray["water"] = outletWaterArray
+	var flowdataArray = new(OutletResultTypeArray)
+	flowdataArray.ResultType = "flow"
+	flowdataArray.ResultData = outletWaterArray
+	outletArray = append(outletArray, flowdataArray)
+
+	var tpdataArray = new(OutletResultTypeArray)
+	tpdataArray.ResultType = "tp"
+	tpdataArray.ResultData = outletTpArray
+	outletArray = append(outletArray, tpdataArray)
+
+	var tndataArray = new(OutletResultTypeArray)
+	tndataArray.ResultType = "tn"
+	tndataArray.ResultData = outletTnArray
+	outletArray = append(outletArray, tndataArray)
 
 	db.Close()
 

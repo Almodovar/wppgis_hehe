@@ -541,6 +541,13 @@ body {
     font-size: 10px;
 }
 
+#offsite-chart,
+#onsite-chart:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
+}
+
+
 /*--------------------------------*/
 
 

@@ -654,6 +654,10 @@ $(document).ready(function() {
         }, 9000);
     });
 
+    var outletSediment = [];
+    var outletFlow = [];
+    var outletTp = [];
+    var outletTn = [];
 
     $("#model-run-btn").click(function(event) {
         $(document).trigger('show-loading-page');
@@ -705,6 +709,18 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(r) {
 
+                outletSediment = r[0].ResultData;
+                outletFlow = r[1].ResultData;
+                outletTp = r[2].ResultData;
+                outletTn = r[3].ResultData;
+
+                // alert(outletSediment);
+                // alert(outletFlow);
+                // alert(outletTp);
+                // alert(outletTn);
+
+                // alert(typeof outletTn[1]);
+
                 resultMap.removeLayer(resultMap.getLayers().getArray()[1]);
 
                 if ($('#show-field-map').prop("disabled") === true) {
@@ -723,8 +739,43 @@ $(document).ready(function() {
                     $('#show-flow-result').siblings().attr("disabled", false);
                 }
 
+                drawOutletChart("flow");
 
+                // $('#model-result-chart').highcharts({
+                //     title: {
+                //         text: '',
+                //         x: -20 //center
+                //     },
 
+                //     xAxis: {
+                //         categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                //             '2008', '2009', '2010', '2011'
+                //         ]
+                //     },
+                //     yAxis: {
+                //         title: {
+                //             text: 'Value'
+                //         },
+                //         plotLines: [{
+                //             value: 0,
+                //             width: 1,
+                //             color: '#808080'
+                //         }]
+                //     },
+                //     credits: {
+                //         enabled: false
+                //     },
+                //     tooltip: {
+                //         valueSuffix: ''
+                //     },
+                //     legend: {
+                //         enabled: false
+                //     },
+                //     series: [{
+                //         name: 'Average',
+                //         data: outletFlow
+                //     }]
+                // });
                 $("#loading-page").css("visibility", "hidden");
                 $("#model-result-page").css('visibility', 'visible');
 
@@ -925,22 +976,22 @@ $(document).ready(function() {
             if ($('#show-flow-result').prop("disabled") === true) {
                 num = hoveredResultFeature.getProperties().flow;
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
-                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Flow " + num);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Flow " + num);
             }
             if ($('#show-sediment-result').prop("disabled") === true) {
                 num = hoveredResultFeature.getProperties().sediment;
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
-                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Sediment " + num);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Sediment " + num);
             }
             if ($('#show-n-result').prop("disabled") === true) {
                 num = hoveredResultFeature.getProperties().tn;
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
-                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Total N " + num);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Total N " + num);
             }
             if ($('#show-p-result').prop("disabled") === true) {
                 num = hoveredResultFeature.getProperties().tp;
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
-                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "\r\n" + "Total P " + num);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Total P " + num);
             }
 
             $(resultInfo).show();
@@ -1013,6 +1064,8 @@ $(document).ready(function() {
                         }
                     }
 
+                    $("#offsite-chart").attr("disabled", false);
+                    $("#onsite-chart").attr("disabled", true);
 
                     $('#model-result-chart').highcharts({
                         title: {
@@ -1027,7 +1080,7 @@ $(document).ready(function() {
                         },
                         yAxis: {
                             title: {
-                                text: 'Value' + " ( " + feature.Type + feature.ID + " )"
+                                text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
                             },
                             plotLines: [{
                                 value: 0,
@@ -1059,6 +1112,18 @@ $(document).ready(function() {
 
         } else {
             resultMapSingleClick.getFeatures().clear();
+            if ($('#show-flow-result').prop("disabled") === true) {
+                drawOutletChart("flow");
+            }
+            if ($('#show-sediment-result').prop("disabled") === true) {
+                drawOutletChart("sediment");
+            }
+            if ($('#show-n-result').prop("disabled") === true) {
+                drawOutletChart("tn");
+            }
+            if ($('#show-p-result').prop("disabled") === true) {
+                drawOutletChart("tp");
+            }
         }
     });
 
@@ -1089,6 +1154,7 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleFlowFunction);
+        drawOutletChart("flow");
         $('#show-flow-result').attr("disabled", true);
         $('#show-flow-result').siblings().attr("disabled", false);
 
@@ -1098,6 +1164,7 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleSedimentFunction);
+        drawOutletChart("sediment");
         $('#show-sediment-result').attr("disabled", true);
         $('#show-sediment-result').siblings().attr("disabled", false);
     });
@@ -1106,6 +1173,7 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTnFunction);
+        drawOutletChart("tn");
         $('#show-n-result').attr("disabled", true);
         $('#show-n-result').siblings().attr("disabled", false);
 
@@ -1115,6 +1183,7 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[1];
         a.setStyle(styleTpFunction);
+        drawOutletChart("tp");
         $('#show-p-result').attr("disabled", true);
         $('#show-p-result').siblings().attr("disabled", false);
     });
@@ -1128,6 +1197,7 @@ $(document).ready(function() {
         $('#show-field-map-result').attr("disabled", true);
         $('#show-flow-result').attr("disabled", true);
         $('#show-flow-result').siblings().attr("disabled", false);
+        drawOutletChart("flow");
     });
 
     $("#show-subbasin-map-result").click(function(event) {
@@ -1138,8 +1208,70 @@ $(document).ready(function() {
         $('#show-field-map-result').attr("disabled", false);
         $('#show-flow-result').attr("disabled", true);
         $('#show-flow-result').siblings().attr("disabled", false);
+        drawOutletChart("flow");
         /* Act on the event */
     });
+
+
+    function drawOutletChart(s) {
+        resultMapSingleClick.getFeatures().clear();
+
+        $("#offsite-chart").attr("disabled", true);
+        $("#onsite-chart").attr("disabled", false);
+
+        var data = [];
+        if (s === "sediment") {
+            data = outletSediment;
+        }
+        if (s === "flow") {
+            data = outletFlow;
+        }
+        if (s === "tp") {
+            data = outletTp;
+        }
+        if (s === "tn") {
+            data = outletTn;
+        }
+        $('#model-result-chart').highcharts({
+            title: {
+                text: '',
+                x: -20 //center
+            },
+
+            xAxis: {
+                categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                    '2008', '2009', '2010', '2011'
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Yr',
+                data: data
+            }]
+        });
+    }
+
+
+    
+
     // ************************************************************************************************************************************************************
     //
     //                                                                      BMP COMPARE PAGE
@@ -1202,44 +1334,6 @@ $(document).ready(function() {
     // ****************************************************
 
 
-    $('#model-result-chart').highcharts({
-        title: {
-            text: '',
-            x: -20 //center
-        },
-
-        xAxis: {
-            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
-                '2008', '2009', '2010', '2011'
-            ]
-        },
-        yAxis: {
-            title: {
-                text: 'Value' + " ( " + feature.Type + feature.ID + " )"
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        credits: {
-            enabled: false
-        },
-        tooltip: {
-            valueSuffix: ''
-        },
-        legend: {
-            enabled: false
-        },
-        series: [{
-            name: 'Average',
-            data: []
-        }, {
-            name: 'Yr',
-            data: []
-        }]
-    });
 
     $('#model-compare-chart').highcharts({
         legend: {
