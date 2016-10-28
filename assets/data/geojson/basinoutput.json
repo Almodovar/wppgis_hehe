@@ -12,13 +12,13 @@
       "properties": {
         "name": "1",
         "description": "",
-        "sediment": 1.8882845599999996,
+        "sediment": 1.88828456,
         "flow": 610.51508,
-        "tp": 6.380881,
-        "tn": 62.444354999999995,
-        "sedimentlevel": "Slight",
-        "flowlevel": "Bad",
-        "tplevel": "Slight",
+        "tp": 6.3808810000000005,
+        "tn": 62.44435500000001,
+        "sedimentlevel": "Normal",
+        "flowlevel": "Slight",
+        "tplevel": "Normal",
         "tnlevel": "Bad"
       },
       "geometry": {
@@ -1103,12 +1103,12 @@
         "description": "",
         "sediment": 3.217371,
         "flow": 586.06034,
-        "tp": 9.137378,
-        "tn": 59.081542,
+        "tp": 9.137378000000002,
+        "tn": 59.08154199999999,
         "sedimentlevel": "Bad",
         "flowlevel": "Normal",
         "tplevel": "Bad",
-        "tnlevel": "Bad"
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -2256,12 +2256,12 @@
         "name": "3",
         "description": "",
         "sediment": 1.95180234,
-        "flow": 608.70482,
-        "tp": 6.5478456,
+        "flow": 608.7048200000002,
+        "tp": 6.5478456000000005,
         "tn": 55.4141,
-        "sedimentlevel": "Slight",
-        "flowlevel": "Bad",
-        "tplevel": "Slight",
+        "sedimentlevel": "Normal",
+        "flowlevel": "Slight",
+        "tplevel": "Normal",
         "tnlevel": "Slight"
       },
       "geometry": {
@@ -4524,14 +4524,14 @@
       "properties": {
         "name": "4",
         "description": "",
-        "sediment": 1.53251699,
-        "flow": 609.7036800000001,
-        "tp": 5.7800416,
-        "tn": 50.027103,
-        "sedimentlevel": "Slight",
+        "sediment": 2.6919989,
+        "flow": 625.45952,
+        "tp": 7.9960047,
+        "tn": 61.187585,
+        "sedimentlevel": "Bad",
         "flowlevel": "Bad",
-        "tplevel": "Slight",
-        "tnlevel": "Normal"
+        "tplevel": "Bad",
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -5813,10 +5813,10 @@
       "properties": {
         "name": "5",
         "description": "",
-        "sediment": 1.2581753999999998,
-        "flow": 561.4594399999999,
-        "tp": 4.8058084999999995,
-        "tn": 36.626565,
+        "sediment": 1.76684348,
+        "flow": 573.98052,
+        "tp": 5.8676604,
+        "tn": 43.510557000000006,
         "sedimentlevel": "Normal",
         "flowlevel": "Good",
         "tplevel": "Normal",
@@ -8807,14 +8807,14 @@
       "properties": {
         "name": "6",
         "description": "",
-        "sediment": 1.1256192000000003,
-        "flow": 575.2664500000001,
-        "tp": 4.6783544,
-        "tn": 43.612832000000004,
-        "sedimentlevel": "Normal",
-        "flowlevel": "Good",
-        "tplevel": "Normal",
-        "tnlevel": "Normal"
+        "sediment": 2.07815968,
+        "flow": 591.0502299999999,
+        "tp": 6.6376583,
+        "tn": 56.001063,
+        "sedimentlevel": "Slight",
+        "flowlevel": "Normal",
+        "tplevel": "Slight",
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -11891,14 +11891,14 @@
       "properties": {
         "name": "7",
         "description": "",
-        "sediment": 1.29867262,
-        "flow": 580.7400700000001,
-        "tp": 4.265351300000001,
-        "tn": 39.673736,
+        "sediment": 1.39105659,
+        "flow": 585.7752399999999,
+        "tp": 4.5509205,
+        "tn": 43.580698999999996,
         "sedimentlevel": "Normal",
-        "flowlevel": "Normal",
+        "flowlevel": "Good",
         "tplevel": "Normal",
-        "tnlevel": "Good"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13340,14 +13340,14 @@
       "properties": {
         "name": "8",
         "description": "",
-        "sediment": 2.7150857999999998,
-        "flow": 587.2492,
-        "tp": 8.2244179,
-        "tn": 44.845592999999994,
+        "sediment": 3.3178818999999997,
+        "flow": 605.80286,
+        "tp": 9.609160199999998,
+        "tn": 57.28970200000001,
         "sedimentlevel": "Bad",
         "flowlevel": "Normal",
         "tplevel": "Bad",
-        "tnlevel": "Normal"
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13611,7 +13611,7 @@
         "sedimentlevel": "Bad",
         "flowlevel": "Bad",
         "tplevel": "Bad",
-        "tnlevel": "Slight"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -14231,7 +14231,7 @@
         "sediment": 1.28437886,
         "flow": 614.08459,
         "tp": 5.2499792,
-        "tn": 46.196839999999995,
+        "tn": 46.19684,
         "sedimentlevel": "Normal",
         "flowlevel": "Bad",
         "tplevel": "Normal",
@@ -15347,10 +15347,10 @@
       "properties": {
         "name": "11",
         "description": "",
-        "sediment": 0.599073031,
-        "flow": 584.0709,
-        "tp": 3.38146585,
-        "tn": 31.7831072,
+        "sediment": 0.867075536,
+        "flow": 588.65094,
+        "tp": 3.8450826500000006,
+        "tn": 34.304578799999994,
         "sedimentlevel": "Good",
         "flowlevel": "Normal",
         "tplevel": "Good",
@@ -15841,10 +15841,10 @@
       "properties": {
         "name": "12",
         "description": "",
-        "sediment": 0.8387505599999999,
-        "flow": 589.7714599999999,
-        "tp": 3.5236223000000004,
-        "tn": 30.044644899999998,
+        "sediment": 1.00162589,
+        "flow": 600.98714,
+        "tp": 3.990368300000001,
+        "tn": 35.829153,
         "sedimentlevel": "Good",
         "flowlevel": "Normal",
         "tplevel": "Good",
@@ -16221,13 +16221,13 @@
         "name": "13",
         "description": "",
         "sediment": 0.8867726300000001,
-        "flow": 610.6975800000001,
-        "tp": 4.410313700000001,
-        "tn": 56.92240599999999,
-        "sedimentlevel": "Normal",
-        "flowlevel": "Bad",
-        "tplevel": "Normal",
-        "tnlevel": "Bad"
+        "flow": 610.69758,
+        "tp": 4.410313699999999,
+        "tn": 56.922406,
+        "sedimentlevel": "Good",
+        "flowlevel": "Slight",
+        "tplevel": "Good",
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -16649,13 +16649,13 @@
       "properties": {
         "name": "14",
         "description": "",
-        "sediment": 1.7029686100000003,
-        "flow": 633.7238500000001,
+        "sediment": 1.7029686099999999,
+        "flow": 633.72385,
         "tp": 6.440092,
         "tn": 66.548766,
-        "sedimentlevel": "Slight",
+        "sedimentlevel": "Normal",
         "flowlevel": "Severe",
-        "tplevel": "Slight",
+        "tplevel": "Normal",
         "tnlevel": "Severe"
       },
       "geometry": {
@@ -17483,13 +17483,13 @@
       "properties": {
         "name": "15",
         "description": "",
-        "sediment": 1.7604984599999998,
-        "flow": 607.83849,
-        "tp": 6.5654761,
-        "tn": 66.78054399999999,
-        "sedimentlevel": "Slight",
+        "sediment": 1.7604984600000002,
+        "flow": 607.8384900000001,
+        "tp": 6.565476100000001,
+        "tn": 66.780544,
+        "sedimentlevel": "Normal",
         "flowlevel": "Slight",
-        "tplevel": "Slight",
+        "tplevel": "Normal",
         "tnlevel": "Severe"
       },
       "geometry": {
@@ -18677,14 +18677,14 @@
       "properties": {
         "name": "16",
         "description": "",
-        "sediment": 1.5693247600000002,
-        "flow": 594.07349,
-        "tp": 5.869801799999999,
-        "tn": 48.418563,
-        "sedimentlevel": "Slight",
+        "sediment": 1.72052473,
+        "flow": 603.51765,
+        "tp": 6.4128311,
+        "tn": 56.58522599999999,
+        "sedimentlevel": "Normal",
         "flowlevel": "Normal",
-        "tplevel": "Slight",
-        "tnlevel": "Normal"
+        "tplevel": "Normal",
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -20721,10 +20721,10 @@
       "properties": {
         "name": "17",
         "description": "",
-        "sediment": 0.92968389,
-        "flow": 593.99431,
-        "tp": 3.4592687,
-        "tn": 25.31684,
+        "sediment": 1.2556494299999998,
+        "flow": 601.23134,
+        "tp": 4.1487423,
+        "tn": 28.753915999999997,
         "sedimentlevel": "Normal",
         "flowlevel": "Normal",
         "tplevel": "Good",
@@ -21565,10 +21565,10 @@
       "properties": {
         "name": "18",
         "description": "",
-        "sediment": 0.62993325,
-        "flow": 554.7035599999999,
-        "tp": 3.2697111999999997,
-        "tn": 36.398346000000004,
+        "sediment": 0.8755041199999999,
+        "flow": 569.63604,
+        "tp": 3.9401953,
+        "tn": 39.893573,
         "sedimentlevel": "Good",
         "flowlevel": "Good",
         "tplevel": "Good",
@@ -24029,14 +24029,14 @@
       "properties": {
         "name": "19",
         "description": "",
-        "sediment": 1.52410049,
-        "flow": 560.07401,
-        "tp": 5.2944791,
-        "tn": 39.589077,
-        "sedimentlevel": "Normal",
+        "sediment": 2.2101168,
+        "flow": 571.50803,
+        "tp": 6.7007703,
+        "tn": 44.254290999999995,
+        "sedimentlevel": "Slight",
         "flowlevel": "Good",
-        "tplevel": "Normal",
-        "tnlevel": "Good"
+        "tplevel": "Slight",
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27393,10 +27393,10 @@
       "properties": {
         "name": "20",
         "description": "",
-        "sediment": 1.2792447,
-        "flow": 592.5955500000001,
-        "tp": 5.1192503,
-        "tn": 45.461888,
+        "sediment": 1.4271006099999997,
+        "flow": 600.4432,
+        "tp": 5.6167265,
+        "tn": 52.175121000000004,
         "sedimentlevel": "Normal",
         "flowlevel": "Normal",
         "tplevel": "Normal",
@@ -28432,13 +28432,13 @@
         "name": "21",
         "description": "",
         "sediment": 0.5862768700000001,
-        "flow": 601.6381100000001,
+        "flow": 601.63811,
         "tp": 3.5200575,
         "tn": 51.67408499999999,
         "sedimentlevel": "Good",
-        "flowlevel": "Slight",
+        "flowlevel": "Normal",
         "tplevel": "Good",
-        "tnlevel": "Slight"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -29255,14 +29255,14 @@
       "properties": {
         "name": "22",
         "description": "",
-        "sediment": 1.0833376700000001,
-        "flow": 633.5731499999999,
-        "tp": 4.8821711,
-        "tn": 55.97180899999999,
-        "sedimentlevel": "Normal",
+        "sediment": 3.0203937999999995,
+        "flow": 636.5545499999998,
+        "tp": 8.878468499999999,
+        "tn": 52.743097,
+        "sedimentlevel": "Bad",
         "flowlevel": "Severe",
-        "tplevel": "Normal",
-        "tnlevel": "Bad"
+        "tplevel": "Bad",
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -29741,10 +29741,10 @@
         "description": "",
         "sediment": 2.127169,
         "flow": 610.6008899999999,
-        "tp": 7.357040699999999,
-        "tn": 69.06959599999999,
+        "tp": 7.357040700000001,
+        "tn": 69.069596,
         "sedimentlevel": "Slight",
-        "flowlevel": "Bad",
+        "flowlevel": "Slight",
         "tplevel": "Slight",
         "tnlevel": "Severe"
       },
@@ -31303,14 +31303,14 @@
       "properties": {
         "name": "24",
         "description": "",
-        "sediment": 0.51669717,
-        "flow": 589.532,
-        "tp": 3.4809232000000003,
-        "tn": 51.601529000000006,
+        "sediment": 0.5166971699999999,
+        "flow": 589.5319999999999,
+        "tp": 3.4809231999999994,
+        "tn": 51.60152899999999,
         "sedimentlevel": "Good",
         "flowlevel": "Normal",
         "tplevel": "Good",
-        "tnlevel": "Slight"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -32347,14 +32347,14 @@
       "properties": {
         "name": "25",
         "description": "",
-        "sediment": 0.7312834699999999,
-        "flow": 604.5725,
-        "tp": 4.0910485,
-        "tn": 52.54088100000001,
+        "sediment": 0.8335550700000001,
+        "flow": 617.79249,
+        "tp": 4.473851,
+        "tn": 60.660373000000014,
         "sedimentlevel": "Good",
-        "flowlevel": "Slight",
-        "tplevel": "Normal",
-        "tnlevel": "Slight"
+        "flowlevel": "Bad",
+        "tplevel": "Good",
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -33547,13 +33547,13 @@
         "name": "26",
         "description": "",
         "sediment": 2.331231,
-        "flow": 609.56158,
+        "flow": 609.5615799999999,
         "tp": 7.581568300000001,
         "tn": 59.049635,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Bad",
-        "tplevel": "Bad",
-        "tnlevel": "Bad"
+        "sedimentlevel": "Slight",
+        "flowlevel": "Slight",
+        "tplevel": "Slight",
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -34311,11 +34311,11 @@
         "name": "27",
         "description": "",
         "sediment": 3.2011398,
-        "flow": 608.4137499999999,
+        "flow": 608.41375,
         "tp": 9.0974247,
-        "tn": 55.015004999999995,
+        "tn": 55.01500500000001,
         "sedimentlevel": "Bad",
-        "flowlevel": "Bad",
+        "flowlevel": "Slight",
         "tplevel": "Bad",
         "tnlevel": "Slight"
       },
@@ -35684,11 +35684,11 @@
       "properties": {
         "name": "28",
         "description": "",
-        "sediment": 1.8370468,
+        "sediment": 1.8370468000000002,
         "flow": 626.9162899999999,
-        "tp": 6.642775500000001,
-        "tn": 62.47200600000001,
-        "sedimentlevel": "Slight",
+        "tp": 6.642775499999999,
+        "tn": 62.472005999999986,
+        "sedimentlevel": "Normal",
         "flowlevel": "Severe",
         "tplevel": "Slight",
         "tnlevel": "Bad"
@@ -36527,14 +36527,14 @@
       "properties": {
         "name": "29",
         "description": "",
-        "sediment": 2.3529758999999997,
-        "flow": 621.96952,
-        "tp": 7.7166582,
-        "tn": 63.695814,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Severe",
-        "tplevel": "Bad",
-        "tnlevel": "Severe"
+        "sediment": 2.3529759,
+        "flow": 621.9695200000001,
+        "tp": 7.7166581999999995,
+        "tn": 63.695814000000006,
+        "sedimentlevel": "Slight",
+        "flowlevel": "Bad",
+        "tplevel": "Slight",
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -37406,10 +37406,10 @@
       "properties": {
         "name": "30",
         "description": "",
-        "sediment": 0.21295234000000002,
-        "flow": 544.60692,
-        "tp": 2.1611184,
-        "tn": 31.011764,
+        "sediment": 0.26481706000000005,
+        "flow": 548.49182,
+        "tp": 2.3120399000000003,
+        "tn": 31.999971999999996,
         "sedimentlevel": "Great",
         "flowlevel": "Good",
         "tplevel": "Great",
@@ -41140,8 +41140,8 @@
       "properties": {
         "name": "31",
         "description": "",
-        "sediment": 0.0194828748,
-        "flow": 506.12021999999996,
+        "sediment": 0.019482874799999998,
+        "flow": 506.1202200000001,
         "tp": 1.43126357,
         "tn": 23.196828,
         "sedimentlevel": "Great",
@@ -42448,14 +42448,14 @@
       "properties": {
         "name": "32",
         "description": "",
-        "sediment": 0.4854169199999999,
-        "flow": 588.1207899999999,
-        "tp": 3.1355894999999996,
-        "tn": 39.299361999999995,
-        "sedimentlevel": "Good",
-        "flowlevel": "Normal",
-        "tplevel": "Good",
-        "tnlevel": "Good"
+        "sediment": 1.60059122,
+        "flow": 617.80075,
+        "tp": 5.726100500000001,
+        "tn": 50.329283999999994,
+        "sedimentlevel": "Normal",
+        "flowlevel": "Bad",
+        "tplevel": "Normal",
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -43751,10 +43751,10 @@
       "properties": {
         "name": "33",
         "description": "",
-        "sediment": 0.098188033,
-        "flow": 546.8174499999999,
-        "tp": 1.8161190399999998,
-        "tn": 24.087863000000002,
+        "sediment": 0.154164074,
+        "flow": 552.28228,
+        "tp": 2.0102293999999996,
+        "tn": 26.671475000000004,
         "sedimentlevel": "Great",
         "flowlevel": "Good",
         "tplevel": "Great",
@@ -45310,14 +45310,14 @@
       "properties": {
         "name": "34",
         "description": "",
-        "sediment": 0.5722683000000001,
-        "flow": 521.84488,
-        "tp": 2.8563378000000004,
-        "tn": 27.858117,
+        "sediment": 1.0165671,
+        "flow": 524.95579,
+        "tp": 3.6030307,
+        "tn": 31.033055,
         "sedimentlevel": "Good",
         "flowlevel": "Great",
         "tplevel": "Good",
-        "tnlevel": "Great"
+        "tnlevel": "Good"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -47774,10 +47774,10 @@
       "properties": {
         "name": "35",
         "description": "",
-        "sediment": 0.085459214,
-        "flow": 518.14781,
-        "tp": 1.0887606300000001,
-        "tn": 24.331516999999998,
+        "sediment": 0.09702575799999999,
+        "flow": 520.0311100000001,
+        "tp": 1.1275586600000003,
+        "tn": 25.085373000000004,
         "sedimentlevel": "Great",
         "flowlevel": "Great",
         "tplevel": "Great",
@@ -49093,14 +49093,14 @@
       "properties": {
         "name": "36",
         "description": "",
-        "sediment": 0.7876166669999999,
-        "flow": 604.9454600000001,
-        "tp": 3.8760591,
-        "tn": 41.917919,
-        "sedimentlevel": "Good",
-        "flowlevel": "Slight",
-        "tplevel": "Good",
-        "tnlevel": "Normal"
+        "sediment": 2.2900435000000003,
+        "flow": 630.05015,
+        "tp": 7.164666000000001,
+        "tn": 56.21857500000001,
+        "sedimentlevel": "Slight",
+        "flowlevel": "Severe",
+        "tplevel": "Slight",
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -49817,10 +49817,10 @@
       "properties": {
         "name": "37",
         "description": "",
-        "sediment": 0.26836954999999996,
-        "flow": 531.4203,
-        "tp": 2.184346,
-        "tn": 29.248838999999997,
+        "sediment": 0.35509386000000004,
+        "flow": 539.30693,
+        "tp": 2.4543936,
+        "tn": 31.56112,
         "sedimentlevel": "Great",
         "flowlevel": "Great",
         "tplevel": "Great",
@@ -56971,14 +56971,14 @@
       "properties": {
         "name": "38",
         "description": "",
-        "sediment": 0.31326398999999994,
-        "flow": 528.7512399999999,
-        "tp": 2.3890187000000003,
-        "tn": 30.075671,
+        "sediment": 0.6125366999999999,
+        "flow": 528.50279,
+        "tp": 2.9032479,
+        "tn": 30.352075000000003,
         "sedimentlevel": "Good",
         "flowlevel": "Great",
         "tplevel": "Good",
-        "tnlevel": "Good"
+        "tnlevel": "Great"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -58255,14 +58255,14 @@
       "properties": {
         "name": "39",
         "description": "",
-        "sediment": 2.2422957000000006,
-        "flow": 565.70372,
-        "tp": 6.6810079,
-        "tn": 50.479206999999995,
+        "sediment": 2.155932,
+        "flow": 584.2695,
+        "tp": 6.786867799999999,
+        "tn": 53.717025,
         "sedimentlevel": "Slight",
         "flowlevel": "Good",
         "tplevel": "Slight",
-        "tnlevel": "Slight"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -59044,13 +59044,13 @@
       "properties": {
         "name": "40",
         "description": "",
-        "sediment": 0.85201432,
-        "flow": 606.78995,
-        "tp": 4.0668684,
-        "tn": 44.53820700000001,
-        "sedimentlevel": "Normal",
-        "flowlevel": "Slight",
-        "tplevel": "Normal",
+        "sediment": 2.0880657,
+        "flow": 630.14002,
+        "tp": 6.761884400000001,
+        "tn": 54.687855,
+        "sedimentlevel": "Slight",
+        "flowlevel": "Severe",
+        "tplevel": "Slight",
         "tnlevel": "Normal"
       },
       "geometry": {
@@ -60473,12 +60473,12 @@
       "properties": {
         "name": "41",
         "description": "",
-        "sediment": 0.9837157939999999,
-        "flow": 602.9073500000001,
-        "tp": 4.4756525,
-        "tn": 47.458924999999994,
+        "sediment": 1.5159894999999999,
+        "flow": 622.8472300000001,
+        "tp": 5.673602399999999,
+        "tn": 54.23533299999999,
         "sedimentlevel": "Normal",
-        "flowlevel": "Slight",
+        "flowlevel": "Bad",
         "tplevel": "Normal",
         "tnlevel": "Normal"
       },
@@ -61128,13 +61128,13 @@
         "name": "42",
         "description": "",
         "sediment": 1.17475219,
-        "flow": 645.78191,
+        "flow": 645.7819099999999,
         "tp": 4.7075777,
-        "tn": 40.798269,
-        "sedimentlevel": "Normal",
+        "tn": 40.798886,
+        "sedimentlevel": "Good",
         "flowlevel": "Severe",
         "tplevel": "Normal",
-        "tnlevel": "Normal"
+        "tnlevel": "Good"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -61411,14 +61411,14 @@
       "properties": {
         "name": "43",
         "description": "",
-        "sediment": 0.57014987,
-        "flow": 552.0404799999999,
-        "tp": 3.1069177999999997,
-        "tn": 43.394223999999994,
+        "sediment": 1.1383885100000002,
+        "flow": 551.23435,
+        "tp": 4.0828962,
+        "tn": 41.773801999999996,
         "sedimentlevel": "Good",
         "flowlevel": "Good",
         "tplevel": "Good",
-        "tnlevel": "Normal"
+        "tnlevel": "Good"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -63271,12 +63271,12 @@
         "name": "44",
         "description": "",
         "sediment": 4.181974899999999,
-        "flow": 623.9697,
-        "tp": 10.807795599999999,
-        "tn": 59.898032,
+        "flow": 623.9696999999999,
+        "tp": 10.8077956,
+        "tn": 59.898032000000015,
         "sedimentlevel": "Severe",
-        "flowlevel": "Severe",
-        "tplevel": "Severe",
+        "flowlevel": "Bad",
+        "tplevel": "Bad",
         "tnlevel": "Bad"
       },
       "geometry": {
@@ -64159,14 +64159,14 @@
       "properties": {
         "name": "45",
         "description": "",
-        "sediment": 4.5585786,
-        "flow": 604.2293200000001,
+        "sediment": 4.558578600000001,
+        "flow": 604.22932,
         "tp": 11.3590776,
-        "tn": 63.731326999999986,
+        "tn": 63.731327,
         "sedimentlevel": "Severe",
-        "flowlevel": "Slight",
+        "flowlevel": "Normal",
         "tplevel": "Severe",
-        "tnlevel": "Severe"
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -65368,14 +65368,14 @@
       "properties": {
         "name": "46",
         "description": "",
-        "sediment": 3.6348326000000006,
-        "flow": 605.64565,
-        "tp": 9.938440500000002,
-        "tn": 61.228897,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Slight",
+        "sediment": 5.1485553,
+        "flow": 626.5129999999999,
+        "tp": 12.189997700000001,
+        "tn": 66.596766,
+        "sedimentlevel": "Severe",
+        "flowlevel": "Severe",
         "tplevel": "Severe",
-        "tnlevel": "Bad"
+        "tnlevel": "Severe"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -67832,11 +67832,11 @@
       "properties": {
         "name": "47",
         "description": "",
-        "sediment": 0.9588589799999998,
-        "flow": 572.9897699999999,
-        "tp": 3.9953642,
-        "tn": 37.163421,
-        "sedimentlevel": "Normal",
+        "sediment": 2.10284464,
+        "flow": 580.61377,
+        "tp": 6.054828900000001,
+        "tn": 37.719307,
+        "sedimentlevel": "Slight",
         "flowlevel": "Good",
         "tplevel": "Normal",
         "tnlevel": "Good"
@@ -72402,11 +72402,11 @@
         "name": "48",
         "description": "",
         "sediment": 4.0091756,
-        "flow": 622.5167899999999,
-        "tp": 10.820042599999999,
+        "flow": 622.51679,
+        "tp": 10.8200426,
         "tn": 59.495858,
-        "sedimentlevel": "Severe",
-        "flowlevel": "Severe",
+        "sedimentlevel": "Bad",
+        "flowlevel": "Bad",
         "tplevel": "Severe",
         "tnlevel": "Bad"
       },
@@ -72980,10 +72980,10 @@
       "properties": {
         "name": "49",
         "description": "",
-        "sediment": 0.73493843,
-        "flow": 547.38446,
-        "tp": 3.4658235,
-        "tn": 38.036109999999994,
+        "sediment": 0.6566044700000001,
+        "flow": 557.7124799999999,
+        "tp": 3.514728999999999,
+        "tn": 40.66656400000001,
         "sedimentlevel": "Good",
         "flowlevel": "Good",
         "tplevel": "Good",
@@ -74554,9 +74554,9 @@
         "tp": 9.253312300000001,
         "tn": 53.93069800000001,
         "sedimentlevel": "Bad",
-        "flowlevel": "Bad",
+        "flowlevel": "Slight",
         "tplevel": "Bad",
-        "tnlevel": "Slight"
+        "tnlevel": "Normal"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -75323,13 +75323,13 @@
       "properties": {
         "name": "51",
         "description": "",
-        "sediment": 2.14001718,
-        "flow": 555.26759,
-        "tp": 6.444910200000001,
-        "tn": 45.581601,
-        "sedimentlevel": "Slight",
+        "sediment": 3.4577685000000002,
+        "flow": 566.87861,
+        "tp": 8.795078799999999,
+        "tn": 51.820018000000005,
+        "sedimentlevel": "Bad",
         "flowlevel": "Good",
-        "tplevel": "Slight",
+        "tplevel": "Bad",
         "tnlevel": "Normal"
       },
       "geometry": {
@@ -76892,14 +76892,14 @@
       "properties": {
         "name": "52",
         "description": "",
-        "sediment": 0.5132868800000001,
-        "flow": 550.14363,
-        "tp": 3.2351858,
-        "tn": 40.992405000000005,
+        "sediment": 0.78975273,
+        "flow": 553.1655099999999,
+        "tp": 3.792003,
+        "tn": 39.79696,
         "sedimentlevel": "Good",
         "flowlevel": "Good",
         "tplevel": "Good",
-        "tnlevel": "Normal"
+        "tnlevel": "Good"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -78713,12 +78713,12 @@
         "description": "",
         "sediment": 4.7589897,
         "flow": 613.7766899999999,
-        "tp": 11.915889099999998,
-        "tn": 63.844658,
+        "tp": 11.9158891,
+        "tn": 63.844657999999995,
         "sedimentlevel": "Severe",
-        "flowlevel": "Bad",
+        "flowlevel": "Slight",
         "tplevel": "Severe",
-        "tnlevel": "Severe"
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -79150,14 +79150,14 @@
       "properties": {
         "name": "54",
         "description": "",
-        "sediment": 3.3915184000000003,
-        "flow": 598.32934,
-        "tp": 9.7377584,
-        "tn": 55.805497,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Normal",
-        "tplevel": "Bad",
-        "tnlevel": "Bad"
+        "sediment": 5.9916996,
+        "flow": 619.53599,
+        "tp": 14.215283099999999,
+        "tn": 70.502702,
+        "sedimentlevel": "Severe",
+        "flowlevel": "Bad",
+        "tplevel": "Severe",
+        "tnlevel": "Severe"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -79949,14 +79949,14 @@
       "properties": {
         "name": "55",
         "description": "",
-        "sediment": 3.0840085000000004,
-        "flow": 600.90518,
-        "tp": 8.980193400000001,
-        "tn": 52.31944,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Slight",
-        "tplevel": "Bad",
-        "tnlevel": "Slight"
+        "sediment": 6.0687083,
+        "flow": 621.3968100000001,
+        "tp": 13.830383699999999,
+        "tn": 69.629806,
+        "sedimentlevel": "Severe",
+        "flowlevel": "Bad",
+        "tplevel": "Severe",
+        "tnlevel": "Severe"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -80329,12 +80329,12 @@
         "name": "56",
         "description": "",
         "sediment": 3.6463206,
-        "flow": 607.38846,
+        "flow": 607.3884599999999,
         "tp": 9.8781355,
-        "tn": 59.804334000000004,
-        "sedimentlevel": "Severe",
-        "flowlevel": "Slight",
-        "tplevel": "Severe",
+        "tn": 59.804334,
+        "sedimentlevel": "Bad",
+        "flowlevel": "Normal",
+        "tplevel": "Bad",
         "tnlevel": "Bad"
       },
       "geometry": {
@@ -80892,14 +80892,14 @@
       "properties": {
         "name": "57",
         "description": "",
-        "sediment": 1.75062085,
-        "flow": 593.4484399999999,
-        "tp": 6.0788306,
-        "tn": 48.62308399999999,
+        "sediment": 2.50611707,
+        "flow": 615.09993,
+        "tp": 7.8473044000000005,
+        "tn": 62.059888,
         "sedimentlevel": "Slight",
-        "flowlevel": "Normal",
+        "flowlevel": "Bad",
         "tplevel": "Slight",
-        "tnlevel": "Normal"
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -82161,13 +82161,13 @@
       "properties": {
         "name": "58",
         "description": "",
-        "sediment": 1.4908558399999998,
-        "flow": 589.20513,
-        "tp": 5.6594763,
-        "tn": 50.160713,
-        "sedimentlevel": "Normal",
+        "sediment": 2.1911085,
+        "flow": 606.3452199999999,
+        "tp": 7.2414423,
+        "tn": 58.72667199999999,
+        "sedimentlevel": "Slight",
         "flowlevel": "Normal",
-        "tplevel": "Normal",
+        "tplevel": "Slight",
         "tnlevel": "Slight"
       },
       "geometry": {
@@ -83476,13 +83476,13 @@
         "name": "59",
         "description": "",
         "sediment": 3.6595293,
-        "flow": 614.4920299999999,
+        "flow": 614.49203,
         "tp": 9.781726299999999,
         "tn": 58.2842,
-        "sedimentlevel": "Severe",
+        "sedimentlevel": "Bad",
         "flowlevel": "Bad",
         "tplevel": "Bad",
-        "tnlevel": "Bad"
+        "tnlevel": "Slight"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -84439,10 +84439,10 @@
       "properties": {
         "name": "60",
         "description": "",
-        "sediment": 4.2630406,
+        "sediment": 4.263040599999999,
         "flow": 607.52911,
         "tp": 10.9273776,
-        "tn": 62.017346999999994,
+        "tn": 62.01734700000001,
         "sedimentlevel": "Severe",
         "flowlevel": "Slight",
         "tplevel": "Severe",
@@ -85038,14 +85038,14 @@
       "properties": {
         "name": "61",
         "description": "",
-        "sediment": 2.544138,
-        "flow": 587.18657,
-        "tp": 7.9642078,
-        "tn": 52.410577,
+        "sediment": 3.7192091000000005,
+        "flow": 610.7673900000001,
+        "tp": 10.363915800000001,
+        "tn": 62.36603799999999,
         "sedimentlevel": "Bad",
-        "flowlevel": "Normal",
+        "flowlevel": "Slight",
         "tplevel": "Bad",
-        "tnlevel": "Slight"
+        "tnlevel": "Bad"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -89212,13 +89212,13 @@
       "properties": {
         "name": "62",
         "description": "",
-        "sediment": 1.9926622600000001,
-        "flow": 577.03898,
-        "tp": 5.9768146,
-        "tn": 38.36983199999999,
-        "sedimentlevel": "Slight",
+        "sediment": 1.99266226,
+        "flow": 577.0389799999999,
+        "tp": 5.976814599999999,
+        "tn": 38.369831999999995,
+        "sedimentlevel": "Normal",
         "flowlevel": "Good",
-        "tplevel": "Slight",
+        "tplevel": "Normal",
         "tnlevel": "Good"
       },
       "geometry": {
@@ -89827,11 +89827,11 @@
         "name": "63",
         "description": "",
         "sediment": 2.9502714999999995,
-        "flow": 602.5027499999999,
-        "tp": 8.638441400000001,
+        "flow": 602.50275,
+        "tp": 8.6384414,
         "tn": 55.441471,
         "sedimentlevel": "Bad",
-        "flowlevel": "Slight",
+        "flowlevel": "Normal",
         "tplevel": "Bad",
         "tnlevel": "Slight"
       },
@@ -93850,13 +93850,13 @@
       "properties": {
         "name": "64",
         "description": "",
-        "sediment": 2.40338547,
+        "sediment": 2.4033854700000004,
         "flow": 608.14526,
         "tp": 7.6917424,
-        "tn": 63.99015000000001,
-        "sedimentlevel": "Bad",
-        "flowlevel": "Bad",
-        "tplevel": "Bad",
+        "tn": 63.99014999999999,
+        "sedimentlevel": "Slight",
+        "flowlevel": "Slight",
+        "tplevel": "Slight",
         "tnlevel": "Severe"
       },
       "geometry": {

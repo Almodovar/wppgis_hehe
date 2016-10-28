@@ -20,12 +20,16 @@ body {
     font-size: 12px;
 }
 
+#login-info {
+    display: none;
+}
+
 
 /*style for map.html*/
 
 #process-control {
     position: fixed;
-    z-index: 9;
+    z-index: 200;
     width: 100%;
     /*    background: rgba(128,122,122,0.3);
 */
@@ -140,7 +144,9 @@ body {
 
 #loading-info #progress-info #box2,
 #box3,
-#box4 {
+#box4,
+#box5,
+#box6 {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -545,6 +551,46 @@ body {
 #onsite-chart:disabled {
     /*font-size: 12px;*/
     cursor: pointer;
+}
+
+.input-err {
+    border: 2px solid rgba(232, 126, 126, 0.8);
+}
+
+#result-issue-description,
+#result-issue-submit {
+    margin-top: 10px;
+}
+
+.timeline-inverted:hover {
+    border-right: 10px solid rgba(37, 57, 205, 0.6);
+    cursor: pointer;
+}
+
+#responsive-timeline {
+    border-top: 2px solid rgba(198, 197, 197, 0.6);
+    border-bottom: 2px solid rgba(198, 197, 197, 0.6);
+}
+
+#result-issues {
+    position: relative;
+}
+
+#result-issue-talk {
+    position: absolute;
+    /*visibility: hidden;*/
+    top: 0px;
+    left: 0px;
+    background: white;
+    z-index: 100;
+}
+
+#talk-content {
+    margin-bottom: 20px;
+}
+
+#issue-comment {
+    margin-bottom: 20px;
 }
 
 
@@ -1008,6 +1054,13 @@ padding: 0 0;}*/
     #model-result-page,
     #model-compare-page,
     #model-optimize-page {
+        font-size: 10px;
+    }
+    #bmp-select-page .map-btn,
+    #bmp-compare-page .map-btn,
+    #model-result-page .map-btn,
+    #model-compare-page .map-btn,
+    #model-optimize-page .map-btn {
         font-size: 10px;
     }
     .model-issue-management * {

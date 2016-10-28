@@ -1,6 +1,9 @@
 package main
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 type ScenarioStore interface {
 	Save(scenario *Scenario) error
@@ -35,11 +38,13 @@ func (store *DBScenarioStore) Save(scenario *Scenario) error {
 }
 
 func (store *DBScenarioStore) Find(id string) (*Scenario, error) {
+	fmt.Println(id)
+
 	row := store.db.QueryRow(
 		`
-		SELECT id, user_id, name, location, description, size, created_at
+		SELECT id, user_id, name,  description, created_at
 		FROM scenarios
-		WHERE id = ?`,
+		WHERE id = $1`,
 		id,
 	)
 
@@ -51,7 +56,9 @@ func (store *DBScenarioStore) Find(id string) (*Scenario, error) {
 		&scenario.Description,
 		&scenario.CreatedAt,
 	)
-	return &scenario, err
+
+	fmt.Println(err)
+	return &scenario, nil
 }
 
 func (store *DBScenarioStore) FindAll() ([]Scenario, error) {

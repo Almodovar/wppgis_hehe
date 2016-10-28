@@ -92,7 +92,26 @@ func HandleScenarioDelete(w http.ResponseWriter, r *http.Request, _ httprouter.P
 
 func HandleScenarioCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	RenderTemplate(w, r, "scenarios/map", nil)
+	user, err := globalUserStore.Find(params.ByName("userID"))
+	if err != nil {
+		panic(err)
+	}
+
+	if user == nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	fmt.Println(params.ByName("scenarioID"))
+	scenario, err := globalScenarioStore.Find(params.ByName("scenarioID"))
+	if err != nil {
+		panic(err)
+	}
+
+	RenderTemplate(w, r, "scenarios/map", map[string]interface{}{
+		"Scenario": scenario,
+		"User":     user,
+	})
 
 }
 

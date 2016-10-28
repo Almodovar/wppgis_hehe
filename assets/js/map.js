@@ -13,6 +13,9 @@ $(document).ready(function() {
         $('#bmp-optimize-table').css('height', $(".model-result-map").height() + $("#model-optimize-chart").height() - $("#model-optimize-input").height() - $(".report-generate").height() - 60);
         $("#loading-page").css('height', $("#bmp-select-page").height() + 150);
         $("#loading-info").css('margin-top', ($("#loading-page").height() - 400) / 2);
+        $("#result-issue-talk").css('height', $("#responsive-timeline").height()+5);
+        $("#result-issue-talk").css('width', $("#result-issues").width());
+        // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
 
     }
     setHeight();
@@ -21,6 +24,7 @@ $(document).ready(function() {
         setHeight();
     });
 
+    $("#result-issue-talk").hide();
 
     // ****************************************************
     //              BOOTSTRAP PLUGINS
@@ -639,15 +643,19 @@ $(document).ready(function() {
         var fadeinBox = $("#box2");
         var nextfadeinBox = $("#box3");
         var lastfadeinBox = $("#box4");
+        var finalfadeinBox = $("#box5");
+        var thetruefinalfadeinBox = $("#box6");
 
 
         setTimeout(function fade() {
-            fadeinBox.stop(true, true).fadeIn(2000);
-            fadeoutBox.stop(true, true).fadeOut(2000, function() {
+            fadeinBox.stop(true, true).fadeIn(1500);
+            fadeoutBox.stop(true, true).fadeOut(1500, function() {
                 var temp = fadeinBox;
                 fadeinBox = nextfadeinBox;
                 nextfadeinBox = lastfadeinBox;
-                lastfadeinBox = fadeoutBox;
+                lastfadeinBox = finalfadeinBox;
+                finalfadeinBox = thetruefinalfadeinBox;
+                thetruefinalfadeinBox = fadeoutBox;
                 fadeoutBox = temp;
                 setTimeout(fade, 9000);
             });
@@ -782,7 +790,7 @@ $(document).ready(function() {
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
                 // alert(r);
                 $("#progress-info").empty();
-                $("#progress-info").append('<div id="box1"><p><span> Preparing modeling files ... </span></p></div><div id="box2"><p><span> Modeling BMPs ... </span></p></div>  <div id="box3"><p><span> Writing results to database ... </span></p></div>  <div id="box4"><p><span> Visualizing the output ... </span></p></div>  ')
+                $("#progress-info").append('<div id="box1"><p><span> Preparing modeling files ... </span></p></div><div id="box2"><p><span> Modeling BMPs ... </span></p></div>  <div id="box3"><p><span> Writing results to database ... </span></p></div>  <div id="box4"><p><span> Visualizing the output ... </span></p></div><div id="box5"><p><span> Thanks for your patience ... </span></p></div><div id="box6"><p><span> Finishing in seconds ... </span></p></div>   ');
             }
         });
     });
@@ -919,6 +927,19 @@ $(document).ready(function() {
         style: styleFlowFunction
     });
 
+
+    // var fieldResultArray = [];
+
+    // fieldOutput.getSource().on('addfeature', function(event) {
+    //     var fieldResultFeatures = fieldOutput.getSource().getFeatures();
+    //     for (i = 0; i < fieldResultFeatures.length; i++) {
+    //         var field = new Field();
+    //         field.id = fieldResultFeatures[i].getProperties().Name;
+    //         field.feature = fieldResultFeatures[i];
+    //         fieldResultArray.push(field);
+    //     }
+    // });
+
     var subbasinOutput = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: '/assets/data/geojson/basinoutput.json',
@@ -926,6 +947,18 @@ $(document).ready(function() {
         }),
         style: styleFlowFunction
     });
+
+    // var subbasinResultArray = [];
+
+    // subbasinOutput.getSource().on('addfeature', function(event) {
+    //     var subbasinResultFeatures = subbasinOutput.getSource().getFeatures();
+    //     for (i = 0; i < subbasinResultFeatures.length; i++) {
+    //         var subbasin = new Subbasin();
+    //         subbasin.id = subbasinResultFeatures[i].getProperties().Name;
+    //         subbasin.feature = subbasinResultFeatures[i];
+    //         subbasinResultArray.push(subbasin);
+    //     }
+    // });
 
     var resultMapPointerMove = new ol.interaction.Select({
         layers: [fieldOutput, subbasinOutput],
@@ -957,6 +990,9 @@ $(document).ready(function() {
     });
 
     resultMap.addOverlay(resultInfoOverlay);
+
+    $("#sel1").prop('disabled', true);
+
 
     // ****************************************************
     //              ResultMap Event Handler
@@ -1007,107 +1043,109 @@ $(document).ready(function() {
 
         selectedResultFeature = event.selected[0];
         if (selectedResultFeature) {
-            var feature = new Object();
-            feature.ID = parseInt(selectedResultFeature.getProperties().name);
-            feature.Type = determineFeatureType();
-            feature.ResultType = determineFeatureResultType();
+            drawFeatureChart();
 
-            var featureJson = JSON.stringify(feature);
-            $.ajax({
-                url: '/chart',
-                type: "post",
-                contentType: 'application/json; charset=utf-8',
-                data: featureJson,
-                dataType: 'json',
-                success: function(r) {
-                    var dataArray = [];
+            // var feature = new Object();
+            // feature.ID = parseInt(selectedResultFeature.getProperties().name);
+            // feature.Type = determineFeatureType();
+            // feature.ResultType = determineFeatureResultType();
 
-                    for (var i = 0; i < r.length; i++) {
-                        r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(1);
-                        dataArray[i] = parseFloat(r[i]);
-                    }
-                    // alert(r);
+            // var featureJson = JSON.stringify(feature);
+            // $.ajax({
+            //     url: '/chart',
+            //     type: "post",
+            //     contentType: 'application/json; charset=utf-8',
+            //     data: featureJson,
+            //     dataType: 'json',
+            //     success: function(r) {
+            //         var dataArray = [];
 
-                    var average = [];
-                    var averageNum;
+            //         for (var i = 0; i < r.length; i++) {
+            //             r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(1);
+            //             dataArray[i] = parseFloat(r[i]);
+            //         }
+            //         // alert(r);
 
-                    if (feature.ResultType == "sediment") {
-                        averageNum = selectedResultFeature.getProperties().sediment;
-                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                        averageNum = parseFloat(averageNum);
-                        for (i = 0; i < 10; i++) {
-                            average[i] = averageNum;
-                        }
-                    }
-                    if (feature.ResultType == "flow") {
-                        averageNum = selectedResultFeature.getProperties().flow;
-                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                        averageNum = parseFloat(averageNum);
-                        for (i = 0; i < 10; i++) {
-                            average[i] = selectedResultFeature.getProperties().flow;
-                        }
-                    }
-                    if (feature.ResultType == "tn") {
-                        averageNum = selectedResultFeature.getProperties().tn;
-                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                        averageNum = parseFloat(averageNum);
-                        for (i = 0; i < 10; i++) {
-                            average[i] = selectedResultFeature.getProperties().tn;
-                        }
-                    }
-                    if (feature.ResultType == "tp") {
-                        averageNum = selectedResultFeature.getProperties().tp;
-                        averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                        averageNum = parseFloat(averageNum);
-                        for (i = 0; i < 10; i++) {
-                            average[i] = selectedResultFeature.getProperties().tp;
-                        }
-                    }
+            //         var average = [];
+            //         var averageNum;
 
-                    $("#offsite-chart").attr("disabled", false);
-                    $("#onsite-chart").attr("disabled", true);
+            //         if (feature.ResultType == "sediment") {
+            //             averageNum = selectedResultFeature.getProperties().sediment;
+            //             averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+            //             averageNum = parseFloat(averageNum);
+            //             for (i = 0; i < 10; i++) {
+            //                 average[i] = averageNum;
+            //             }
+            //         }
+            //         if (feature.ResultType == "flow") {
+            //             averageNum = selectedResultFeature.getProperties().flow;
+            //             averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+            //             averageNum = parseFloat(averageNum);
+            //             for (i = 0; i < 10; i++) {
+            //                 average[i] = selectedResultFeature.getProperties().flow;
+            //             }
+            //         }
+            //         if (feature.ResultType == "tn") {
+            //             averageNum = selectedResultFeature.getProperties().tn;
+            //             averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+            //             averageNum = parseFloat(averageNum);
+            //             for (i = 0; i < 10; i++) {
+            //                 average[i] = selectedResultFeature.getProperties().tn;
+            //             }
+            //         }
+            //         if (feature.ResultType == "tp") {
+            //             averageNum = selectedResultFeature.getProperties().tp;
+            //             averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+            //             averageNum = parseFloat(averageNum);
+            //             for (i = 0; i < 10; i++) {
+            //                 average[i] = selectedResultFeature.getProperties().tp;
+            //             }
+            //         }
 
-                    $('#model-result-chart').highcharts({
-                        title: {
-                            text: '',
-                            x: -20 //center
-                        },
+            //         $("#offsite-chart").attr("disabled", false);
+            //         $("#onsite-chart").attr("disabled", true);
 
-                        xAxis: {
-                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
-                                '2008', '2009', '2010', '2011'
-                            ]
-                        },
-                        yAxis: {
-                            title: {
-                                text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
-                            },
-                            plotLines: [{
-                                value: 0,
-                                width: 1,
-                                color: '#808080'
-                            }]
-                        },
-                        credits: {
-                            enabled: false
-                        },
-                        tooltip: {
-                            valueSuffix: ''
-                        },
-                        legend: {
-                            enabled: false
-                        },
-                        series: [{
-                            name: 'Average',
-                            data: average
-                        }, {
-                            name: 'Yr',
-                            data: dataArray
-                        }]
-                    });
+            //         $('#model-result-chart').highcharts({
+            //             title: {
+            //                 text: '',
+            //                 x: -20 //center
+            //             },
 
-                }
-            });
+            //             xAxis: {
+            //                 categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+            //                     '2008', '2009', '2010', '2011'
+            //                 ]
+            //             },
+            //             yAxis: {
+            //                 title: {
+            //                     text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
+            //                 },
+            //                 plotLines: [{
+            //                     value: 0,
+            //                     width: 1,
+            //                     color: '#808080'
+            //                 }]
+            //             },
+            //             credits: {
+            //                 enabled: false
+            //             },
+            //             tooltip: {
+            //                 valueSuffix: ''
+            //             },
+            //             legend: {
+            //                 enabled: false
+            //             },
+            //             series: [{
+            //                 name: 'Average',
+            //                 data: average
+            //             }, {
+            //                 name: 'Yr',
+            //                 data: dataArray
+            //             }]
+            //         });
+
+            //     }
+            // });
 
 
         } else {
@@ -1269,8 +1307,187 @@ $(document).ready(function() {
         });
     }
 
+    function drawFeatureChart() {
+        var feature = new Object();
+        feature.ID = parseInt(selectedResultFeature.getProperties().name);
+        feature.Type = determineFeatureType();
+        feature.ResultType = determineFeatureResultType();
 
-    
+        var featureJson = JSON.stringify(feature);
+        $.ajax({
+            url: '/chart',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: featureJson,
+            dataType: 'json',
+            success: function(r) {
+                var dataArray = [];
+
+                for (var i = 0; i < r.length; i++) {
+                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(1);
+                    dataArray[i] = parseFloat(r[i]);
+                }
+                // alert(r);
+
+                var average = [];
+                var averageNum;
+
+                if (feature.ResultType == "sediment") {
+                    averageNum = selectedResultFeature.getProperties().sediment;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "flow") {
+                    averageNum = selectedResultFeature.getProperties().flow;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedResultFeature.getProperties().flow;
+                    }
+                }
+                if (feature.ResultType == "tn") {
+                    averageNum = selectedResultFeature.getProperties().tn;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedResultFeature.getProperties().tn;
+                    }
+                }
+                if (feature.ResultType == "tp") {
+                    averageNum = selectedResultFeature.getProperties().tp;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedResultFeature.getProperties().tp;
+                    }
+                }
+
+                $("#offsite-chart").attr("disabled", false);
+                $("#onsite-chart").attr("disabled", true);
+
+                $('#model-result-chart').highcharts({
+                    title: {
+                        text: '',
+                        x: -20 //center
+                    },
+
+                    xAxis: {
+                        categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                            '2008', '2009', '2010', '2011'
+                        ]
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        valueSuffix: ''
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Average',
+                        data: average
+                    }, {
+                        name: 'Yr',
+                        data: dataArray
+                    }]
+                });
+                $("#sel1").val(selectedResultFeature.getProperties().name);
+
+            }
+        });
+    }
+
+    $('#search-result-prevent').submit(function(e) {
+        e.preventDefault();
+    });
+
+    var subbasinFeatureCollections = [];
+    var fieldFeatureCollections = [];
+    $('#search-result-feature').keyup(function(e) {
+        if (e.keyCode == 13) {
+            var id = $(this).val();
+            // alert(typeof id);
+            if ($('#show-subbasin-map-result').prop("disabled") === true) {
+                subbasinFeatureCollections = subbasinOutput.getSource().getFeatures();
+                for (i = 0; i < subbasinFeatureCollections.length; i++) {
+                    var temp = subbasinFeatureCollections[i].getProperties().name;
+                    // alert(typeof temp);
+                    if (id == temp) {
+                        selectedResultFeature = subbasinFeatureCollections[i];
+                    }
+                }
+            }
+            if ($('#show-field-map-result').prop("disabled") === true) {
+                fieldFeatureCollections = fieldOutput.getSource().getFeatures();
+                for (i = 0; i < fieldFeatureCollections.length; i++) {
+
+                    if (id == fieldFeatureCollections[i].getProperties().name) {
+                        selectedResultFeature = fieldFeatureCollections[i];
+                    }
+                }
+            }
+
+            resultMapSingleClick.getFeatures().clear();
+            resultMapSingleClick.getFeatures().push(selectedResultFeature);
+
+            drawFeatureChart();
+        }
+    });
+
+
+
+
+    $("#result-issue-submit").click(function(event) {
+
+        $("#result-issue-talk").hide();
+
+        if ($("#result-issue-title").val().length === 0) {
+            $("#result-issue-title").addClass("input-err");
+            $("#result-issue-title").prop("placeholder", "Please write issue title");
+        } else {
+            $("#result-issue-title").removeClass("input-err");
+        }
+        if ($("#sel1").val().length === 0) {
+            $("#sel1").addClass("input-err");
+            $("#sel1").prop("placeholder", "Please select a feature");
+        } else {
+            $("#sel1").removeClass("input-err");
+
+        }
+
+        if ($("#sel1").val().length !== 0 && $("#result-issue-title").val().length !== 0) {
+            var s = $("#user-id").html();
+            var currentdate = new Date();
+            var datetime = " " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+            $("#result-issue-timeline").append(' <li class="timeline-inverted"><div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div><div class="timeline-panel"><div class="timeline-heading"><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + datetime + " via " + s + '</small></p></div><div class="timeline-body"><p>' + $("#result-issue-title").val() + '</p></div></li>');
+            $(".timeline-inverted").click(function(event) {
+                $("#result-issue-talk").css('height', $("#responsive-timeline").height()+5);
+                $("#result-issue-talk").css('width', $("#result-issues").width());
+                $("#result-issue-talk").show("slow");
+                // alert("hello");
+            });
+        }
+
+
+    });
+
+
+
 
     // ************************************************************************************************************************************************************
     //
