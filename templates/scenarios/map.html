@@ -3,6 +3,9 @@
     <div id="user-id">
         {{.User.Username}}
     </div>
+    <div id="scenario-name">
+        {{.Scenario.Name}}
+    </div>    
     <div id="scenario-id">
         {{.Scenario.ID}}
     </div>
@@ -272,18 +275,17 @@
                                 <p>Description: </p>
                             </div>
                             <div class="col-sm-10 col-sm-push-1" id="talk-content">
-                                <hr> this is a test comment
+                                <hr> this is a test comment 
                             </div>
                             <div class="col-sm-12" id="talk-reply">
                                 <div class="row">
-                                    
                                     <div class="col-sm-10 col-sm-push-1">
                                     <hr>
                                         <textarea name="issue comment" id="issue-comment" rows="2" style="width: 100%" placeholder="Please leave comments"></textarea>
                                     </div>
                                     <div class="col-sm-10 col-sm-push-1 text-right">
-                                        <button type="button" class="btn btn-primary map-btn">Reply</button>
-                                        <button type="button" class="btn btn-danger map-btn">Close</button>
+                                        <button type="button" class="btn btn-primary map-btn" id="result-issue-comment-reply">Reply</button>
+                                        <button type="button" class="btn btn-danger map-btn" id="result-issue-comment-close">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -349,7 +351,7 @@
                         </div>
                     </div>
                     <div class="report-generate col-sm-12 text-right">
-                        <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button" href="#bmp-compare-page">Compare scenarios</a>
+                        <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button">Compare scenarios</a>
                         <button type="submit" class="btn btn-primary map-btn">Generate report</button>
                     </div>
                 </div>

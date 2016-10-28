@@ -13,8 +13,10 @@ $(document).ready(function() {
         $('#bmp-optimize-table').css('height', $(".model-result-map").height() + $("#model-optimize-chart").height() - $("#model-optimize-input").height() - $(".report-generate").height() - 60);
         $("#loading-page").css('height', $("#bmp-select-page").height() + 150);
         $("#loading-info").css('margin-top', ($("#loading-page").height() - 400) / 2);
-        $("#result-issue-talk").css('height', $("#responsive-timeline").height()+5);
+        $("#result-issue-talk").css('height', $("#responsive-timeline").height() + 5);
         $("#result-issue-talk").css('width', $("#result-issues").width());
+        var h = $("#result-issue-talk").height() - 190;
+        $("#talk-content").css('height', h + "px");
         // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
 
     }
@@ -68,9 +70,7 @@ $(document).ready(function() {
     //                  EVENT HANDLER
     // ****************************************************
 
-    $("#bmp-compare-btn").click(function(event) {
-        $("#bmp-compare-page").css('visibility', 'visible');
-    });
+
 
     $("#model-compare-btn").click(function(event) {
         $("#model-compare-page").css('visibility', 'visible');
@@ -1476,17 +1476,43 @@ $(document).ready(function() {
             var datetime = " " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
             $("#result-issue-timeline").append(' <li class="timeline-inverted"><div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div><div class="timeline-panel"><div class="timeline-heading"><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + datetime + " via " + s + '</small></p></div><div class="timeline-body"><p>' + $("#result-issue-title").val() + '</p></div></li>');
             $(".timeline-inverted").click(function(event) {
-                $("#result-issue-talk").css('height', $("#responsive-timeline").height()+5);
+                $("#result-issue-talk").css('height', $("#responsive-timeline").height() + 5);
                 $("#result-issue-talk").css('width', $("#result-issues").width());
+                // $("#talk-reply").css('top', $("#result-issue-talk") - 200);
+
+                var h = $("#result-issue-talk").height() - 190;
+                $("#talk-content").css('height', h + "px");
+
+                // $("#talk-content").css('height', $("#result-issue-talk") - 200);
                 $("#result-issue-talk").show("slow");
+                // $("#talk-title").append('<p>Issue Titile:' + $(this) + '' + '</p><p>Description: </p>')
+
+
                 // alert("hello");
             });
         }
-
-
     });
 
 
+    $("#result-issue-comment-reply").click(function(event) {
+        /* Act on the event */
+        $("#talk-content").append(' <hr> ' + $("#issue-comment").val());
+        $("#issue-comment").val("");
+    });
+
+    $("#result-issue-comment-close").click(function(event) {
+        /* Act on the event */
+        $("#result-issue-talk").hide();
+
+    });
+
+    $("#bmp-compare-btn").click(function(event) {
+        /* Act on the event */
+        $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 1000);
+        $("#bmp-compare-page").css('visibility', 'visible');
+
+
+    });
 
 
     // ************************************************************************************************************************************************************
@@ -1494,6 +1520,32 @@ $(document).ready(function() {
     //                                                                      BMP COMPARE PAGE
     //                                  
     // ************************************************************************************************************************************************************
+    var userName = $("#user-id").html();
+    var scenarioName = $("#scenario-name").html();
+    var scenarioID = $("#scenario-id").html();
+
+    var scenarioInfo = new Object();
+    scenarioInfo.userName = userName;
+    scenarioInfo.scenarioName = scenarioName;
+    scenarioInfo.scenarioID = scenarioID;
+
+
+    var fieldCompare = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/fieldcompare.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
+
+
+    var subbasinCompare = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/basincompare.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: styleFlowFunction
+    });
 
     var compareMap = new ol.Map({
         target: 'model-compare-map',
@@ -1504,6 +1556,57 @@ $(document).ready(function() {
         })
     });
 
+
+    $("#show-flow2").click(function(event) {
+        var a = compareMap.getLayers().getArray()[1];
+        a.setStyle(styleFlowFunction);
+        $('#show-flow2').attr("disabled", true);
+        $('#show-flow2').siblings().attr("disabled", false);
+
+    });
+    $("#show-sediment2").click(function(event) {
+        /* Act on the event */
+        var a = compareMap.getLayers().getArray()[1];
+        a.setStyle(styleSedimentFunction);
+        $('#show-sediment2').attr("disabled", true);
+        $('#show-sediment2').siblings().attr("disabled", false);
+    });
+    $("#show-n2").click(function(event) {
+        /* Act on the event */
+        var a = compareMap.getLayers().getArray()[1];
+        a.setStyle(styleTnFunction);
+        $('#show-n2').attr("disabled", true);
+        $('#show-n2').siblings().attr("disabled", false);
+
+    });
+    $("#show-p2").click(function(event) {
+        /* Act on the event */
+        var a = compareMap.getLayers().getArray()[1];
+        a.setStyle(styleTpFunction);
+        $('#show-p2').attr("disabled", true);
+        $('#show-p2').siblings().attr("disabled", false);
+    });
+
+
+    $("#show-field-map2").click(function(event) {
+        compareMap.removeLayer(subbasinCompare);
+        compareMap.addLayer(fieldCompare);
+        $('#show-subbasin-map2').attr("disabled", false);
+        $('#show-field-map2').attr("disabled", true);
+        $('#show-flow2').attr("disabled", true);
+        $('#show-flow2').siblings().attr("disabled", false);
+    });
+
+    $("#show-subbasin-map2").click(function(event) {
+        compareMap.removeLayer(fieldCompare);
+        compareMap.addLayer(subbasinCompare);
+        $('#show-subbasin-map2').attr("disabled", true);
+        $('#show-field-map2').attr("disabled", false);
+        $('#show-flow2').attr("disabled", true);
+        $('#show-flow2').siblings().attr("disabled", false);
+        /* Act on the event */
+    });
+
     $("#accordianmenu p").click(function() {
         $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
         $(this).css({ "background-color": "rgb(66,139,202)", "color": "white" });
@@ -1511,6 +1614,45 @@ $(document).ready(function() {
         if (!$(this).next().next().is(":visible")) {
             $(this).next().next().slideDown();
         }
+
+        var scenario = JSON.stringify(scenarioInfo);
+        $.ajax({
+            url: '/readmodelresult',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: scenario,
+            dataType: 'json',
+            success: function(r) {
+
+                // outletSediment = r[0].ResultData;
+                // outletFlow = r[1].ResultData;
+                // outletTp = r[2].ResultData;
+                // outletTn = r[3].ResultData;
+
+                $('#show-subbasin-map2').attr("disabled", true);
+                $('#show-field-map2').attr("disabled", false);
+                compareMap.removeLayer(compareMap.getLayers().getArray()[1]);
+
+                if ($('#show-field-map2').prop("disabled") === true) {
+                    compareMap.addLayer(fieldCompare);
+                    $("#show-field-map2").attr('disabled', true);
+                    $("#show-subbasin-map2").attr('disabled', false);
+                    $('#show-flow2').attr("disabled", true);
+                    $('#show-flow2').siblings().attr("disabled", false);
+
+                }
+                if ($('#show-subbasin-map2').prop("disabled") === true) {
+                    compareMap.addLayer(subbasinCompare);
+                    $("#show-subbasin-map2").attr('disabled', true);
+                    $("#show-field-map2").attr('disabled', false);
+                    $('#show-flow2').attr("disabled", true);
+                    $('#show-flow2').siblings().attr("disabled", false);
+                }
+
+                alert("hello");
+            }
+        });
+
     });
 
     // ************************************************************************************************************************************************************

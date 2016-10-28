@@ -585,12 +585,26 @@ body {
     z-index: 100;
 }
 
+#result-issue-talk .row {
+    height: 100%;
+}
+
 #talk-content {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    overflow-y: scroll;
+    /*height: 300px;*/
 }
 
 #issue-comment {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+#talk-title {
+    height: 40px;
+}
+
+#talk-reply {
+    height: 150px;
 }
 
 

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
@@ -149,16 +150,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			}
 		}
 
-		// for x, i := range d {
-		// 	if x < len(d)-1 {
-		// 		if i.FeatureType == "field" {
-		// 			d = append(d[:x], d[x+1:]...)
-		// 		}
-		// 	} else if d[len(d)-1].FeatureType == "field" {
-		// 		d = d[:len(d)-1]
-		// 	}
-		// }
-
 		var s = make(map[int]int)
 
 		for _, x := range d {
@@ -239,7 +230,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	done := make(chan bool, 1)
 	go func() {
-		// Chdir("C:/xxKun_Learn/Go/Go/src/wppgis/assets/swat")
 
 		cmd := exec.Command("SWAT_abca_150524")
 		cmd.Dir = "C:/xxKun_Learn/Go/Go/src/wppgis/assets/swat"
@@ -252,48 +242,39 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	<-done
 	fmt.Println("done")
-	BasintoField()
-	// var featureCollection = new(MapFeature)
-	// configFile, err := os.Open("./assets/data/geojson/field.json")
-	// if err != nil {
-	// 	fmt.Println("fail 1")
-	// }
 
-	// jsonParser := json.NewDecoder(configFile)
-	// if err = jsonParser.Decode(&featureCollection); err != nil {
-	// 	fmt.Println("fail 2")
-	// }
+	BasintoField("result")
+	GenerateResultJsonFile("field", "fieldoutput", fieldAverage)
+	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage)
+	OutletResultArray()
 
-	//
-	// Quartile(fieldAverage)
+	a, err := json.Marshal(outletArray)
+	w.Write(a)
 
-	// // var temp int
+}
 
-	// for id := range fieldAverage {
-	// 	for i := 0; i < len(featureCollection.Features); i++ {
-	// 		if strconv.Itoa(id) == featureCollection.Features[i].Properties.Name {
-	// 			featureCollection.Features[i].Properties.Flow = fieldAverage[id].Water
-	// 			featureCollection.Features[i].Properties.Sediment = fieldAverage[id].Sediment
-	// 			featureCollection.Features[i].Properties.Tp = fieldAverage[id].Tp
-	// 			featureCollection.Features[i].Properties.Tn = fieldAverage[id].Tn
-	// 			featureCollection.Features[i].Properties.FlowLevel = SelectLevel(fieldAverage[id].Water, FlowQuartile)
-	// 			featureCollection.Features[i].Properties.SedimentLevel = SelectLevel(fieldAverage[id].Sediment, SedimentQuartile)
-	// 			featureCollection.Features[i].Properties.TpLevel = SelectLevel(fieldAverage[id].Tp, TpQuartile)
-	// 			featureCollection.Features[i].Properties.TnLevel = SelectLevel(fieldAverage[id].Tn, TnQuartile)
-	// 		}
-	// 	}
-	// }
+type ScenarioInfo struct {
+	ScenarioID   string
+	UserName     string
+	ScenarioName string
+}
 
-	// b, err := json.MarshalIndent(featureCollection, "", "  ")
-	// // var i = len(featureCollection.Features)
-	// err = ioutil.WriteFile("./assets/data/geojson/fieldoutput.json", b, 0644)
-	// if err != nil {
-	// 	panic(err)
-	// }
+func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var scenario = new(ScenarioInfo)
+	err := json.NewDecoder(r.Body).Decode(&scenario)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
-	GenerateResultJsonFile("field", fieldAverage)
-	GenerateResultJsonFile("basin", subbasinAverage)
+	fmt.Println(scenario.ScenarioID)
+	fmt.Println(scenario.UserName)
+	fmt.Println(scenario.ScenarioName)
 
+	fmt.Println(strings.Compare(strings.TrimSpace(scenario.ScenarioName), "wewewe"))
+
+	BasintoField(strings.TrimSpace(scenario.ScenarioName))
+	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
+	GenerateResultJsonFile("basin", "basincompare", subbasinAverage)
 	OutletResultArray()
 
 	a, err := json.Marshal(outletArray)
@@ -378,9 +359,9 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Write(a)
 }
 
-func GenerateResultJsonFile(s string, array map[int]*Result) {
+func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 	var featureCollection = new(MapFeature)
-	configFile, err := os.Open("./assets/data/geojson/" + s + ".json")
+	configFile, err := os.Open("./assets/data/geojson/" + sin + ".json")
 	if err != nil {
 		fmt.Println("fail 1")
 	}
@@ -391,8 +372,6 @@ func GenerateResultJsonFile(s string, array map[int]*Result) {
 	}
 
 	Quartile(array)
-
-	// var temp int
 
 	for id := range array {
 		for i := 0; i < len(featureCollection.Features); i++ {
@@ -411,7 +390,7 @@ func GenerateResultJsonFile(s string, array map[int]*Result) {
 
 	b, err := json.MarshalIndent(featureCollection, "", "  ")
 	// var i = len(featureCollection.Features)
-	err = ioutil.WriteFile("./assets/data/geojson/"+s+"output.json", b, 0644)
+	err = ioutil.WriteFile("./assets/data/geojson/"+sout+".json", b, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -419,8 +398,9 @@ func GenerateResultJsonFile(s string, array map[int]*Result) {
 	fmt.Println("success")
 }
 
-func BasintoField() {
-	db, err := sql.Open("sqlite3", "./assets/swat/result.db3")
+func BasintoField(database string) {
+	fmt.Println(database)
+	db, err := sql.Open("sqlite3", "./assets/swat/"+database+".db3")
 	checkErr(err)
 
 	//查询数据
@@ -523,7 +503,7 @@ func BasintoField() {
 
 	for k := range fieldArray {
 		var result = new(Result)
-		fmt.Println(fieldArray[k])
+		// fmt.Println(fieldArray[k])
 		for m := range fieldArray[k] {
 			result.Water = fieldArray[k][m].Water + result.Water
 			result.Sediment = fieldArray[k][m].Sediment + result.Sediment
@@ -561,7 +541,6 @@ func Quartile(m map[int]*Result) {
 	c1, _ := stats.Percentile(flowArray, 50)
 	d1, _ := stats.Percentile(flowArray, 70)
 	e1, _ := stats.Percentile(flowArray, 90)
-
 	FlowQuartile = []float64{a1, b1, c1, d1, e1}
 
 	a2, _ := stats.Percentile(sedimentArray, 10)
@@ -618,6 +597,7 @@ func checkErr(err error) {
 }
 
 func OutletResultArray() {
+	outletArray = []*OutletResultTypeArray{}
 
 	var outletSedimentArray []float64
 	var outletWaterArray []float64
