@@ -83,17 +83,33 @@ var FlowQuartile []float64
 var TpQuartile []float64
 var TnQuartile []float64
 
-var subbasinArray = make(map[int]map[int]Result)
+var subbasinArray map[int]map[int]Result
 
-var fieldArray = make(map[int]map[int]*Result)
+var fieldArray map[int]map[int]*Result
+
+var compareTosubbasinArray map[int]map[int]Result
+
+var compareTofieldArray map[int]map[int]*Result
+
+var compareFromsubbasinArray map[int]map[int]Result
+
+var compareFromfieldArray map[int]map[int]*Result
 
 var subbasinArea = make(map[int]float64)
 
 var fieldArea = make(map[int]float64)
 
-var subbasinAverage = make(map[int]*Result)
+var subbasinAverage map[int]*Result
 
-var fieldAverage = make(map[int]*Result)
+var fieldAverage map[int]*Result
+
+var compareTosubbasinAverage = make(map[int]*Result)
+
+var compareTofieldAverage = make(map[int]*Result)
+
+var compareFromsubbasinAverage = make(map[int]*Result)
+
+var compareFromfieldAverage = make(map[int]*Result)
 
 type OutletResultTypeArray struct {
 	ResultType string
@@ -120,9 +136,9 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(d[0].FeatureID)
-	fmt.Println(d[0].BMPCode)
-	fmt.Println(d[0].FeatureType)
+	// fmt.Println(d[0].FeatureID)
+	// fmt.Println(d[0].BMPCode)
+	// fmt.Println(d[0].FeatureType)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -167,10 +183,10 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			}
 
 		}
-		fmt.Println(s)
+		// fmt.Println(s)
 	}
 
-	fmt.Println(d)
+	// fmt.Println(d)
 
 	for _, i := range d {
 		var id = i.FeatureID
@@ -206,7 +222,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		"Scenario type (1: historic; 2: conventional; 3: user define) \r\n" +
 		"3 \r\n" +
 		"WASCoBs (RES file code for all WASCoBs. Only operating in user define scenario. 0: without WASCoB; 1: with WASCoB) \r\n" +
-		"1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 \r\n" +
+		"1 1 0 1 1 1 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 0 1 1 0 1 \r\n" +
 		"Scenario input (MGT file code for all HRUs. Only operating in user define scenario.1: historic; 2: conventional; 3: conservation tillage; 4: NMAN; 5: cover crop; 6: conservation tillage + NMAN; 7: conservation tillage + cover crop; 8: NMAN + cover crop; 9: conservation tillage + NMAN + cover crop)\r\n "
 
 	for i := 0; i < len(BMPCodeArray); i++ {
@@ -248,6 +264,11 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage)
 	OutletResultArray()
 
+	compareTosubbasinArray = subbasinArray
+	compareTosubbasinAverage = subbasinAverage
+	compareTofieldArray = fieldArray
+	compareTofieldAverage = fieldAverage
+
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
 
@@ -257,6 +278,7 @@ type ScenarioInfo struct {
 	ScenarioID   string
 	UserName     string
 	ScenarioName string
+	ScenarioGet  string
 }
 
 func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -266,20 +288,26 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(scenario.ScenarioID)
-	fmt.Println(scenario.UserName)
-	fmt.Println(scenario.ScenarioName)
+	// fmt.Println(scenario.ScenarioID)
+	// fmt.Println(scenario.UserName)
+	// fmt.Println(scenario.ScenarioName)
 
-	fmt.Println(strings.Compare(strings.TrimSpace(scenario.ScenarioName), "wewewe"))
+	// fmt.Println(strings.Compare(strings.TrimSpace(scenario.ScenarioName), "wewewe"))
 
-	BasintoField(strings.TrimSpace(scenario.ScenarioName))
+	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
 	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
 	GenerateResultJsonFile("basin", "basincompare", subbasinAverage)
 	OutletResultArray()
 
+	compareFromsubbasinArray = subbasinArray
+	compareFromsubbasinAverage = subbasinAverage
+	compareFromfieldArray = fieldArray
+	compareFromfieldAverage = fieldAverage
+	// fmt.Println(compareFromsubbasinAverage)
+	// fmt.Println(compareFromsubbasinAverage[6])
+
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
-
 }
 
 type FeatureResultType struct {
@@ -295,9 +323,9 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(d.ID)
-	fmt.Println(d.Type)
-	fmt.Println(d.ResultType)
+	// fmt.Println(d.ID)
+	// fmt.Println(d.Type)
+	// fmt.Println(d.ResultType)
 
 	var arrayDataFeatureResultType []float64
 	if d.Type == "subbasin" {
@@ -348,14 +376,57 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		}
 	}
 
-	fmt.Println(len(arrayDataFeatureResultType))
-	fmt.Println(arrayDataFeatureResultType)
+	// fmt.Println(len(arrayDataFeatureResultType))
+	// fmt.Println(arrayDataFeatureResultType)
 
 	// create json response from struct
 	a, err := json.Marshal(arrayDataFeatureResultType)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	w.Write(a)
+}
+
+func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var scenario = new(ScenarioInfo)
+	err := json.NewDecoder(r.Body).Decode(&scenario)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	var fieldCompareResult = make(map[int]*Result)
+	var subbasinCompareResult = make(map[int]*Result)
+
+	for i, _ := range compareTosubbasinAverage {
+		var s = new(Result)
+		s.Water = (compareTosubbasinAverage[i].Water - compareFromsubbasinAverage[i].Water) * 100 / compareTosubbasinAverage[i].Water
+		s.Sediment = (compareTosubbasinAverage[i].Sediment - compareFromsubbasinAverage[i].Sediment) * 100 / compareTosubbasinAverage[i].Sediment
+		s.Tn = (compareTosubbasinAverage[i].Tn - compareFromsubbasinAverage[i].Tn) * 100 / compareTosubbasinAverage[i].Tn
+		s.Tp = (compareTosubbasinAverage[i].Tp - compareFromsubbasinAverage[i].Tp) * 100 / compareTosubbasinAverage[i].Tp
+		subbasinCompareResult[i] = s
+	}
+
+	for i, _ := range compareTofieldAverage {
+		var s = new(Result)
+		if compareTofieldAverage[i].Water != 0 {
+			s.Water = (compareTofieldAverage[i].Water - compareFromfieldAverage[i].Water) * 100 / compareTofieldAverage[i].Water
+			s.Sediment = (compareTofieldAverage[i].Sediment - compareFromfieldAverage[i].Sediment) * 100 / compareTofieldAverage[i].Sediment
+			s.Tn = (compareTofieldAverage[i].Tn - compareFromfieldAverage[i].Tn) * 100 / compareFromfieldAverage[i].Tn
+			s.Tp = (compareTofieldAverage[i].Tp - compareFromfieldAverage[i].Tp) * 100 / compareFromfieldAverage[i].Tp
+		} else {
+			s.Water = 0
+			s.Sediment = 0
+			s.Tn = 0
+			s.Tp = 0
+		}
+
+		fieldCompareResult[i] = s
+	}
+
+	GenerateResultJsonFile("field", "fieldcompareresult", fieldCompareResult)
+	GenerateResultJsonFile("basin", "basincompareresult", subbasinCompareResult)
+
+	a, err := json.Marshal(scenario)
 	w.Write(a)
 }
 
@@ -395,11 +466,15 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 		panic(err)
 	}
 
-	fmt.Println("success")
+	// fmt.Println("success")
 }
 
 func BasintoField(database string) {
-	fmt.Println(database)
+
+	subbasinArray = make(map[int]map[int]Result)
+	fieldArray = make(map[int]map[int]*Result)
+
+	// fmt.Println(database)
 	db, err := sql.Open("sqlite3", "./assets/swat/"+database+".db3")
 	checkErr(err)
 
@@ -425,8 +500,6 @@ func BasintoField(database string) {
 	}
 
 	db.Close()
-
-	fieldArray = make(map[int]map[int]*Result)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 
@@ -486,6 +559,9 @@ func BasintoField(database string) {
 	}
 	dbSpatial.Close()
 
+	subbasinAverage = make(map[int]*Result)
+	fieldAverage = make(map[int]*Result)
+
 	for k := range subbasinArray {
 		var result = new(Result)
 		for m := range subbasinArray[k] {
@@ -517,7 +593,7 @@ func BasintoField(database string) {
 		fieldAverage[k].Water = result.Water / 10
 		fieldAverage[k].Tn = result.Tn / 10
 		fieldAverage[k].Tp = result.Tp / 10
-		fmt.Println(fieldAverage[k])
+		// fmt.Println(fieldAverage[k])
 	}
 
 }
@@ -534,7 +610,7 @@ func Quartile(m map[int]*Result) {
 		tnArray = append(tnArray, m[i].Tn)
 		tpArray = append(tpArray, m[i].Tp)
 	}
-	q, _ := stats.Quartile(sedimentArray)
+	// q, _ := stats.Quartile(sedimentArray)
 
 	a1, _ := stats.Percentile(flowArray, 10)
 	b1, _ := stats.Percentile(flowArray, 30)
@@ -565,11 +641,11 @@ func Quartile(m map[int]*Result) {
 
 	TpQuartile = []float64{a4, b4, c4, d4, e4}
 
-	fmt.Println(FlowQuartile)
-	fmt.Println(SedimentQuartile)
-	fmt.Println(TnQuartile)
-	fmt.Println(TpQuartile) // 4
-	fmt.Println(q)          // {15 37.5 40}}
+	// fmt.Println(FlowQuartile)
+	// fmt.Println(SedimentQuartile)
+	// fmt.Println(TnQuartile)
+	// fmt.Println(TpQuartile) // 4
+	// fmt.Println(q)          // {15 37.5 40}}
 }
 
 var Level = []string{"Great", "Good", "Normal", "Slight", "Bad", "Severe"}

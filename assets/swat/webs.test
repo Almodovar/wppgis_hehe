@@ -1,20 +1,20 @@
  webs.webs is good!
- 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  0  1  1  1  1  1  1  1  1  1  1  0  1  1  0  1
+ 1  1  0  1  1  1  1  0  1  0  0  1  0  0  0  0  0  0  0  0  1  1  1  1  1  1  1  0  1  1  0  1
  MGT/1_Histroic/000010001.mgt                                                                        
  MGT/1_Histroic/000010002.mgt                                                                        
  MGT/1_Histroic/000010003.mgt                                                                        
  MGT/1_Histroic/000020001.mgt                                                                        
  MGT/1_Histroic/000020002.mgt                                                                        
  MGT/1_Histroic/000020003.mgt                                                                        
- MGT/1_Histroic/000030001.mgt                                                                        
- MGT/1_Histroic/000030002.mgt                                                                        
- MGT/1_Histroic/000030003.mgt                                                                        
- MGT/1_Histroic/000030004.mgt                                                                        
- MGT/1_Histroic/000030005.mgt                                                                        
- MGT/1_Histroic/000030006.mgt                                                                        
- MGT/1_Histroic/000030007.mgt                                                                        
- MGT/1_Histroic/000030008.mgt                                                                        
- MGT/1_Histroic/000030009.mgt                                                                        
+ MGT/9_Three_BMPs/000030001.mgt                                                                      
+ MGT/9_Three_BMPs/000030002.mgt                                                                      
+ MGT/9_Three_BMPs/000030003.mgt                                                                      
+ MGT/9_Three_BMPs/000030004.mgt                                                                      
+ MGT/9_Three_BMPs/000030005.mgt                                                                      
+ MGT/9_Three_BMPs/000030006.mgt                                                                      
+ MGT/9_Three_BMPs/000030007.mgt                                                                      
+ MGT/9_Three_BMPs/000030008.mgt                                                                      
+ MGT/9_Three_BMPs/000030009.mgt                                                                      
  MGT/1_Histroic/000040001.mgt                                                                        
  MGT/1_Histroic/000040002.mgt                                                                        
  MGT/1_Histroic/000040003.mgt                                                                        
@@ -36,17 +36,17 @@
  MGT/1_Histroic/000050007.mgt                                                                        
  MGT/1_Histroic/000050008.mgt                                                                        
  MGT/1_Histroic/000050009.mgt                                                                        
- MGT/6_ConTill_NMAN/000060001.mgt                                                                    
- MGT/6_ConTill_NMAN/000060002.mgt                                                                    
- MGT/6_ConTill_NMAN/000060003.mgt                                                                    
- MGT/6_ConTill_NMAN/000060004.mgt                                                                    
- MGT/6_ConTill_NMAN/000060005.mgt                                                                    
- MGT/6_ConTill_NMAN/000060006.mgt                                                                    
- MGT/6_ConTill_NMAN/000060007.mgt                                                                    
- MGT/6_ConTill_NMAN/000060008.mgt                                                                    
- MGT/6_ConTill_NMAN/000060009.mgt                                                                    
- MGT/6_ConTill_NMAN/000060010.mgt                                                                    
- MGT/6_ConTill_NMAN/000060011.mgt                                                                    
+ MGT/7_ConTill_CoverCrop/000060001.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060002.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060003.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060004.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060005.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060006.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060007.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060008.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060009.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060010.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060011.mgt                                                               
  MGT/1_Histroic/000070001.mgt                                                                        
  MGT/1_Histroic/000070002.mgt                                                                        
  MGT/1_Histroic/000070003.mgt                                                                        
@@ -524,15 +524,15 @@
  MGT/1_Histroic/000020001.mgt                                                                        
  MGT/1_Histroic/000020002.mgt                                                                        
  MGT/1_Histroic/000020003.mgt                                                                        
- MGT/1_Histroic/000030001.mgt                                                                        
- MGT/1_Histroic/000030002.mgt                                                                        
- MGT/1_Histroic/000030003.mgt                                                                        
- MGT/1_Histroic/000030004.mgt                                                                        
- MGT/1_Histroic/000030005.mgt                                                                        
- MGT/1_Histroic/000030006.mgt                                                                        
- MGT/1_Histroic/000030007.mgt                                                                        
- MGT/1_Histroic/000030008.mgt                                                                        
- MGT/1_Histroic/000030009.mgt                                                                        
+ MGT/9_Three_BMPs/000030001.mgt                                                                      
+ MGT/9_Three_BMPs/000030002.mgt                                                                      
+ MGT/9_Three_BMPs/000030003.mgt                                                                      
+ MGT/9_Three_BMPs/000030004.mgt                                                                      
+ MGT/9_Three_BMPs/000030005.mgt                                                                      
+ MGT/9_Three_BMPs/000030006.mgt                                                                      
+ MGT/9_Three_BMPs/000030007.mgt                                                                      
+ MGT/9_Three_BMPs/000030008.mgt                                                                      
+ MGT/9_Three_BMPs/000030009.mgt                                                                      
  MGT/1_Histroic/000040001.mgt                                                                        
  MGT/1_Histroic/000040002.mgt                                                                        
  MGT/1_Histroic/000040003.mgt                                                                        
@@ -554,17 +554,17 @@
  MGT/1_Histroic/000050007.mgt                                                                        
  MGT/1_Histroic/000050008.mgt                                                                        
  MGT/1_Histroic/000050009.mgt                                                                        
- MGT/6_ConTill_NMAN/000060001.mgt                                                                    
- MGT/6_ConTill_NMAN/000060002.mgt                                                                    
- MGT/6_ConTill_NMAN/000060003.mgt                                                                    
- MGT/6_ConTill_NMAN/000060004.mgt                                                                    
- MGT/6_ConTill_NMAN/000060005.mgt                                                                    
- MGT/6_ConTill_NMAN/000060006.mgt                                                                    
- MGT/6_ConTill_NMAN/000060007.mgt                                                                    
- MGT/6_ConTill_NMAN/000060008.mgt                                                                    
- MGT/6_ConTill_NMAN/000060009.mgt                                                                    
- MGT/6_ConTill_NMAN/000060010.mgt                                                                    
- MGT/6_ConTill_NMAN/000060011.mgt                                                                    
+ MGT/7_ConTill_CoverCrop/000060001.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060002.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060003.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060004.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060005.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060006.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060007.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060008.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060009.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060010.mgt                                                               
+ MGT/7_ConTill_CoverCrop/000060011.mgt                                                               
  MGT/1_Histroic/000070001.mgt                                                                        
  MGT/1_Histroic/000070002.mgt                                                                        
  MGT/1_Histroic/000070003.mgt                                                                        
@@ -1037,7 +1037,7 @@
  MGT/1_Histroic/000640001.mgt                                                                        
  MGT/1_Histroic/000640002.mgt                                                                        
  RES/1_With_WASCoB/000010000.res                                                                     
- RES/1_With_WASCoB/000070000.res                                                                     
+ RES/0_None_WASCoB/000070000.res                                                                     
  RES/1_With_WASCoB/000040000.res                                                                     
  RES/1_With_WASCoB/000100000.res                                                                     
  RES/1_With_WASCoB/000090000.res                                                                     
@@ -1045,17 +1045,17 @@
  RES/1_With_WASCoB/000150000.res                                                                     
  RES/1_With_WASCoB/000210000.res                                                                     
  RES/1_With_WASCoB/000250000.res                                                                     
- RES/1_With_WASCoB/000220000.res                                                                     
- RES/1_With_WASCoB/000200000.res                                                                     
- RES/1_With_WASCoB/000270000.res                                                                     
- RES/1_With_WASCoB/000290000.res                                                                     
+ RES/0_None_WASCoB/000220000.res                                                                     
+ RES/0_None_WASCoB/000200000.res                                                                     
+ RES/0_None_WASCoB/000270000.res                                                                     
+ RES/0_None_WASCoB/000290000.res                                                                     
  RES/0_None_WASCoB/000360000.res                                                                     
- RES/1_With_WASCoB/000410000.res                                                                     
- RES/1_With_WASCoB/000420000.res                                                                     
- RES/1_With_WASCoB/000400000.res                                                                     
- RES/1_With_WASCoB/000320000.res                                                                     
- RES/1_With_WASCoB/000280000.res                                                                     
- RES/1_With_WASCoB/000230000.res                                                                     
+ RES/0_None_WASCoB/000410000.res                                                                     
+ RES/0_None_WASCoB/000420000.res                                                                     
+ RES/0_None_WASCoB/000400000.res                                                                     
+ RES/0_None_WASCoB/000320000.res                                                                     
+ RES/0_None_WASCoB/000280000.res                                                                     
+ RES/0_None_WASCoB/000230000.res                                                                     
  RES/1_With_WASCoB/000430000.res                                                                     
  RES/1_With_WASCoB/000480000.res                                                                     
  RES/1_With_WASCoB/000440000.res                                                                     

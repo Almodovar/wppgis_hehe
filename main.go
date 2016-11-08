@@ -50,6 +50,7 @@ func main() {
 	secureRouter.Handle("POST", "/userID/:userID", HandleScenarioShow)
 	secureRouter.Handle("POST", "/runmodel", HandleModelRun)
 	secureRouter.Handle("POST", "/readmodelresult", HandleModelResultGet)
+	secureRouter.Handle("POST", "/comparemodelresult", HandleModelCompare)
 
 	secureRouter.Handle("POST", "/chart", HandleChart)
 	secureRouter.Handle("POST", "/deletescenario", HandleScenarioDelete)
