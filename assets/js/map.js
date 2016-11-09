@@ -666,9 +666,16 @@ $(document).ready(function() {
     var outletFlow = [];
     var outletTp = [];
     var outletTn = [];
+    var outletCompareSediment = [];
+    var outletCompareFlow = [];
+    var outletCompareTp = [];
+    var outletCompareTn = [];
     var bmpAssignmentArray = [];
 
     $("#model-run-btn").click(function(event) {
+
+
+        $("#process-control").html('<div class="stepwizard-row">' + '<div class="liner"></div>' + '<div class="stepwizard-step">' + '<a id="process-icon1" class="btn icon-btn btn-danger" href="#"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon2" class="btn icon-btn btn-default" href="#"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon3" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon4" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Evaluate Comparison</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon5" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>Optimiza Scenario</a>' + '</div>' + '</div>');
 
         $(document).trigger('show-loading-page');
         bmpAssignmentArray.length = 0;
@@ -901,19 +908,6 @@ $(document).ready(function() {
         style: styleFlowFunction
     });
 
-
-    // var fieldResultArray = [];
-
-    // fieldOutput.getSource().on('addfeature', function(event) {
-    //     var fieldResultFeatures = fieldOutput.getSource().getFeatures();
-    //     for (i = 0; i < fieldResultFeatures.length; i++) {
-    //         var field = new Field();
-    //         field.id = fieldResultFeatures[i].getProperties().Name;
-    //         field.feature = fieldResultFeatures[i];
-    //         fieldResultArray.push(field);
-    //     }
-    // });
-
     var subbasinOutput = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: '/assets/data/geojson/basinoutput.json',
@@ -921,18 +915,6 @@ $(document).ready(function() {
         }),
         style: styleFlowFunction
     });
-
-    // var subbasinResultArray = [];
-
-    // subbasinOutput.getSource().on('addfeature', function(event) {
-    //     var subbasinResultFeatures = subbasinOutput.getSource().getFeatures();
-    //     for (i = 0; i < subbasinResultFeatures.length; i++) {
-    //         var subbasin = new Subbasin();
-    //         subbasin.id = subbasinResultFeatures[i].getProperties().Name;
-    //         subbasin.feature = subbasinResultFeatures[i];
-    //         subbasinResultArray.push(subbasin);
-    //     }
-    // });
 
     var resultMapPointerMove = new ol.interaction.Select({
         layers: [fieldOutput, subbasinOutput],
@@ -1178,6 +1160,8 @@ $(document).ready(function() {
         });
     }
 
+
+
     function drawFeatureChart() {
         var feature = new Object();
         feature.ID = parseInt(selectedResultFeature.getProperties().name);
@@ -1196,7 +1180,7 @@ $(document).ready(function() {
                 var dataArray = [];
 
                 for (var i = 0; i < r.length; i++) {
-                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(1);
+                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(6);
                     dataArray[i] = parseFloat(r[i]);
                 }
                 // alert(r);
@@ -1206,34 +1190,30 @@ $(document).ready(function() {
 
                 if (feature.ResultType == "sediment") {
                     averageNum = selectedResultFeature.getProperties().sediment;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                    averageNum = parseFloat(averageNum);
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
                     for (i = 0; i < 10; i++) {
                         average[i] = averageNum;
                     }
                 }
                 if (feature.ResultType == "flow") {
                     averageNum = selectedResultFeature.getProperties().flow;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                    averageNum = parseFloat(averageNum);
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedResultFeature.getProperties().flow;
+                        average[i] = averageNum;
                     }
                 }
                 if (feature.ResultType == "tn") {
                     averageNum = selectedResultFeature.getProperties().tn;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                    averageNum = parseFloat(averageNum);
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedResultFeature.getProperties().tn;
+                        average[i] = averageNum;
                     }
                 }
                 if (feature.ResultType == "tp") {
                     averageNum = selectedResultFeature.getProperties().tp;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(1);
-                    averageNum = parseFloat(averageNum);
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedResultFeature.getProperties().tp;
+                        average[i] = averageNum;
                     }
                 }
 
@@ -1283,6 +1263,7 @@ $(document).ready(function() {
             }
         });
     }
+
 
     $('#search-result-prevent').submit(function(e) {
         e.preventDefault();
@@ -1376,6 +1357,7 @@ $(document).ready(function() {
         $("#process-icon3 span").removeClass('text-default').addClass('text-danger');
         $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 1000);
         $("#bmp-compare-page").css('visibility', 'visible');
+        $("#model-compare-btn").css('disabled', 'true');
     });
 
     // ************************************************************************************************************************************************************
@@ -1538,6 +1520,7 @@ $(document).ready(function() {
 
     $("#accordianmenu p").click(function() {
         compareMapSingleClick.getFeatures().clear();
+        $("#model-compare-btn").css('disabled', 'false');
 
         $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
         $(this).css({ "background-color": "rgb(66,139,202)", "color": "white" });
@@ -1584,6 +1567,8 @@ $(document).ready(function() {
 
     $("#model-compare-btn").click(function(event) {
         /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
+
         var jsonArray = JSON.stringify(scenarioInfo);
         $.ajax({
             url: '/comparemodelresult',
@@ -1598,6 +1583,11 @@ $(document).ready(function() {
 
                 $("#process-icon4").removeClass('btn-default').addClass('btn-danger');
                 $("#process-icon4 span").removeClass('text-default').addClass('text-danger');
+
+                outletCompareSediment = r[0].ResultData;
+                outletCompareFlow = r[1].ResultData;
+                outletCompareTp = r[2].ResultData;
+                outletCompareTn = r[3].ResultData;
 
                 compareresultMap.removeLayer(compareresultMap.getLayers().getArray()[1]);
 
@@ -1618,6 +1608,8 @@ $(document).ready(function() {
                     $("#show-flow-compare-result").attr("disabled", true);
                     $("#show-flow-compare-result").siblings().attr("disabled", false);
                 }
+
+                drawCompareOutletChart("flow");
             }
         });
     });
@@ -1915,54 +1907,220 @@ $(document).ready(function() {
     });
 
     $("#show-flow-compare-result").click(function(event) {
+        compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[1];
         a.setStyle(compareStyleFlowFunction);
         $('#show-flow-compare-result').attr("disabled", true);
         $('#show-flow-compare-result').siblings().attr("disabled", false);
-
+        drawCompareOutletChart("flow");
     });
     $("#show-sediment-compare-result").click(function(event) {
         /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[1];
         a.setStyle(compareStyleSedimentFunction);
         $('#show-sediment-compare-result').attr("disabled", true);
         $('#show-sediment-compare-result').siblings().attr("disabled", false);
+        drawCompareOutletChart("sediment");
     });
     $("#show-tn-compare-result").click(function(event) {
         /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[1];
         a.setStyle(compareStyleTnFunction);
         $('#show-tn-compare-result').attr("disabled", true);
         $('#show-tn-compare-result').siblings().attr("disabled", false);
-
+        drawCompareOutletChart("tn");
     });
     $("#show-tp-compare-result").click(function(event) {
         /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[1];
         a.setStyle(compareStyleTpFunction);
         $('#show-tp-compare-result').attr("disabled", true);
         $('#show-tp-compare-result').siblings().attr("disabled", false);
+        drawCompareOutletChart("tp");
     });
 
+    var selectedCompareResultFeature;
+    compareresultMapSingleClick.on('select', function(event) {
 
-    // $("#show-field-compare-map").click(function(event) {
-    //     compareresultMap.removeLayer(subbasinCompareResult);
-    //     compareresultMap.addLayer(fieldCompareResult);
-    //     $('#show-subbasin-compare-map').attr("disabled", false);
-    //     $('#show-field-compare-map').attr("disabled", true);
-    //     $('#show-flow-compare-result').attr("disabled", true);
-    //     $('#show-flow-compare-result').siblings().attr("disabled", false);
-    // });
+        selectedCompareResultFeature = event.selected[0];
 
-    // $("#show-subbasin-compare-map").click(function(event) {
-    //     compareresultMap.removeLayer(fieldCompareResult);
-    //     compareresultMap.addLayer(subbasinCompareResult);
-    //     $('#show-subbasin-compare-map').attr("disabled", true);
-    //     $('#show-field-compare-map').attr("disabled", false);
-    //     $('#show-flow-compare-result').attr("disabled", true);
-    //     $('#show-flow-compare-result').siblings().attr("disabled", false);
-    //     /* Act on the event */
-    // });
+        if (selectedCompareResultFeature) {
+            drawCompareFeatureChart();
+        } else {
+            compareresultMapSingleClick.getFeatures().clear();
+            if ($('#show-flow-result').prop("disabled") === true) {
+                drawCompareOutletChart("flow");
+            }
+            if ($('#show-sediment-result').prop("disabled") === true) {
+                drawCompareOutletChart("sediment");
+            }
+            if ($('#show-n-result').prop("disabled") === true) {
+                drawCompareOutletChart("tn");
+            }
+            if ($('#show-p-result').prop("disabled") === true) {
+                drawCompareOutletChart("tp");
+            }
+        }
+    });
+
+    function drawCompareOutletChart(s) {
+        compareresultMapSingleClick.getFeatures().clear();
+
+        $("#offsite-compare-chart").attr("disabled", true);
+        $("#onsite-compare-chart").attr("disabled", false);
+
+        var data = [];
+        if (s === "sediment") {
+            data = outletCompareSediment;
+        }
+        if (s === "flow") {
+            data = outletCompareFlow;
+        }
+        if (s === "tp") {
+            data = outletCompareTp;
+        }
+        if (s === "tn") {
+            data = outletCompareTn;
+        }
+        $('#model-compare-chart').highcharts({
+            title: {
+                text: '',
+                x: -20 //center
+            },
+
+            xAxis: {
+                categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                    '2008', '2009', '2010', '2011'
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Yr',
+                data: data
+            }]
+        });
+    }
+
+    function drawCompareFeatureChart() {
+        var feature = new Object();
+        feature.ID = parseInt(selectedCompareResultFeature.getProperties().name);
+        feature.Type = selectedLayer;
+        feature.ResultType = determineFeatureResultType();
+
+        var featureJson = JSON.stringify(feature);
+        $.ajax({
+            url: '/comparechart',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: featureJson,
+            dataType: 'json',
+            success: function(r) {
+                var dataArray = [];
+
+                for (var i = 0; i < r.length; i++) {
+                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(6);
+                    dataArray[i] = parseFloat(r[i]);
+                }
+
+                var average = [];
+                var averageNum;
+
+                if (feature.ResultType == "sediment") {
+                    averageNum = selectedCompareResultFeature.getProperties().sediment;
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
+
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "flow") {
+                    averageNum = selectedCompareResultFeature.getProperties().flow;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedCompareResultFeature.getProperties().flow;
+                    }
+                }
+                if (feature.ResultType == "tn") {
+                    averageNum = selectedCompareResultFeature.getProperties().tn;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedCompareResultFeature.getProperties().tn;
+                    }
+                }
+                if (feature.ResultType == "tp") {
+                    averageNum = selectedCompareResultFeature.getProperties().tp;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = selectedCompareResultFeature.getProperties().tp;
+                    }
+                }
+
+                $('#model-compare-chart').highcharts({
+                    title: {
+                        text: '',
+                        x: -20 //center
+                    },
+
+                    xAxis: {
+                        categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                            '2008', '2009', '2010', '2011'
+                        ]
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        valueSuffix: ''
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Average',
+                        data: average
+                    }, {
+                        name: 'Yr',
+                        data: dataArray
+                    }]
+                });
+                // $("#sel1").val(selectedResultFeature.getProperties().name);
+            }
+        });
+    }
 
 
     // ************************************************************************************************************************************************************
@@ -1987,36 +2145,45 @@ $(document).ready(function() {
     //                      DRAW CHART
     // ****************************************************
 
-
-
     $('#model-compare-chart').highcharts({
-        legend: {
-            enabled: false
-        },
-        chart: {
-            type: 'column'
-        },
         title: {
-            text: null
+            text: '',
+            x: -20 //center
         },
+
         xAxis: {
-            categories: ['Flow', 'Sediment', 'Phosphorus', 'Nitrigen']
+            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                '2008', '2009', '2010', '2011'
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
         },
         credits: {
             enabled: false
         },
-
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            enabled: false
+        },
         series: [{
-            name: 'John',
-            data: [5, 3, 4, 7]
+            name: 'Average',
+            data: []
         }, {
-            name: 'Jane',
-            data: [2, -2, -3, 2]
-        }, {
-            name: 'Joe',
-            data: [3, 4, 4, -2]
+            name: 'Yr',
+            data: []
         }]
     });
+
 
     $('#model-optimize-chart').highcharts({
         legend: {

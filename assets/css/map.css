@@ -705,6 +705,16 @@ body {
     font-size: 10px;
 }
 
+#bmp-compare-page .map-tool-bar .map-switch-btn:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
+}
+
+#bmp-compare-page .map-tool-bar .result-switch-btn:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
+}
+
 
 /*#bmp-compare-page #accordianmenu ul ul li a:hover {
     background: black;
@@ -745,7 +755,10 @@ padding: 0 0;}*/
     padding-top: 190px;
     font-size: 12px;
 }
-
+#model-compare-page .map-tool-bar .result-switch-btn:disabled {
+    /*font-size: 12px;*/
+    cursor: pointer;
+}
 #responsive-timeline2 {
     height: 60%;
     overflow-y: scroll;

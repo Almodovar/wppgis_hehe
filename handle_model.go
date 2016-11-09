@@ -117,6 +117,7 @@ type OutletResultTypeArray struct {
 }
 
 var outletArray []*OutletResultTypeArray
+var outletCompareArray []*OutletResultTypeArray
 
 func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
@@ -135,10 +136,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-
-	// fmt.Println(d[0].FeatureID)
-	// fmt.Println(d[0].BMPCode)
-	// fmt.Println(d[0].FeatureType)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -183,10 +180,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			}
 
 		}
-		// fmt.Println(s)
 	}
-
-	// fmt.Println(d)
 
 	for _, i := range d {
 		var id = i.FeatureID
@@ -205,7 +199,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 				var a BMPCodeHRU
 				a.BMPCode = bmpCode
 				a.HRUID = hruID
-				// fmt.Println(a.HRUID)
 				x = append(x, a)
 				BMPCodeArray[hruID-1] = bmpCode
 			}
@@ -288,12 +281,6 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	// fmt.Println(scenario.ScenarioID)
-	// fmt.Println(scenario.UserName)
-	// fmt.Println(scenario.ScenarioName)
-
-	// fmt.Println(strings.Compare(strings.TrimSpace(scenario.ScenarioName), "wewewe"))
-
 	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
 	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
 	GenerateResultJsonFile("basin", "basincompare", subbasinAverage)
@@ -303,8 +290,6 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	compareFromsubbasinAverage = subbasinAverage
 	compareFromfieldArray = fieldArray
 	compareFromfieldAverage = fieldAverage
-	// fmt.Println(compareFromsubbasinAverage)
-	// fmt.Println(compareFromsubbasinAverage[6])
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
@@ -322,10 +307,6 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-
-	// fmt.Println(d.ID)
-	// fmt.Println(d.Type)
-	// fmt.Println(d.ResultType)
 
 	var arrayDataFeatureResultType []float64
 	if d.Type == "subbasin" {
@@ -376,10 +357,69 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		}
 	}
 
-	// fmt.Println(len(arrayDataFeatureResultType))
-	// fmt.Println(arrayDataFeatureResultType)
+	a, err := json.Marshal(arrayDataFeatureResultType)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(a)
+}
 
-	// create json response from struct
+func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d FeatureResultType
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	var arrayDataFeatureResultType []float64
+	if d.Type == "subbasin" {
+		if d.ResultType == "flow" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Water-compareFromsubbasinArray[d.ID][i].Water)*100/compareFromsubbasinArray[d.ID][i].Water)
+			}
+		}
+		if d.ResultType == "sediment" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Sediment-compareFromsubbasinArray[d.ID][i].Sediment)*100/compareFromsubbasinArray[d.ID][i].Sediment)
+			}
+		}
+
+		if d.ResultType == "tp" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Tp-compareFromsubbasinArray[d.ID][i].Tp)*100/compareFromsubbasinArray[d.ID][i].Tp)
+			}
+		}
+		if d.ResultType == "tn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Tn-compareFromsubbasinArray[d.ID][i].Tn)*100/compareFromsubbasinArray[d.ID][i].Tn)
+			}
+		}
+	}
+
+	if d.Type == "field" {
+		if d.ResultType == "flow" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Water-compareFromfieldArray[d.ID][i].Water)*100/compareFromfieldArray[d.ID][i].Water)
+			}
+		}
+		if d.ResultType == "sediment" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Sediment-compareFromfieldArray[d.ID][i].Sediment)*100/compareFromfieldArray[d.ID][i].Sediment)
+			}
+		}
+
+		if d.ResultType == "tp" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Tp-compareFromfieldArray[d.ID][i].Tp)*100/compareFromfieldArray[d.ID][i].Tp)
+			}
+		}
+		if d.ResultType == "tn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Tn-compareFromfieldArray[d.ID][i].Tn)*100/compareFromfieldArray[d.ID][i].Tn)
+			}
+		}
+	}
+
 	a, err := json.Marshal(arrayDataFeatureResultType)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -399,18 +439,18 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 
 	for i, _ := range compareTosubbasinAverage {
 		var s = new(Result)
-		s.Water = (compareTosubbasinAverage[i].Water - compareFromsubbasinAverage[i].Water) * 100 / compareTosubbasinAverage[i].Water
-		s.Sediment = (compareTosubbasinAverage[i].Sediment - compareFromsubbasinAverage[i].Sediment) * 100 / compareTosubbasinAverage[i].Sediment
-		s.Tn = (compareTosubbasinAverage[i].Tn - compareFromsubbasinAverage[i].Tn) * 100 / compareTosubbasinAverage[i].Tn
-		s.Tp = (compareTosubbasinAverage[i].Tp - compareFromsubbasinAverage[i].Tp) * 100 / compareTosubbasinAverage[i].Tp
+		s.Water = (compareTosubbasinAverage[i].Water - compareFromsubbasinAverage[i].Water) * 100 / compareFromsubbasinAverage[i].Water
+		s.Sediment = (compareTosubbasinAverage[i].Sediment - compareFromsubbasinAverage[i].Sediment) * 100 / compareFromsubbasinAverage[i].Sediment
+		s.Tn = (compareTosubbasinAverage[i].Tn - compareFromsubbasinAverage[i].Tn) * 100 / compareFromsubbasinAverage[i].Tn
+		s.Tp = (compareTosubbasinAverage[i].Tp - compareFromsubbasinAverage[i].Tp) * 100 / compareFromsubbasinAverage[i].Tp
 		subbasinCompareResult[i] = s
 	}
 
 	for i, _ := range compareTofieldAverage {
 		var s = new(Result)
 		if compareTofieldAverage[i].Water != 0 {
-			s.Water = (compareTofieldAverage[i].Water - compareFromfieldAverage[i].Water) * 100 / compareTofieldAverage[i].Water
-			s.Sediment = (compareTofieldAverage[i].Sediment - compareFromfieldAverage[i].Sediment) * 100 / compareTofieldAverage[i].Sediment
+			s.Water = (compareTofieldAverage[i].Water - compareFromfieldAverage[i].Water) * 100 / compareFromfieldAverage[i].Water
+			s.Sediment = (compareTofieldAverage[i].Sediment - compareFromfieldAverage[i].Sediment) * 100 / compareFromfieldAverage[i].Sediment
 			s.Tn = (compareTofieldAverage[i].Tn - compareFromfieldAverage[i].Tn) * 100 / compareFromfieldAverage[i].Tn
 			s.Tp = (compareTofieldAverage[i].Tp - compareFromfieldAverage[i].Tp) * 100 / compareFromfieldAverage[i].Tp
 		} else {
@@ -426,7 +466,10 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	GenerateResultJsonFile("field", "fieldcompareresult", fieldCompareResult)
 	GenerateResultJsonFile("basin", "basincompareresult", subbasinCompareResult)
 
-	a, err := json.Marshal(scenario)
+	fmt.Println(scenario.ScenarioGet)
+	OutletCompareResultArray(scenario.ScenarioGet)
+
+	a, err := json.Marshal(outletCompareArray)
 	w.Write(a)
 }
 
@@ -465,8 +508,6 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 	if err != nil {
 		panic(err)
 	}
-
-	// fmt.Println("success")
 }
 
 func BasintoField(database string) {
@@ -727,5 +768,106 @@ func OutletResultArray() {
 	outletArray = append(outletArray, tndataArray)
 
 	db.Close()
+}
 
+func OutletCompareResultArray(s string) {
+	outletCompareArray = []*OutletResultTypeArray{}
+
+	var outletSedimentArray []float64
+	var outletWaterArray []float64
+	var outletTnArray []float64
+	var outletTpArray []float64
+
+	db, err := sql.Open("sqlite3", "./assets/swat/"+s+".db3")
+	checkErr(err)
+
+	//查询数据
+	rows, err := db.Query("SELECT id,year,water,sediment,TP,TN FROM rch ")
+	checkErr(err)
+
+	for rows.Next() {
+		var id int
+		var year int
+		var water float64
+		var sediment float64
+		var tp float64
+		var tn float64
+		err = rows.Scan(&id, &year, &water, &sediment, &tp, &tn)
+		checkErr(err)
+
+		for i := 2002; i <= 2011; i++ {
+			if id == 33 && year == i {
+				outletSedimentArray = append(outletSedimentArray, sediment)
+				outletTnArray = append(outletTnArray, tn)
+				outletTpArray = append(outletTpArray, tp)
+				outletWaterArray = append(outletWaterArray, water)
+			}
+		}
+	}
+
+	var outletCompareSedimentArray []float64
+	var outletCompareWaterArray []float64
+	var outletCompareTnArray []float64
+	var outletCompareTpArray []float64
+
+	db, err = sql.Open("sqlite3", "./assets/swat/result.db3")
+	checkErr(err)
+
+	//查询数据
+	rows, err = db.Query("SELECT id,year,water,sediment,TP,TN FROM rch ")
+	checkErr(err)
+
+	for rows.Next() {
+		var id int
+		var year int
+		var water float64
+		var sediment float64
+		var tp float64
+		var tn float64
+		err = rows.Scan(&id, &year, &water, &sediment, &tp, &tn)
+		checkErr(err)
+
+		for i := 2002; i <= 2011; i++ {
+			if id == 33 && year == i {
+				outletCompareSedimentArray = append(outletCompareSedimentArray, sediment)
+				outletCompareTnArray = append(outletCompareTnArray, tn)
+				outletCompareTpArray = append(outletCompareTpArray, tp)
+				outletCompareWaterArray = append(outletCompareWaterArray, water)
+			}
+		}
+	}
+
+	var outletCompareResultSedimentArray []float64
+	var outletCompareResultWaterArray []float64
+	var outletCompareResultTnArray []float64
+	var outletCompareResultTpArray []float64
+
+	for i := 0; i < len(outletSedimentArray); i++ {
+		outletCompareResultSedimentArray = append(outletCompareResultSedimentArray, (outletCompareSedimentArray[i]-outletSedimentArray[i])*100/outletSedimentArray[i])
+		outletCompareResultWaterArray = append(outletCompareResultWaterArray, (outletCompareWaterArray[i]-outletWaterArray[i])*100/outletWaterArray[i])
+		outletCompareResultTnArray = append(outletCompareResultTnArray, (outletCompareTnArray[i]-outletTnArray[i])*100/outletTnArray[i])
+		outletCompareResultTpArray = append(outletCompareResultTpArray, (outletCompareTpArray[i]-outletTpArray[i])*100/outletTpArray[i])
+	}
+
+	var sedimentdataArray = new(OutletResultTypeArray)
+	sedimentdataArray.ResultType = "sediment"
+	sedimentdataArray.ResultData = outletCompareResultSedimentArray
+	outletCompareArray = append(outletCompareArray, sedimentdataArray)
+
+	var flowdataArray = new(OutletResultTypeArray)
+	flowdataArray.ResultType = "flow"
+	flowdataArray.ResultData = outletCompareResultWaterArray
+	outletCompareArray = append(outletCompareArray, flowdataArray)
+
+	var tpdataArray = new(OutletResultTypeArray)
+	tpdataArray.ResultType = "tp"
+	tpdataArray.ResultData = outletCompareResultTpArray
+	outletCompareArray = append(outletCompareArray, tpdataArray)
+
+	var tndataArray = new(OutletResultTypeArray)
+	tndataArray.ResultType = "tn"
+	tndataArray.ResultData = outletCompareResultTnArray
+	outletCompareArray = append(outletCompareArray, tndataArray)
+
+	db.Close()
 }

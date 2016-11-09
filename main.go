@@ -53,6 +53,8 @@ func main() {
 	secureRouter.Handle("POST", "/comparemodelresult", HandleModelCompare)
 
 	secureRouter.Handle("POST", "/chart", HandleChart)
+	secureRouter.Handle("POST", "/comparechart", HandleCompareChart)
+
 	secureRouter.Handle("POST", "/deletescenario", HandleScenarioDelete)
 	secureRouter.Handle("GET", "/sign-out", HandleSessionDestroy)
 
