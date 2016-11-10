@@ -402,34 +402,50 @@
             <div class="col-md-4 scenario-task">
                 <div class="row">
                     <div class="model-issue-management">
-                        <form class="form-horizontal">
-                            <div class="form-group">
+                        <div class="form-group">
+                            <div class="row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Title">
+                                    <input type="text" class="form-control" id="result-issue-title2" placeholder="Title">
                                 </div>
                                 <div class="col-md-6">
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="sel2" placeholder="FeatureID">
                                 </div>
-                            </div>
-                            <textarea class="form-control" rows="2"></textarea>
-                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea id="result-issue-description2" class="form-control" rows="2"></textarea>
+                                </div>
                                 <div class="col-sm-12 text-right">
-                                    <button type="submit" class="btn btn-danger map-btn">Submit</button>
+                                    <button class="btn btn-danger map-btn" id="result-issue-submit2">Submit</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="result-issues2">
+                    <div id="result-issue-talk2">
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-push-1" id="talk-title2">
+                            </div>
+                            <div class="col-sm-10 col-sm-push-1" id="talk-content2">
+                                <hr> this is a test comment
+                            </div>
+                            <div class="col-sm-12" id="talk-reply2">
+                                <div class="row">
+                                    <div class="col-sm-10 col-sm-push-1">
+                                        <hr>
+                                        <textarea name="issue comment" id="issue-comment2" rows="2" style="width: 100%" placeholder="Please leave comments"></textarea>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-push-1 text-right">
+                                        <button type="button" class="btn btn-primary map-btn" id="result-issue-comment-reply2">Reply</button>
+                                        <button type="button" class="btn btn-danger map-btn" id="result-issue-comment-close2">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="responsive-timeline2" class="col-sm-12 responsive-timeline">
                         <div>
-                            <ul class="timeline">
-                                <li class="timeline-inverted">
+                            <ul class="timeline" id="result-issue-timeline2">
+                                <!-- <li class="timeline-inverted">
                                     <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
                                     <div class="timeline-panel">
                                         <div class="timeline-heading">
@@ -481,7 +497,7 @@
                                             <p> mais bolis eu num gostis.</p>
                                         </div>
                                     </div>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>

@@ -17,6 +17,12 @@ $(document).ready(function() {
         $("#result-issue-talk").css('width', $("#result-issues").width());
         var h = $("#result-issue-talk").height() - 190;
         $("#talk-content").css('height', h + "px");
+
+        $("#result-issue-talk2").css('height', $("#responsive-timeline2").height() + 5);
+        $("#result-issue-talk2").css('width', $("#result-issues2").width());
+        var h2 = $("#result-issue-talk2").height() - 190;
+        $("#talk-content2").css('height', h2 + "px");
+
         // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
 
     }
@@ -27,6 +33,7 @@ $(document).ready(function() {
     });
 
     $("#result-issue-talk").hide();
+    $("#result-issue-talk2").hide();
 
     // ****************************************************
     //              BOOTSTRAP PLUGINS
@@ -1259,7 +1266,6 @@ $(document).ready(function() {
                     }]
                 });
                 $("#sel1").val(selectedResultFeature.getProperties().name);
-
             }
         });
     }
@@ -1302,9 +1308,6 @@ $(document).ready(function() {
         }
     });
 
-
-
-
     $("#result-issue-submit").click(function(event) {
         $("#result-issue-talk").hide();
         if ($("#result-issue-title").val().length === 0) {
@@ -1325,7 +1328,7 @@ $(document).ready(function() {
             var currentdate = new Date();
             var datetime = " " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
             $("#result-issue-timeline").append(' <li class="timeline-inverted"><div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div><div class="timeline-panel"><div class="timeline-heading"><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + datetime + " via " + s + '</small></p></div><div class="timeline-body"><p>' + $("#result-issue-title").val() + '</p></div></li>');
-            $(".timeline-inverted").click(function(event) {
+            $("#result-issue-timeline .timeline-inverted").click(function(event) {
                 $("#talk-title").html("");
                 $("#result-issue-talk").css('height', $("#responsive-timeline").height() + 5);
                 $("#result-issue-talk").css('width', $("#result-issues").width());
@@ -1339,7 +1342,6 @@ $(document).ready(function() {
             });
         }
     });
-
 
     $("#result-issue-comment-reply").click(function(event) {
         $("#talk-content").append(' <hr> ' + $("#issue-comment").val());
@@ -1359,6 +1361,9 @@ $(document).ready(function() {
         $("#bmp-compare-page").css('visibility', 'visible');
         $("#model-compare-btn").css('disabled', 'true');
     });
+
+
+
 
     // ************************************************************************************************************************************************************
     //
@@ -1520,8 +1525,7 @@ $(document).ready(function() {
 
     $("#accordianmenu p").click(function() {
         compareMapSingleClick.getFeatures().clear();
-        $("#model-compare-btn").css('disabled', 'false');
-
+        // $("#model-compare-btn").css('disabled', 'false');
         $("#accordianmenu p").css({ "background-color": "white", "color": "black" });
         $(this).css({ "background-color": "rgb(66,139,202)", "color": "white" });
         $("#accordianmenu ul ul").slideUp();
@@ -1541,6 +1545,9 @@ $(document).ready(function() {
             data: scenario,
             dataType: 'json',
             success: function(r) {
+                fieldCompare.getSource().clear();
+                subbasinCompare.getSource().clear();
+
                 $('#show-subbasin-map2').attr("disabled", true);
                 $('#show-field-map2').attr("disabled", false);
                 compareMap.removeLayer(compareMap.getLayers().getArray()[1]);
@@ -1635,6 +1642,9 @@ $(document).ready(function() {
         source.clear();
         loader.call(source, [], 1, 'EPSG:3857');
     }
+
+
+
 
     // ************************************************************************************************************************************************************
     //
@@ -1834,11 +1844,27 @@ $(document).ready(function() {
 
     var compareresultMapPointerMove = new ol.interaction.Select({
         layers: [fieldCompareResult, subbasinCompareResult],
-        condition: ol.events.condition.pointerMove
+        condition: ol.events.condition.pointerMove,
+        filter: function(feature, layer) {
+            for (var i = 0; i < bmpAssignmentArray.length; i++) {
+                if (bmpAssignmentArray[i].featureID == feature.getProperties().name) {
+                    return true;
+                }
+            }
+            return false;
+        },
     });
 
     var compareresultMapSingleClick = new ol.interaction.Select({
         layers: [fieldCompareResult, subbasinCompareResult],
+        filter: function(feature, layer) {
+            for (var i = 0; i < bmpAssignmentArray.length; i++) {
+                if (bmpAssignmentArray[i].featureID == feature.getProperties().name) {
+                    return true;
+                }
+            }
+            return false;
+        },
     });
 
     var compareresultMap = new ol.Map({
@@ -1906,6 +1932,10 @@ $(document).ready(function() {
         }
     });
 
+
+    $("#sel2").prop('disabled', true);
+
+
     $("#show-flow-compare-result").click(function(event) {
         compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[1];
@@ -1968,10 +1998,8 @@ $(document).ready(function() {
 
     function drawCompareOutletChart(s) {
         compareresultMapSingleClick.getFeatures().clear();
-
         $("#offsite-compare-chart").attr("disabled", true);
         $("#onsite-compare-chart").attr("disabled", false);
-
         var data = [];
         if (s === "sediment") {
             data = outletCompareSediment;
@@ -1990,7 +2018,6 @@ $(document).ready(function() {
                 text: '',
                 x: -20 //center
             },
-
             xAxis: {
                 categories: ['2002', '2003', '2004', '2005', '2006', '2007',
                     '2008', '2009', '2010', '2011'
@@ -2037,15 +2064,12 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(r) {
                 var dataArray = [];
-
                 for (var i = 0; i < r.length; i++) {
                     r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(6);
                     dataArray[i] = parseFloat(r[i]);
                 }
-
                 var average = [];
                 var averageNum;
-
                 if (feature.ResultType == "sediment") {
                     averageNum = selectedCompareResultFeature.getProperties().sediment;
                     averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
@@ -2078,7 +2102,6 @@ $(document).ready(function() {
                         average[i] = selectedCompareResultFeature.getProperties().tp;
                     }
                 }
-
                 $('#model-compare-chart').highcharts({
                     title: {
                         text: '',
@@ -2117,11 +2140,60 @@ $(document).ready(function() {
                         data: dataArray
                     }]
                 });
-                // $("#sel1").val(selectedResultFeature.getProperties().name);
+                $("#sel2").val(selectedCompareResultFeature.getProperties().name);
             }
         });
     }
 
+    $("#result-issue-submit2").click(function(event) {
+        $("#result-issue-talk2").hide();
+        if ($("#result-issue-title2").val().length === 0) {
+            $("#result-issue-title2").addClass("input-err");
+            $("#result-issue-title2").prop("placeholder", "Please write issue title");
+        } else {
+            $("#result-issue-title2").removeClass("input-err");
+        }
+        if ($("#sel2").val().length === 0) {
+            $("#sel2").addClass("input-err");
+            $("#sel2").prop("placeholder", "Please select a feature");
+        } else {
+            $("#sel2").removeClass("input-err");
+
+        }
+        if ($("#sel2").val().length !== 0 && $("#result-issue-title2").val().length !== 0) {
+            var s = $("#user-id").html();
+            var currentdate = new Date();
+            var datetime = " " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+            $("#result-issue-timeline2").append(' <li class="timeline-inverted"><div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div><div class="timeline-panel"><div class="timeline-heading"><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + datetime + " via " + s + '</small></p></div><div class="timeline-body"><p>' + $("#result-issue-title2").val() + '</p></div></li>');
+            $("#result-issue-timeline2 .timeline-inverted").click(function(event) {
+                $("#talk-title2").html("");
+                $("#result-issue-talk2").css('height', $("#responsive-timeline2").height() + 5);
+                $("#result-issue-talk2").css('width', $("#result-issues2").width());
+                var issueTitle = $(this).find(".timeline-body").children('p').html();
+                // alert(issueTitle);
+                $("#talk-title2").append('<p><span style="font-weight:bold"> Issue title : ' + issueTitle + '</span></p>');
+                var h = $("#result-issue-talk2").height() - 190;
+                $("#talk-content2").css('height', h + "px");
+                $("#result-issue-talk2").show("slow");
+
+            });
+        }
+    });
+
+    $("#result-issue-comment-reply2").click(function(event) {
+        if ($("#issue-comment2").val().length === 0) {
+            $("#issue-comment2").prop("placeholder", "Comment empty");
+            $("#issue-comment2").addClass('input-err');
+        } else {
+            $("#issue-comment2").removeClass('input-err');
+            $("#talk-content2").append(' <hr> ' + $("#issue-comment2").val());
+            $("#issue-comment2").val("");
+        }
+    });
+
+    $("#result-issue-comment-close2").click(function(event) {
+        $("#result-issue-talk2").hide();
+    });
 
     // ************************************************************************************************************************************************************
     //
@@ -2158,7 +2230,7 @@ $(document).ready(function() {
         },
         yAxis: {
             title: {
-                text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
+                text: 'Value'
             },
             plotLines: [{
                 value: 0,

@@ -1002,6 +1002,60 @@ padding: 0 0;}*/
 }
 
 
+#result-issue-description2,
+#result-issue-submit2 {
+    margin-top: 10px;
+}
+
+.timeline-inverted:hover {
+    border-right: 10px solid rgba(37, 57, 205, 0.6);
+    cursor: pointer;
+}
+
+#responsive-timeline2 {
+    border-top: 2px solid rgba(198, 197, 197, 0.6);
+    border-bottom: 2px solid rgba(198, 197, 197, 0.6);
+}
+
+#result-issues2 {
+    position: relative;
+    /*border-top: 2px solid #9D9D9D;*/
+}
+
+#result-issue-talk2 {
+    position: absolute;
+    /*visibility: hidden;*/
+    top: 0px;
+    left: 0px;
+    border-top: 2px solid rgba(208, 208, 208, 0.7);
+    background: white;
+    z-index: 100;
+}
+
+#result-issue-talk2 .row {
+    height: 100%;
+}
+
+#talk-content2 {
+    margin-bottom: 10px;
+    overflow-y: scroll;
+    /*height: 300px;*/
+}
+
+#issue-comment2 {
+    margin-bottom: 10px;
+}
+
+#talk-title2 {
+    height: 40px;
+    padding-top: 20px;
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+#talk-reply2 {
+    height: 150px;
+}
 /*--------------------------------*/
 
 
@@ -1123,3 +1177,5 @@ padding: 0 0;}*/
         font-size: 10px;
     }
 }
+
+
