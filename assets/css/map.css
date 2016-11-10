@@ -1,5 +1,7 @@
 body {
     position: relative;
+    overflow: hidden;
+    min-width: 900px;
 }
 
 
@@ -169,24 +171,21 @@ body {
     content: 'Subbasin';
 }
 
-@media screen and (max-width: 1140px) {
+@media screen and (max-width: 1300px) {
     .show-field:before {
         content: 'F';
     }
     .show-subbasin:before {
         content: 'B';
     }
-    .search-field-subbasin {
-        display: none;
+    .search-field-subbasin input {
+        font-size: 10px;
     }
-}
-
-@media screen and (max-width: 1300px) {
     .show-n:before {
         content: 'N';
     }
     .show-p:before {
-        content: 'Ph';
+        content: 'P';
     }
 }
 
@@ -296,7 +295,8 @@ body {
 }
 
 #responsive-timeline {
-    height: 60%;
+    /*    height: 60%;
+*/
     overflow-y: scroll;
 }
 
@@ -491,6 +491,9 @@ body {
         left: -14px;
         right: auto;
     }
+    .search-field-subbasin {
+        display: none;
+    }
 }
 
 #model-result-page .map-tool-bar .map-switch-btn:focus {
@@ -535,7 +538,7 @@ body {
 
 #model-result-page .report-generate {
     padding-top: 10px;
-    padding-bottom: 9%;
+    padding-bottom: 4%;
 }
 
 #result-feature-info {
@@ -755,12 +758,14 @@ padding: 0 0;}*/
     padding-top: 190px;
     font-size: 12px;
 }
+
 #model-compare-page .map-tool-bar .result-switch-btn:disabled {
     /*font-size: 12px;*/
     cursor: pointer;
 }
+
 #responsive-timeline2 {
-    height: 60%;
+    /*height: 60%;*/
     overflow-y: scroll;
 }
 
@@ -1001,7 +1006,6 @@ padding: 0 0;}*/
     font-size: 10px;
 }
 
-
 #result-issue-description2,
 #result-issue-submit2 {
     margin-top: 10px;
@@ -1056,6 +1060,8 @@ padding: 0 0;}*/
 #talk-reply2 {
     height: 150px;
 }
+
+
 /*--------------------------------*/
 
 
@@ -1177,5 +1183,3 @@ padding: 0 0;}*/
         font-size: 10px;
     }
 }
-
-

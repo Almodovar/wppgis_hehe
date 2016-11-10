@@ -4,26 +4,65 @@ $(document).ready(function() {
     //              Dimension calculation
     //   calculate the height for pages and sections
     // ****************************************************
+    // $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 500);
+
+    var progress = "bmpSelection";
+
     function setHeight() {
-        var windowHeight = $(window).height();
+        var windowHeight = $(window).innerHeight;
+
 
         $('#bmp-select-table').css('height', $(".map-size-adjust").height() - $("#model-run-btn").height() - 20);
+
+
+        $("#model-result-page").css('height', $('#bmp-select-page').outerHeight());
+        $(".scenario-task").css('height', $('#bmp-select-page').outerHeight() - $("#process-control").outerHeight());
+        $("#result-issues").css('height', $('.scenario-task').outerHeight() - $(".model-issue-management").outerHeight() - 40);
+        $("#responsive-timeline").css('height', $("#result-issues").outerHeight() - $(".report-generate").outerHeight());
         $('.model-result-map').css('height', $(".scenario-task").height() - $("#model-result-chart").height() - $(".map-tool-bar").height() * 2 - 20);
+
+
+        $("#model-compare-page").css('height', $('#bmp-select-page').outerHeight());
+        $("#result-issues2").css('height', $('.scenario-task').outerHeight() - $(".model-issue-management").outerHeight() - 40);
+        $("#responsive-timeline2").css('height', $("#result-issues2").outerHeight() - $(".report-generate").outerHeight());
+        $('.model-result-map').css('height', $(".scenario-task").height() - $("#model-compare-chart").height() - $(".map-tool-bar").height() * 2 - 20);
+
         $('#accordianmenu').css('height', $(".map-size-adjust").height() - $("#model-compare-btn").height() - 50);
+
+
+
+
         $('#bmp-optimize-table').css('height', $(".model-result-map").height() + $("#model-optimize-chart").height() - $("#model-optimize-input").height() - $(".report-generate").height() - 60);
+
+
         $("#loading-page").css('height', $("#bmp-select-page").height() + 150);
         $("#loading-info").css('margin-top', ($("#loading-page").height() - 400) / 2);
+
         $("#result-issue-talk").css('height', $("#responsive-timeline").height() + 5);
         $("#result-issue-talk").css('width', $("#result-issues").width());
         var h = $("#result-issue-talk").height() - 190;
         $("#talk-content").css('height', h + "px");
-
         $("#result-issue-talk2").css('height', $("#responsive-timeline2").height() + 5);
         $("#result-issue-talk2").css('width', $("#result-issues2").width());
         var h2 = $("#result-issue-talk2").height() - 190;
         $("#talk-content2").css('height', h2 + "px");
 
         // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
+
+        switch (progress) {
+            case "bmpEvaluation":
+                $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 'slow');
+                break;
+            case "checkScenario":
+                $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 'slow');
+                break;
+            case "compareScenario":
+                $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
+                break;
+            default:
+                // $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
+                break;
+        }
 
     }
     setHeight();
@@ -721,6 +760,7 @@ $(document).ready(function() {
             data: jsonArray,
             dataType: 'json',
             success: function(r) {
+                progress = "bmpEvaluation";
                 $("#process-icon1").removeClass('btn-danger').addClass('btn-success');
                 $("#process-icon1 span").removeClass('text-danger').addClass('text-success');
 
@@ -1360,6 +1400,7 @@ $(document).ready(function() {
         $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 1000);
         $("#bmp-compare-page").css('visibility', 'visible');
         $("#model-compare-btn").css('disabled', 'true');
+        progress = "checkScenario";
     });
 
 
@@ -1584,6 +1625,7 @@ $(document).ready(function() {
             data: jsonArray,
             dataType: 'json',
             success: function(r) {
+                progress = "compareScenario";
 
                 $("#process-icon3").removeClass('btn-danger').addClass('btn-success');
                 $("#process-icon3 span").removeClass('text-danger').addClass('text-success');
