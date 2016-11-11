@@ -4,9 +4,9 @@ $(document).ready(function() {
     //              Dimension calculation
     //   calculate the height for pages and sections
     // ****************************************************
-    // $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 500);
 
     var progress = "bmpSelection";
+    var resizePage = 1;
 
     function setHeight() {
         var windowHeight = $(window).innerHeight;
@@ -49,14 +49,17 @@ $(document).ready(function() {
 
         // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
 
-        switch (progress) {
-            case "bmpEvaluation":
+        switch (resizePage) {
+            case 1:
+                $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 'slow');
+                break;
+            case 2:
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 'slow');
                 break;
-            case "checkScenario":
+            case 3:
                 $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 'slow');
                 break;
-            case "compareScenario":
+            case 4:
                 $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
                 break;
             default:
@@ -71,8 +74,16 @@ $(document).ready(function() {
         setHeight();
     });
 
+    $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 500);
+
+
     $("#result-issue-talk").hide();
     $("#result-issue-talk2").hide();
+
+
+
+
+
 
     // ****************************************************
     //              BOOTSTRAP PLUGINS
@@ -720,8 +731,40 @@ $(document).ready(function() {
 
     $("#model-run-btn").click(function(event) {
 
+        
+        $("#process-control").html('<div class="stepwizard-row">' + '<div class="liner"></div>' + '<div class="stepwizard-step">' + '<a id="process-icon1" class="btn icon-btn btn-danger"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon2" class="btn icon-btn btn-default"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Evaluate Comparison</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>Optimiza Scenario</a>' + '</div>' + '</div>');
 
-        $("#process-control").html('<div class="stepwizard-row">' + '<div class="liner"></div>' + '<div class="stepwizard-step">' + '<a id="process-icon1" class="btn icon-btn btn-danger" href="#"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon2" class="btn icon-btn btn-default" href="#"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon3" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon4" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Evaluate Comparison</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon5" class="btn icon-btn btn-default" href="#"><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>Optimiza Scenario</a>' + '</div>' + '</div>');
+        $("#process-icon1").on('click', function(event) {
+            resizePage = 1;
+            $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 'slow');
+        });
+
+        $("#process-icon2").on('click', function(event) {
+
+
+            if (progress == "bmpEvaluation" || progress == "checkScenario" || progress == "compareScenario") {
+                resizePage = 2;
+                $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 'slow');
+            }
+        });
+
+        $("#process-icon3").on('click', function(event) {
+
+
+            if (progress == "checkScenario" || progress == "compareScenario") {
+                resizePage = 3;
+                $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 'slow');
+            }
+        });
+
+        $("#process-icon4").on('click', function(event) {
+
+
+            if (progress == "compareScenario") {
+                resizePage = 4;
+                $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
+            }
+        });
 
         $(document).trigger('show-loading-page');
         bmpAssignmentArray.length = 0;
@@ -760,6 +803,7 @@ $(document).ready(function() {
             data: jsonArray,
             dataType: 'json',
             success: function(r) {
+                resizePage = 2;
                 progress = "bmpEvaluation";
                 $("#process-icon1").removeClass('btn-danger').addClass('btn-success');
                 $("#process-icon1 span").removeClass('text-danger').addClass('text-success');
@@ -1401,6 +1445,7 @@ $(document).ready(function() {
         $("#bmp-compare-page").css('visibility', 'visible');
         $("#model-compare-btn").css('disabled', 'true');
         progress = "checkScenario";
+        resizePage = 3;
     });
 
 
@@ -1625,6 +1670,8 @@ $(document).ready(function() {
             data: jsonArray,
             dataType: 'json',
             success: function(r) {
+                resizePage = 4;
+
                 progress = "compareScenario";
 
                 $("#process-icon3").removeClass('btn-danger').addClass('btn-success');
