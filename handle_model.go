@@ -255,7 +255,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	BasintoField("result")
 	GenerateResultJsonFile("field", "fieldoutput", fieldAverage)
 	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage)
-	OutletResultArray()
+	OutletResultArray("result")
 
 	compareTosubbasinArray = subbasinArray
 	compareTosubbasinAverage = subbasinAverage
@@ -281,15 +281,21 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	fmt.Println(scenario.ScenarioGet)
+
 	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
 	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
 	GenerateResultJsonFile("basin", "basincompare", subbasinAverage)
-	OutletResultArray()
+	OutletResultArray(strings.TrimSpace(scenario.ScenarioGet))
 
 	compareFromsubbasinArray = subbasinArray
 	compareFromsubbasinAverage = subbasinAverage
 	compareFromfieldArray = fieldArray
 	compareFromfieldAverage = fieldAverage
+
+	fmt.Println(outletArray[0])
+	fmt.Println(outletArray[1])
+	fmt.Println(outletArray[2])
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
@@ -713,7 +719,7 @@ func checkErr(err error) {
 	}
 }
 
-func OutletResultArray() {
+func OutletResultArray(s string) {
 	outletArray = []*OutletResultTypeArray{}
 
 	var outletSedimentArray []float64
@@ -721,7 +727,7 @@ func OutletResultArray() {
 	var outletTnArray []float64
 	var outletTpArray []float64
 
-	db, err := sql.Open("sqlite3", "./assets/swat/result.db3")
+	db, err := sql.Open("sqlite3", "./assets/swat/"+s+".db3")
 	checkErr(err)
 
 	//查询数据

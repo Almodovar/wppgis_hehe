@@ -29,9 +29,6 @@ $(document).ready(function() {
 
         $('#accordianmenu').css('height', $(".map-size-adjust").height() - $("#model-compare-btn").height() - 50);
 
-
-
-
         $('#bmp-optimize-table').css('height', $(".model-result-map").height() + $("#model-optimize-chart").height() - $("#model-optimize-input").height() - $(".report-generate").height() - 60);
 
 
@@ -79,10 +76,6 @@ $(document).ready(function() {
 
     $("#result-issue-talk").hide();
     $("#result-issue-talk2").hide();
-
-
-
-
 
 
     // ****************************************************
@@ -216,6 +209,7 @@ $(document).ready(function() {
             fieldArray.push(field);
         }
     });
+
 
     // ****************************************************
     // the select interaction allows us to select features 
@@ -728,20 +722,18 @@ $(document).ready(function() {
     var outletCompareTp = [];
     var outletCompareTn = [];
     var bmpAssignmentArray = [];
-
+    var outletSedimentAverage = 0;
+    var outletFlowAverage = 0;
+    var outletTpAverage = 0;
+    var outletTnAverage = 0;
     $("#model-run-btn").click(function(event) {
-
-        
-        $("#process-control").html('<div class="stepwizard-row">' + '<div class="liner"></div>' + '<div class="stepwizard-step">' + '<a id="process-icon1" class="btn icon-btn btn-danger"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon2" class="btn icon-btn btn-default"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Evaluate Comparison</a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>Optimiza Scenario</a>' + '</div>' + '</div>');
-
+        $("#process-control").html('<div class="stepwizard-row">' + '<div class="liner"></div>' + '<div class="stepwizard-step">' + '<a id="process-icon1" class="btn icon-btn btn-danger"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span><span id="process-status1"></span></a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon2" class="btn icon-btn btn-default"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span><span id="process-status2"></span></a>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span><span id="process-status3"></span></a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span><span id="process-status4"></span></a>' + '<p>' + '<small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>' + '</p>' + '</div>' + '<div class="stepwizard-step">' + '<a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span><span id="process-status5"></span></a>' + '</div>' + '</div>');
         $("#process-icon1").on('click', function(event) {
             resizePage = 1;
             $("html, body").animate({ scrollTop: $('#bmp-select-page').offset().top }, 'slow');
         });
 
         $("#process-icon2").on('click', function(event) {
-
-
             if (progress == "bmpEvaluation" || progress == "checkScenario" || progress == "compareScenario") {
                 resizePage = 2;
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 'slow');
@@ -749,8 +741,6 @@ $(document).ready(function() {
         });
 
         $("#process-icon3").on('click', function(event) {
-
-
             if (progress == "checkScenario" || progress == "compareScenario") {
                 resizePage = 3;
                 $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 'slow');
@@ -758,8 +748,6 @@ $(document).ready(function() {
         });
 
         $("#process-icon4").on('click', function(event) {
-
-
             if (progress == "compareScenario") {
                 resizePage = 4;
                 $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
@@ -805,18 +793,47 @@ $(document).ready(function() {
             success: function(r) {
                 resizePage = 2;
                 progress = "bmpEvaluation";
+                var b = resultMap.getLayers().getArray()[1];
+                b.setStyle(outletSelectStyle);
                 $("#process-icon1").removeClass('btn-danger').addClass('btn-success');
-                $("#process-icon1 span").removeClass('text-danger').addClass('text-success');
+                $("#process-icon1 span:first").removeClass('text-danger').addClass('text-success');
 
                 $("#process-icon2").removeClass('btn-default').addClass('btn-danger');
-                $("#process-icon2 span").removeClass('text-default').addClass('text-danger');
+                $("#process-icon2 span:first").removeClass('text-default').addClass('text-danger');
 
                 outletSediment = r[0].ResultData;
                 outletFlow = r[1].ResultData;
                 outletTp = r[2].ResultData;
                 outletTn = r[3].ResultData;
 
-                resultMap.removeLayer(resultMap.getLayers().getArray()[1]);
+                outletSedimentAverage = 0;
+                outletFlowAverage = 0;
+                outletTpAverage = 0;
+                outletTnAverage = 0;
+
+                for (var i = 0; i < outletSediment.length; i++) {
+                    outletSedimentAverage = outletSedimentAverage + outletSediment[i];
+                    outletFlowAverage = outletFlowAverage + outletFlow[i];
+                    outletTpAverage = outletTpAverage + outletTp[i];
+                    outletTnAverage = outletTnAverage + outletTn[i];
+                }
+
+                outletSedimentAverage = outletSedimentAverage / 10;
+                outletFlowAverage = outletFlowAverage / 10;
+                outletTpAverage = outletTpAverage / 10;
+                outletTnAverage = outletTnAverage / 10;
+
+
+                outlet.setProperties({
+                    'sediment': outletSedimentAverage,
+                    'flow': outletFlowAverage,
+                    'tp': outletTpAverage,
+                    'tn': outletTnAverage,
+                    'name': 'outlet'
+                });
+
+
+                resultMap.removeLayer(resultMap.getLayers().getArray()[2]);
                 // refreshBasinSource(subbasinOutput);
                 // refreshFieldSource(fieldOutput);
                 subbasinOutput.getSource().clear();
@@ -876,12 +893,6 @@ $(document).ready(function() {
     //                                                                      BMP RESULT PAGE
     //                                  
     // ************************************************************************************************************************************************************
-    // var Great = [53, 191, 0, 0.6];
-    // var Good = [115, 197, 0, 0.6];
-    // var Normal = [181, 203, 0, 0.6];
-    // var Slight = [210, 168, 0, 0.6];
-    // var Bad = [216, 170, 0, 0.6];
-    // var Severe = [229, 0, 26, 0.6];
 
     var Great = 'rgba(53, 191, 0, 0.6)';
     var Good = 'rgba(115, 197, 0, 0.6)';
@@ -1007,8 +1018,98 @@ $(document).ready(function() {
         style: styleFlowFunction
     });
 
+    // ****************************************************
+    // Outlet layer loaded from geoserver in Jsonp format
+    // Be sure to enable the Jsonp function in the web.xml
+    // of Geoserver     
+    // ****************************************************
+
+    var outletDefaultStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            fill: new ol.style.Fill({
+                color: [247, 161, 49, 1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'white',
+                width: 1
+            }),
+            radius: 5
+        }),
+        fill: new ol.style.Fill({
+            color: [247, 161, 49, 1]
+        }),
+        stroke: new ol.style.Stroke({
+            color: 'white',
+            width: 1
+        })
+    });
+
+    var outletSelectStyle = [
+        new ol.style.Style({
+            image: new ol.style.Circle({
+                fill: new ol.style.Fill({
+                    color: [247, 161, 49, 1]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: [230, 230, 100, 1],
+                    width: 1
+                }),
+                radius: 10
+            }),
+            fill: new ol.style.Fill({
+                color: [247, 161, 49, 1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: [230, 230, 100, 1],
+                width: 2
+            })
+        }),
+        new ol.style.Style({
+            image: new ol.style.Circle({
+                fill: new ol.style.Fill({
+                    color: [247, 161, 49, 1]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'white',
+                    width: 5
+                }),
+                radius: 10
+            }),
+            fill: new ol.style.Fill({
+                color: [247, 161, 49, 1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'white',
+                width: 5
+            })
+        })
+    ];
+
+    var outlet = new ol.Feature({});
+    var point_geom = new ol.geom.Point(
+        ol.proj.transform([-81.7132830619812, 43.61527726000183], 'EPSG:4326', 'EPSG:3857')
+    );
+    outlet.setGeometry(point_geom);
+
+    var outletLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [outlet]
+        }),
+        zIndex: 10
+    });
+
+    outletLayer.setStyle(outletDefaultStyle);
+    // var outlet = new ol.Feature({ geometry: new ol.geom.Point(ol.proj.transform([43.569678, -81.709828], 'EPSG:4326', 'EPSG:3857')) });
+    // var outletLayer = new ol.layer.Vector({
+    //     source: new ol.source.Vector({
+    //         features: [outlet]
+    //     }),
+    //     style: outletDefaultStyle,
+    //     zIndex:10
+    // });
+
     var resultMapPointerMove = new ol.interaction.Select({
-        layers: [fieldOutput, subbasinOutput],
+        layers: [fieldOutput, outletLayer, subbasinOutput],
         condition: ol.events.condition.pointerMove
     });
 
@@ -1018,7 +1119,7 @@ $(document).ready(function() {
 
     var resultMap = new ol.Map({
         target: 'model-result-map',
-        layers: [tiledRaster, fieldJsonp],
+        layers: [tiledRaster, outletLayer, fieldJsonp],
         view: new ol.View({
             center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
             zoom: 13
@@ -1091,8 +1192,12 @@ $(document).ready(function() {
         selectedResultFeature = event.selected[0];
 
         if (selectedResultFeature) {
+            var b = resultMap.getLayers().getArray()[1];
+            b.setStyle(outletDefaultStyle);
             drawFeatureChart();
         } else {
+            var a = resultMap.getLayers().getArray()[1];
+            a.setStyle(outletSelectStyle);
             resultMapSingleClick.getFeatures().clear();
             if ($('#show-flow-result').prop("disabled") === true) {
                 drawOutletChart("flow");
@@ -1134,8 +1239,10 @@ $(document).ready(function() {
 
     $("#show-flow-result").click(function(event) {
         resultMapSingleClick.getFeatures().clear();
-        var a = resultMap.getLayers().getArray()[1];
+        var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleFlowFunction);
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         drawOutletChart("flow");
         $('#show-flow-result').attr("disabled", true);
         $('#show-flow-result').siblings().attr("disabled", false);
@@ -1144,8 +1251,10 @@ $(document).ready(function() {
     $("#show-sediment-result").click(function(event) {
         /* Act on the event */
         resultMapSingleClick.getFeatures().clear();
-        var a = resultMap.getLayers().getArray()[1];
+        var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleSedimentFunction);
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         drawOutletChart("sediment");
         $('#show-sediment-result').attr("disabled", true);
         $('#show-sediment-result').siblings().attr("disabled", false);
@@ -1153,8 +1262,10 @@ $(document).ready(function() {
     $("#show-n-result").click(function(event) {
         /* Act on the event */
         resultMapSingleClick.getFeatures().clear();
-        var a = resultMap.getLayers().getArray()[1];
+        var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleTnFunction);
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         drawOutletChart("tn");
         $('#show-n-result').attr("disabled", true);
         $('#show-n-result').siblings().attr("disabled", false);
@@ -1163,8 +1274,10 @@ $(document).ready(function() {
     $("#show-p-result").click(function(event) {
         /* Act on the event */
         resultMapSingleClick.getFeatures().clear();
-        var a = resultMap.getLayers().getArray()[1];
+        var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleTpFunction);
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         drawOutletChart("tp");
         $('#show-p-result').attr("disabled", true);
         $('#show-p-result').siblings().attr("disabled", false);
@@ -1172,6 +1285,9 @@ $(document).ready(function() {
 
 
     $("#show-field-map-result").click(function(event) {
+        var a = resultMap.getLayers().getArray()[1];
+        a.setStyle(outletSelectStyle);
+
         resultMapSingleClick.getFeatures().clear();
         resultMap.removeLayer(subbasinOutput);
         resultMap.addLayer(fieldOutput);
@@ -1183,6 +1299,8 @@ $(document).ready(function() {
     });
 
     $("#show-subbasin-map-result").click(function(event) {
+        var a = resultMap.getLayers().getArray()[1];
+        a.setStyle(outletSelectStyle);
         resultMapSingleClick.getFeatures().clear();
         resultMap.removeLayer(fieldOutput);
         resultMap.addLayer(subbasinOutput);
@@ -1346,7 +1464,8 @@ $(document).ready(function() {
                         data: average
                     }, {
                         name: 'Yr',
-                        data: dataArray
+                        data: dataArray,
+                        color: '#99EAA4'
                     }]
                 });
                 $("#sel1").val(selectedResultFeature.getProperties().name);
@@ -1391,6 +1510,9 @@ $(document).ready(function() {
             drawFeatureChart();
         }
     });
+
+
+
 
     $("#result-issue-submit").click(function(event) {
         $("#result-issue-talk").hide();
@@ -1438,14 +1560,18 @@ $(document).ready(function() {
 
     $("#bmp-compare-btn").click(function(event) {
         $("#process-icon2").removeClass('btn-danger').addClass('btn-success');
-        $("#process-icon2 span").removeClass('text-danger').addClass('text-success');
+        $("#process-icon2 span:first").removeClass('text-danger').addClass('text-success');
         $("#process-icon3").removeClass('btn-default').addClass('btn-danger');
-        $("#process-icon3 span").removeClass('text-default').addClass('text-danger');
+        $("#process-icon3 span:first").removeClass('text-default').addClass('text-danger');
         $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 1000);
         $("#bmp-compare-page").css('visibility', 'visible');
         $("#model-compare-btn").css('disabled', 'true');
         progress = "checkScenario";
         resizePage = 3;
+
+        $('#bmp-compare-page .map-btn').prop({
+            disabled: 'true',
+        });
     });
 
 
@@ -1481,8 +1607,27 @@ $(document).ready(function() {
         style: styleFlowFunction
     });
 
+    // ****************************************************
+    // Outlet layer loaded from geoserver in Jsonp format
+    // Be sure to enable the Jsonp function in the web.xml
+    // of Geoserver     
+    // ****************************************************
+
+    var outlet2 = new ol.Feature({});
+    var point_geom2 = new ol.geom.Point(
+        ol.proj.transform([-81.7132830619812, 43.61527726000183], 'EPSG:4326', 'EPSG:3857')
+    );
+    outlet2.setGeometry(point_geom2);
+
+    var outletLayer2 = new ol.layer.Vector({
+        source: new ol.source.Vector({}),
+        zIndex: 10
+    });
+
+    outletLayer2.setStyle(outletSelectStyle);
+
     var compareMapPointerMove = new ol.interaction.Select({
-        layers: [fieldCompare, subbasinCompare],
+        layers: [fieldCompare, outletLayer2, subbasinCompare],
         condition: ol.events.condition.pointerMove
     });
 
@@ -1492,7 +1637,7 @@ $(document).ready(function() {
 
     var compareMap = new ol.Map({
         target: 'model-compare-map',
-        layers: [tiledRaster, fieldJsonp],
+        layers: [tiledRaster, outletLayer2, fieldJsonp],
         view: new ol.View({
             center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
             zoom: 13
@@ -1535,7 +1680,7 @@ $(document).ready(function() {
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
                 $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "Total N " + num);
             }
-            if ($('#show-p-2').prop("disabled") === true) {
+            if ($('#show-p2').prop("disabled") === true) {
                 num = hoveredCompareFeature.getProperties().tp;
                 num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
                 $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "Total P " + num);
@@ -1550,8 +1695,9 @@ $(document).ready(function() {
 
     $("#show-flow2").click(function(event) {
         compareMapSingleClick.getFeatures().clear();
-        var a = compareMap.getLayers().getArray()[1];
+        var a = compareMap.getLayers().getArray()[2];
         a.setStyle(styleFlowFunction);
+
         $('#show-flow2').attr("disabled", true);
         $('#show-flow2').siblings().attr("disabled", false);
 
@@ -1560,8 +1706,9 @@ $(document).ready(function() {
         /* Act on the event */
         compareMapSingleClick.getFeatures().clear();
 
-        var a = compareMap.getLayers().getArray()[1];
+        var a = compareMap.getLayers().getArray()[2];
         a.setStyle(styleSedimentFunction);
+
         $('#show-sediment2').attr("disabled", true);
         $('#show-sediment2').siblings().attr("disabled", false);
     });
@@ -1569,8 +1716,9 @@ $(document).ready(function() {
         /* Act on the event */
         compareMapSingleClick.getFeatures().clear();
 
-        var a = compareMap.getLayers().getArray()[1];
+        var a = compareMap.getLayers().getArray()[2];
         a.setStyle(styleTnFunction);
+
         $('#show-n2').attr("disabled", true);
         $('#show-n2').siblings().attr("disabled", false);
 
@@ -1579,8 +1727,9 @@ $(document).ready(function() {
         /* Act on the event */
         compareMapSingleClick.getFeatures().clear();
 
-        var a = compareMap.getLayers().getArray()[1];
+        var a = compareMap.getLayers().getArray()[2];
         a.setStyle(styleTpFunction);
+
         $('#show-p2').attr("disabled", true);
         $('#show-p2').siblings().attr("disabled", false);
     });
@@ -1631,14 +1780,17 @@ $(document).ready(function() {
             data: scenario,
             dataType: 'json',
             success: function(r) {
+                outletLayer2.getSource().clear();
+                outletLayer2.getSource().addFeature(outlet2);
+
                 fieldCompare.getSource().clear();
                 subbasinCompare.getSource().clear();
 
                 $('#show-subbasin-map2').attr("disabled", true);
                 $('#show-field-map2').attr("disabled", false);
-                compareMap.removeLayer(compareMap.getLayers().getArray()[1]);
+                compareMap.removeLayer(compareMap.getLayers().getArray()[2]);
 
-                if ($('#show-field-map2').prop("disabled") === true) {
+                if (selectedLayer === "field") {
                     compareMap.addLayer(fieldCompare);
                     $("#show-field-map2").attr('disabled', true);
                     $("#show-subbasin-map2").attr('disabled', false);
@@ -1646,16 +1798,83 @@ $(document).ready(function() {
                     $('#show-flow2').siblings().attr("disabled", false);
 
                 }
-                if ($('#show-subbasin-map2').prop("disabled") === true) {
+                if (selectedLayer === "subbasin") {
                     compareMap.addLayer(subbasinCompare);
                     $("#show-subbasin-map2").attr('disabled', true);
                     $("#show-field-map2").attr('disabled', false);
                     $('#show-flow2').attr("disabled", true);
                     $('#show-flow2').siblings().attr("disabled", false);
                 }
+
+                outletSediment = r[0].ResultData;
+                outletFlow = r[1].ResultData;
+                outletTp = r[2].ResultData;
+                outletTn = r[3].ResultData;
+
+                alert(outletSediment);
+
+                outletSedimentAverage = 0;
+                outletFlowAverage = 0;
+                outletTpAverage = 0;
+                outletTnAverage = 0;
+                for (var i = 0; i < outletSediment.length; i++) {
+                    outletSedimentAverage = outletSedimentAverage + outletSediment[i];
+                    outletFlowAverage = outletFlowAverage + outletFlow[i];
+                    outletTpAverage = outletTpAverage + outletTp[i];
+                    outletTnAverage = outletTnAverage + outletTn[i];
+                }
+
+                outletSedimentAverage = outletSedimentAverage / 10;
+                outletFlowAverage = outletFlowAverage / 10;
+                outletTpAverage = outletTpAverage / 10;
+                outletTnAverage = outletTnAverage / 10;
+
+
+                outlet2.setProperties({
+                    'sediment': outletSedimentAverage,
+                    'flow': outletFlowAverage,
+                    'tp': outletTpAverage,
+                    'tn': outletTnAverage,
+                    'name': 'outlet'
+                });
+
             }
         });
 
+    });
+
+    var selectedCompareFeature;
+    $('#search-compare-prevent').submit(function(e) {
+        e.preventDefault();
+    });
+
+    $('#search-compare-feature').keyup(function(e) {
+        if (e.keyCode == 13) {
+            var id = $(this).val();
+            // alert(typeof id);
+            if ($('#show-subbasin-map2').prop("disabled") === true) {
+                subbasinFeatureCollections = subbasinCompare.getSource().getFeatures();
+                for (i = 0; i < subbasinFeatureCollections.length; i++) {
+                    var temp = subbasinFeatureCollections[i].getProperties().name;
+                    // alert(typeof temp);
+                    if (id == temp) {
+                        selectedCompareFeature = subbasinFeatureCollections[i];
+                    }
+                }
+            }
+            if ($('#show-field-map2').prop("disabled") === true) {
+                fieldFeatureCollections = fieldCompare.getSource().getFeatures();
+                for (i = 0; i < fieldFeatureCollections.length; i++) {
+
+                    if (id == fieldFeatureCollections[i].getProperties().name) {
+                        selectedCompareFeature = fieldFeatureCollections[i];
+                    }
+                }
+            }
+
+            compareMapSingleClick.getFeatures().clear();
+            compareMapSingleClick.getFeatures().push(selectedCompareFeature);
+        }
     });
 
     $("#model-compare-btn").click(function(event) {
@@ -1674,18 +1893,50 @@ $(document).ready(function() {
 
                 progress = "compareScenario";
 
+
+                var b = compareresultMap.getLayers().getArray()[1];
+                b.setStyle(outletSelectStyle);
+
+
                 $("#process-icon3").removeClass('btn-danger').addClass('btn-success');
-                $("#process-icon3 span").removeClass('text-danger').addClass('text-success');
+                $("#process-icon3 span:first").removeClass('text-danger').addClass('text-success');
 
                 $("#process-icon4").removeClass('btn-default').addClass('btn-danger');
-                $("#process-icon4 span").removeClass('text-default').addClass('text-danger');
+                $("#process-icon4 span:first").removeClass('text-default').addClass('text-danger');
 
                 outletCompareSediment = r[0].ResultData;
                 outletCompareFlow = r[1].ResultData;
                 outletCompareTp = r[2].ResultData;
                 outletCompareTn = r[3].ResultData;
 
-                compareresultMap.removeLayer(compareresultMap.getLayers().getArray()[1]);
+
+                outletSedimentAverage = 0;
+                outletFlowAverage = 0;
+                outletTpAverage = 0;
+                outletTnAverage = 0;
+
+                for (var i = 0; i < outletSediment.length; i++) {
+                    outletSedimentAverage = outletSedimentAverage + outletCompareSediment[i];
+                    outletFlowAverage = outletFlowAverage + outletCompareFlow[i];
+                    outletTpAverage = outletTpAverage + outletCompareTp[i];
+                    outletTnAverage = outletTnAverage + outletCompareTn[i];
+                }
+
+                outletSedimentAverage = outletSedimentAverage / 10;
+                outletFlowAverage = outletFlowAverage / 10;
+                outletTpAverage = outletTpAverage / 10;
+                outletTnAverage = outletTnAverage / 10;
+
+
+                outlet3.setProperties({
+                    'sediment': outletSedimentAverage,
+                    'flow': outletFlowAverage,
+                    'tp': outletTpAverage,
+                    'tn': outletTnAverage,
+                    'name': 'outlet'
+                });
+
+                compareresultMap.removeLayer(compareresultMap.getLayers().getArray()[2]);
 
                 $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 1000);
 
@@ -1931,16 +2182,41 @@ $(document).ready(function() {
         style: compareStyleFlowFunction
     });
 
+
+    // ****************************************************
+    // Outlet layer loaded from geoserver in Jsonp format
+    // Be sure to enable the Jsonp function in the web.xml
+    // of Geoserver     
+    // ****************************************************
+
+    var outlet3 = new ol.Feature({});
+    var point_geom3 = new ol.geom.Point(
+        ol.proj.transform([-81.7132830619812, 43.61527726000183], 'EPSG:4326', 'EPSG:3857')
+    );
+    outlet3.setGeometry(point_geom3);
+
+    var outletLayer3 = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [outlet3]
+        }),
+        zIndex: 10
+    });
+
+    outletLayer3.setStyle(outletDefaultStyle);
+
     var compareresultMapPointerMove = new ol.interaction.Select({
-        layers: [fieldCompareResult, subbasinCompareResult],
+        layers: [fieldCompareResult, outletLayer3, subbasinCompareResult],
         condition: ol.events.condition.pointerMove,
         filter: function(feature, layer) {
-            for (var i = 0; i < bmpAssignmentArray.length; i++) {
-                if (bmpAssignmentArray[i].featureID == feature.getProperties().name) {
-                    return true;
+            if (layer === fieldCompareResult || layer === subbasinCompareResult) {
+                for (var i = 0; i < bmpAssignmentArray.length; i++) {
+                    if (bmpAssignmentArray[i].featureID == feature.getProperties().name) {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
+            return true;
         },
     });
 
@@ -1958,7 +2234,7 @@ $(document).ready(function() {
 
     var compareresultMap = new ol.Map({
         target: 'compare-result-map',
-        layers: [tiledRaster, fieldJsonp],
+        layers: [tiledRaster, outletLayer3, fieldJsonp],
         view: new ol.View({
             center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
             zoom: 13
@@ -1984,6 +2260,36 @@ $(document).ready(function() {
         hoveredCompareResultFeature = event.selected[0];
         var num;
         if (hoveredCompareResultFeature) {
+
+            if (hoveredCompareResultFeature.getProperties().name == "outlet") {
+                var coordinate = ol.extent.getCenter(hoveredCompareResultFeature.getGeometry().getExtent());
+                var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
+                compareResultInfoOverlay.setPosition(offsetCoordinate);
+                if ($('#show-flow-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().flow;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Flow " + num);
+                }
+                if ($('#show-sediment-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().sediment;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Sediment " + num);
+                }
+                if ($('#show-tn-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().tn;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total N " + num);
+                }
+                if ($('#show-tp-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().tp;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total P " + num);
+                }
+
+                $(compareResultInfoElement).show();
+                compareResultInfoOverlay.setPosition(offsetCoordinate);
+            }
+
             for (var i = 0; i < bmpAssignmentArray.length; i++) {
                 if (bmpAssignmentArray[i].featureID == parseInt(hoveredCompareResultFeature.getProperties().name)) {
                     var coordinate = ol.extent.getCenter(hoveredCompareResultFeature.getGeometry().getExtent());
@@ -2027,8 +2333,10 @@ $(document).ready(function() {
 
     $("#show-flow-compare-result").click(function(event) {
         compareresultMapSingleClick.getFeatures().clear();
-        var a = compareresultMap.getLayers().getArray()[1];
+        var a = compareresultMap.getLayers().getArray()[2];
         a.setStyle(compareStyleFlowFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-flow-compare-result').attr("disabled", true);
         $('#show-flow-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("flow");
@@ -2036,8 +2344,10 @@ $(document).ready(function() {
     $("#show-sediment-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
-        var a = compareresultMap.getLayers().getArray()[1];
+        var a = compareresultMap.getLayers().getArray()[2];
         a.setStyle(compareStyleSedimentFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-sediment-compare-result').attr("disabled", true);
         $('#show-sediment-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("sediment");
@@ -2045,8 +2355,10 @@ $(document).ready(function() {
     $("#show-tn-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
-        var a = compareresultMap.getLayers().getArray()[1];
+        var a = compareresultMap.getLayers().getArray()[2];
         a.setStyle(compareStyleTnFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-tn-compare-result').attr("disabled", true);
         $('#show-tn-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("tn");
@@ -2054,8 +2366,10 @@ $(document).ready(function() {
     $("#show-tp-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
-        var a = compareresultMap.getLayers().getArray()[1];
+        var a = compareresultMap.getLayers().getArray()[2];
         a.setStyle(compareStyleTpFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-tp-compare-result').attr("disabled", true);
         $('#show-tp-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("tp");
@@ -2065,9 +2379,11 @@ $(document).ready(function() {
     compareresultMapSingleClick.on('select', function(event) {
 
         selectedCompareResultFeature = event.selected[0];
+        var b = compareresultMap.getLayers().getArray()[1];
 
         if (selectedCompareResultFeature) {
             drawCompareFeatureChart();
+            b.setStyle(outletDefaultStyle);
         } else {
             compareresultMapSingleClick.getFeatures().clear();
             if ($('#show-flow-result').prop("disabled") === true) {
@@ -2082,6 +2398,7 @@ $(document).ready(function() {
             if ($('#show-p-result').prop("disabled") === true) {
                 drawCompareOutletChart("tp");
             }
+            b.setStyle(outletSelectStyle);
         }
     });
 
@@ -2226,7 +2543,8 @@ $(document).ready(function() {
                         data: average
                     }, {
                         name: 'Yr',
-                        data: dataArray
+                        data: dataArray,
+                        color: '#99EAA4'
                     }]
                 });
                 $("#sel2").val(selectedCompareResultFeature.getProperties().name);

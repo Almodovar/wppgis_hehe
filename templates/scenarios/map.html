@@ -50,25 +50,25 @@
         <div class="stepwizard-row">
             <div class="liner"></div>
             <div class="stepwizard-step">
-                <a id="process-icon1" class="btn icon-btn btn-danger" ><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span>Create Scenario</a>
+                <a id="process-icon1" class="btn icon-btn btn-danger" ><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span><span id="process-status1"></span></a>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon2" class="btn icon-btn btn-default" ><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span>Evaluate Scenario</a>
+                <a id="process-icon2" class="btn icon-btn btn-default" ><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span><span id="process-status2"></span></a>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span>Compare Scenario</a>
+                <a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span><span id="process-status3"></span></a>
                 <p>
                     <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
                 </p>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span>Evaluate Comparison</a>
+                <a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span><span id="process-status4"></span></a>
                 <p>
                     <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
                 </p>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span>Optimiza Scenario</a>
+                <a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span><span id="process-status5"></span></a>
             </div>
         </div>
     </div>
@@ -274,12 +274,12 @@
             <div class="col-sm-9">
                 <div class="row map-tool-bar">
                     <div class="col-sm-6">
-                        <form class="navbar-form navbar-left" role="search">
+                        <form class="navbar-form navbar-left" id="search-compare-prevent" role="search" id="search-compare-prevent">
                             <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map2" href="#field-map"><span class="show-field"></span></button>
                             <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map2" href="#subbasin-map"><span class="show-subbasin"></span></button>
                             <div class="form-group search-field-subbasin">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
+                                    <input type="text" class="form-control" id="search-compare-feature" placeholder="Search for...">
                                     <span class="input-group-btn">
                                 </span>
                                 </div>

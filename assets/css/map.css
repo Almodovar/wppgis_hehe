@@ -35,7 +35,6 @@ body {
     width: 100%;
     /*    background: rgba(128,122,122,0.3);
 */
-
 }
 
 .stepwizard {
@@ -101,6 +100,26 @@ body {
 #model-compare-page,
 #model-optimize-page {
     visibility: hidden;
+}
+
+#process-status1:before {
+    content: 'Create Scenario';
+}
+
+#process-status2:before {
+    content: 'Evaluate Scenario';
+}
+
+#process-status3:before {
+    content: 'Check pre-Scenario';
+}
+
+#process-status4:before {
+    content: 'Compare Scenario';
+}
+
+#process-status5:before {
+    content: 'Optimize Scenario';
 }
 
 
@@ -187,6 +206,22 @@ body {
     }
     .show-p:before {
         content: 'P';
+    }
+    
+    #process-status1:before {
+        content: 'Create S';
+    }
+    #process-status2:before {
+        content: 'Evaluate S';
+    }
+    #process-status3:before {
+        content: 'Check pre-S';
+    }
+    #process-status4:before {
+        content: 'Compare S';
+    }
+    #process-status5:before {
+        content: 'Optimize S';
     }
 }
 
