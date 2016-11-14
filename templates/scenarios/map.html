@@ -93,7 +93,7 @@
                 <div class="map-size-adjust">
                     <div id="map" class="map">
                     </div>
-                    <div id="bmp-select-tool">
+                    <div class="bmp-select-tool" id="select-panel1">
                         <table class="table">
                             <tr>
                                 <td><a href="#" data-toggle="tooltip" title="Conservation Tillage!">CT</a></td>
@@ -120,6 +120,33 @@
                             <button type="button" class="btn btn-primary" id="bmp-submit">Confirm</button>
                         </div>
                     </div>
+                    <div class="bmp-select-tool" id="select-panel2">
+                        <table class="table">
+                            <tr>
+                                <td><a href="#" data-toggle="tooltip" title="Conservation Tillage!">CT</a></td>
+                                <td>
+                                    <input id="ct2" type="checkbox" name="my-checkbox" data-size="mini" data-on-color="success" data-off-color="warning" data-on-text="YES" data-off-text="NO">
+                                </td>
+                                <td><a href="#" data-toggle="tooltip" title="Cover Crop">CC</a></td>
+                                <td>
+                                    <input id="cc2" type="checkbox" name="my-checkbox" data-size="mini" data-on-color="success" data-off-color="warning" data-on-text="YES" data-off-text="NO">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" data-toggle="tooltip" title="Nutrient Management">NM</a></td>
+                                <td>
+                                    <input id="nm2" type="checkbox" name="my-checkbox" data-size="mini" data-on-color="success" data-off-color="warning" data-on-text="YES" data-off-text="NO">
+                                </td>
+                                <td><a href="#" data-toggle="tooltip" title="Water and sediment control basins">WasCobs</a></td>
+                                <td>
+                                    <input id="wascobs2" type="checkbox" name="my-checkbox" data-size="mini" data-on-color="success" data-off-color="warning" data-on-text="YES" data-off-text="NO" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="bmp-submit">Confirm</button>
+                        </div>
+                    </div>                    
                     <div id="feature-info">
                     </div>
                 </div>
@@ -587,6 +614,6 @@
     <script src="/assets/js/ol.js" type="text/javascript"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://github.com/highcharts/highcharts/blob/master/js/themes/dark-unica.js"></script>
+    <!-- <script src="https://github.com/highcharts/highcharts/blob/master/js/themes/dark-unica.js"></script> -->
     <script src="/assets/js/map.js" type="text/javascript" charset="utf-8"></script>
     {{end}}

@@ -272,21 +272,21 @@ body {
     width: 70%;
 }
 
-#bmp-select-tool {
+.bmp-select-tool {
     background: rgba(255, 255, 255, 1);
     width: 300px;
-    visibility: hidden;
+    display: none;
 }
 
-#bmp-select-tool input {
+.bmp-select-tool input {
     font-size: 10px;
 }
 
-#bmp-select-tool table a {
+.bmp-select-tool table a {
     font-weight: bold;
 }
 
-#bmp-select-tool button {
+.bmp-select-tool button {
     font-size: 10px;
     margin-bottom: 10px;
     margin-top: 0px;

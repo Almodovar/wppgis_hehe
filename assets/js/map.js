@@ -5,6 +5,73 @@ $(document).ready(function() {
     //   calculate the height for pages and sections
     // ****************************************************
 
+    var wascobToField = [68,
+        113,
+        113,
+        64,
+        64,
+        113,
+        113,
+        113,
+        54,
+        113,
+        113,
+        53,
+        113,
+        113,
+        113,
+        102,
+        126,
+        126,
+        126,
+        92,
+        35,
+        133,
+        86,
+        133,
+        88,
+        85,
+        85,
+        85,
+        84,
+        85,
+        85,
+        132
+    ];
+    var wascobToSubbasin = [1,
+        4,
+        7,
+        9,
+        10,
+        14,
+        15,
+        20,
+        21,
+        22,
+        23,
+        25,
+        27,
+        28,
+        29,
+        32,
+        36,
+        40,
+        41,
+        42,
+        43,
+        44,
+        46,
+        48,
+        50,
+        53,
+        55,
+        56,
+        57,
+        59,
+        60,
+        64,
+    ];
+
     var progress = "bmpSelection";
     var resizePage = 1;
 
@@ -296,10 +363,16 @@ $(document).ready(function() {
     }));
 
     var bmpOverlay = new ol.Overlay({
-        element: document.getElementById('bmp-select-tool')
+        element: $('#select-panel1').get(0)
     });
 
     map.addOverlay(bmpOverlay);
+
+    var bmpOverlay2 = new ol.Overlay({
+        element: $('#select-panel2').get(0)
+    });
+
+    map.addOverlay(bmpOverlay2);
 
     var element = document.getElementById('feature-info');
 
@@ -358,18 +431,54 @@ $(document).ready(function() {
 
 
     selectSingleClick.on('select', function(event) {
-        $(element).hide();
+        // $(element).hide();
+        $("#select-panel1").hide();
+        $("#select-panel2").hide();
         $("#bmp-select-table table tr").removeClass('rowSelected');
         if (selectedFeature) {
             selectedFeature.setStyle(null);
         }
         selectedFeature = event.selected[0];
         if (selectedFeature) {
-            $("#bmp-select-tool").css('visibility', 'visible');
-            $("#bmp-select-tool").show();
+
             var coordinate = ol.extent.getCenter(selectedFeature.getGeometry().getExtent());
             var offsetCoordinate = [coordinate[0] + 400, coordinate[1] + 400];
-            bmpOverlay.setPosition(offsetCoordinate);
+            var wascobExist = false;
+            if (selectedLayer == "subbasin") {
+                for (var i = 1; i < wascobToSubbasin.length; i++) {
+                    if (selectedFeature.getProperties().Name == wascobToSubbasin[i]) {
+                        $("#select-panel1").show();
+                        bmpOverlay.setPosition(offsetCoordinate);
+                        wascobExist = true;
+
+                    }
+                }
+                if (wascobExist === false) {
+                    $("#select-panel2").show();
+                    bmpOverlay2.setPosition(offsetCoordinate);
+
+                }
+
+            }
+
+            if (selectedLayer == "field") {
+                for (var i = 1; i < wascobToField.length; i++) {
+                    if (selectedFeature.getProperties().Name == wascobToField[i]) {
+                        wascobExist = true;
+                        $("#select-panel1").show();
+                        bmpOverlay.setPosition(offsetCoordinate);
+                    }
+                }
+                if (wascobExist === false) {
+
+                    $("#select-panel2").show();
+                    bmpOverlay2.setPosition(offsetCoordinate);
+
+                }
+
+            }
+
+            // $(".bmp-select-tool").css('visibility', 'visible');
 
             if (searchedFeature) {
                 if (searchedFeatureStyle(searchedFeature.getProperties().Name) === true) {
@@ -504,7 +613,11 @@ $(document).ready(function() {
             if (feature == searchedFeature) {
                 searchedFeature = null;
             }
-            $("#bmp-select-tool").hide();
+            // if (selectedFeature)
+            // {
+            //     selectedFeature.setStyle(null);
+            // }
+            // $(".bmp-select-tool").hide();
 
             selectSingleClick.getFeatures().clear();
         });
@@ -528,10 +641,12 @@ $(document).ready(function() {
     }
 
     $("#show-field-map").click(function(event) {
-        $("#bmp-select-tool").hide();
+        $(".bmp-select-tool").hide();
         subbasinTable = $('#bmp-select-table').html();
         // alert(subbasinTable);
-
+        if (selectedFeature) {
+            selectedFeature.setStyle(null);
+        }
         selectSingleClick.getFeatures().clear();
         map.removeLayer(subbasinJsonp);
         map.addLayer(fieldJsonp);
@@ -544,9 +659,11 @@ $(document).ready(function() {
 
 
     $("#show-subbasin-map").click(function(event) {
-        $("#bmp-select-tool").hide();
+        $(".bmp-select-tool").hide();
         fieldTable = $('#bmp-select-table').html();
-        // alert(fieldTable);
+        if (selectedFeature) {
+            selectedFeature.setStyle(null);
+        }
         selectSingleClick.getFeatures().clear();
         map.removeLayer(fieldJsonp);
         map.addLayer(subbasinJsonp);
@@ -559,41 +676,64 @@ $(document).ready(function() {
     });
 
     var selectedFeatureID = [];
-    $("#bmp-select-tool button").click(function(event) {
+    $("#select-panel1 button").click(function(event) {
         selectedFeatureID.length = 0;
         $(element).hide();
         var bmpCode;
         var ccSelected = 'N';
         var ctSelected = 'N';
         var nmSelected = 'N';
+        var wascobSelected = 'N';
+
         var selectedID = selectedFeature.getProperties().Name;
         if ($("#ct").prop("checked") && $("#nm").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 9;
             ctSelected = 'Y';
             nmSelected = 'Y';
             ccSelected = 'Y';
+            checkWascob();
+
         } else if ($("#ct").prop("checked") && $("#nm").prop("checked")) {
             bmpCode = 6;
             ctSelected = 'Y';
             nmSelected = 'Y';
+            checkWascob();
+
         } else if ($("#ct").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 7;
             ctSelected = 'Y';
             ccSelected = 'Y';
+            checkWascob();
+
         } else if ($("#nm").prop("checked") && $("#cc").prop("checked")) {
             bmpCode = 8;
             nmSelected = 'Y';
             ccSelected = 'Y';
+            checkWascob();
+
         } else if ($("#ct").prop("checked")) {
             bmpCode = 3;
             ctSelected = 'Y';
+            checkWascob();
+
         } else if ($("#nm").prop("checked")) {
             bmpCode = 4;
             nmSelected = 'Y';
+            checkWascob();
+
         } else if ($("#cc").prop("checked")) {
             bmpCode = 5;
             ccSelected = 'Y';
+            checkWascob();
+        } else if ($("#wascobs").prop("checked")) {
+            wascobSelected = 'Y';
         } else bmpCode = null;
+
+        function checkWascob() {
+            if ($("#wascobs").prop("checked")) {
+                wascobSelected = 'Y';
+            } else wascobSelected = 'N';
+        }
 
         var exist;
         if (bmpCode !== null) {
@@ -605,17 +745,92 @@ $(document).ready(function() {
                 }
             });
             if (exist === true) {
-                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
+                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + wascobSelected + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
             } else {
-                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
-
+                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + wascobSelected + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
             }
 
-            $("#bmp-select-tool").hide();
+            $(".bmp-select-tool").hide();
             addTableEvent();
             selectSingleClick.getFeatures().clear();
         } else {
-            $("#bmp-select-tool").hide();
+            $(".bmp-select-tool").hide();
+            selectedFeature.setStyle(null);
+            $("#bmp-select-table table tr").removeClass('rowSelected');
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                var m = $(this).html();
+                if (m == selectedID) {
+                    $(this).closest('tr').remove();
+                }
+            });
+
+            selectSingleClick.getFeatures().clear();
+        }
+        selectedFeature = null;
+
+    });
+
+    $("#select-panel2 button").click(function(event) {
+        selectedFeatureID.length = 0;
+        $(element).hide();
+        var bmpCode;
+        var ccSelected = 'N';
+        var ctSelected = 'N';
+        var nmSelected = 'N';
+
+        var selectedID = selectedFeature.getProperties().Name;
+        if ($("#ct2").prop("checked") && $("#nm2").prop("checked") && $("#cc2").prop("checked")) {
+            bmpCode = 9;
+            ctSelected = 'Y';
+            nmSelected = 'Y';
+            ccSelected = 'Y';
+        } else if ($("#ct2").prop("checked") && $("#nm2").prop("checked")) {
+            bmpCode = 6;
+            ctSelected = 'Y';
+            nmSelected = 'Y';
+        } else if ($("#ct2").prop("checked") && $("#cc2").prop("checked")) {
+            bmpCode = 7;
+            ctSelected = 'Y';
+            ccSelected = 'Y';
+        } else if ($("#nm2").prop("checked") && $("#cc2").prop("checked")) {
+            bmpCode = 8;
+            nmSelected = 'Y';
+            ccSelected = 'Y';
+        } else if ($("#ct2").prop("checked")) {
+            bmpCode = 3;
+            ctSelected = 'Y';
+        } else if ($("#nm2").prop("checked")) {
+            bmpCode = 4;
+            nmSelected = 'Y';
+        } else if ($("#cc2").prop("checked")) {
+            bmpCode = 5;
+            ccSelected = 'Y';
+        } else bmpCode = null;
+
+
+
+
+        var exist;
+        if (bmpCode !== null) {
+            $('#bmp-select-table table .selectedFeatureID').each(function() {
+                var m = $(this).html();
+                if (m == selectedID) {
+                    exist = true;
+                    $(this).closest('tr').remove();
+                }
+            });
+            if (exist === true) {
+                $('#bmp-select-table table').append('<tr class="table-data rowSelected"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a">' + 'N' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
+            } else {
+                $('#bmp-select-table table').append('<tr class="table-data"><td style="padding-top:11px;" class="selectedFeatureID">' + selectedID + '</td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ccSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + ctSelected + '</a></td><td style="padding-top:11px;"><a class="table-edit" data-type="select">' + nmSelected + '</a></td><td style="padding-top:11px;"><a>' + 'N' + '</a></td><td class="deletescenario" style="white-space: nowrap;width: 1%;"><a class="btn btn-danger" aria-label="Delete"><i class="fa fa-trash-o " aria-hidden="true"></i></a></td><td style="display:none;" class="bmp_code">' + bmpCode + '</td></tr>');
+
+            }
+
+            $(".bmp-select-tool").hide();
+            addTableEvent();
+            selectSingleClick.getFeatures().clear();
+        } else {
+            $(".bmp-select-tool").hide();
             selectedFeature.setStyle(null);
             $("#bmp-select-table table tr").removeClass('rowSelected');
             $('#bmp-select-table table .selectedFeatureID').each(function() {
@@ -680,7 +895,7 @@ $(document).ready(function() {
                 }
                 searchedFeature = null;
             }
-            $("#bmp-select-tool").hide();
+            $(".bmp-select-tool").hide();
             selectSingleClick.getFeatures().clear();
             $("#bmp-select-table table tr").removeClass('rowSelected');
         }
@@ -764,6 +979,7 @@ $(document).ready(function() {
             cc = $(this).next().text();
             ct = $(this).next().next().text();
             nm = $(this).next().next().next().text();
+            wascob = $(this).next().next().next().next().text();
             if (cc === 'Y' && nm === 'Y' && ct === 'Y') {
                 bmpAssignment.bmpCode = 9;
             } else if (cc === 'N' && nm === 'Y' && ct === 'Y') {
@@ -780,8 +996,11 @@ $(document).ready(function() {
                 bmpAssignment.bmpCode = 5;
             } else bmpAssignment.bmpCode = null;
             bmpAssignment.featureType = selectedLayer;
+            bmpAssignment.wascob = wascob;
             bmpAssignmentArray.push(bmpAssignment);
         });
+
+
 
         var jsonArray = JSON.stringify(bmpAssignmentArray);
         $.ajax({
