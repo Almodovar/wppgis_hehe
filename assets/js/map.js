@@ -285,11 +285,29 @@ $(document).ready(function() {
 
     var selectPointerMove = new ol.interaction.Select({
         layers: [fieldJsonp, subbasinJsonp],
-        condition: ol.events.condition.pointerMove
+        condition: ol.events.condition.pointerMove,
+        filter: function(feature, layer) {
+            if (layer === fieldJsonp) {
+                if (feature.getProperties().Name > 600) {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        },
     });
 
     var selectSingleClick = new ol.interaction.Select({
         layers: [fieldJsonp, subbasinJsonp],
+        filter: function(feature, layer) {
+            if (layer === fieldJsonp) {
+                if (feature.getProperties().Name > 600) {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        },
     });
 
     // ****************************************************
@@ -2605,16 +2623,16 @@ $(document).ready(function() {
             b.setStyle(outletDefaultStyle);
         } else {
             compareresultMapSingleClick.getFeatures().clear();
-            if ($('#show-flow-result').prop("disabled") === true) {
+            if ($('#show-flow-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("flow");
             }
-            if ($('#show-sediment-result').prop("disabled") === true) {
+            if ($('#show-sediment-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("sediment");
             }
-            if ($('#show-n-result').prop("disabled") === true) {
+            if ($('#show-tn-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("tn");
             }
-            if ($('#show-p-result').prop("disabled") === true) {
+            if ($('#show-tp-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("tp");
             }
             b.setStyle(outletSelectStyle);
@@ -2678,7 +2696,7 @@ $(document).ready(function() {
         var feature = new Object();
         feature.ID = parseInt(selectedCompareResultFeature.getProperties().name);
         feature.Type = selectedLayer;
-        feature.ResultType = determineFeatureResultType();
+        feature.ResultType = determineFeatureCompareResultType();
 
         var featureJson = JSON.stringify(feature);
         $.ajax({
@@ -2769,6 +2787,22 @@ $(document).ready(function() {
                 $("#sel2").val(selectedCompareResultFeature.getProperties().name);
             }
         });
+    }
+
+
+    function determineFeatureCompareResultType() {
+        if ($('#show-flow-compare-result').prop("disabled") === true) {
+            return "flow";
+        }
+        if ($('#show-sediment-compare-result').prop("disabled") === true) {
+            return "sediment";
+        }
+        if ($('#show-tn-compare-result').prop("disabled") === true) {
+            return "tn";
+        }
+        if ($('#show-tp-compare-result').prop("disabled") === true) {
+            return "tp";
+        }
     }
 
     $("#result-issue-submit2").click(function(event) {

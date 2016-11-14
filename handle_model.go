@@ -300,6 +300,8 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	compareTofieldArray = fieldArray
 	compareTofieldAverage = fieldAverage
 
+	fmt.Println(compareTosubbasinArray[61])
+
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
 
@@ -331,9 +333,7 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	compareFromfieldArray = fieldArray
 	compareFromfieldAverage = fieldAverage
 
-	fmt.Println(outletArray[0])
-	fmt.Println(outletArray[1])
-	fmt.Println(outletArray[2])
+	fmt.Println(compareFromsubbasinArray[61])
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
@@ -415,6 +415,12 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	fmt.Println(d.ID)
+	fmt.Println(d.Type)
+	fmt.Println(d.ResultType)
+	fmt.Println(compareTosubbasinArray[61])
+	fmt.Println(compareFromsubbasinArray[61])
+
 	var arrayDataFeatureResultType []float64
 	if d.Type == "subbasin" {
 		if d.ResultType == "flow" {
@@ -425,6 +431,8 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		if d.ResultType == "sediment" {
 			for i := 2002; i <= 2011; i++ {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Sediment-compareFromsubbasinArray[d.ID][i].Sediment)*100/compareFromsubbasinArray[d.ID][i].Sediment)
+				fmt.Println(compareTosubbasinArray[d.ID][i].Sediment)
+				fmt.Println(compareFromsubbasinArray[d.ID][i].Sediment)
 			}
 		}
 
@@ -464,6 +472,7 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		}
 	}
 
+	fmt.Println(arrayDataFeatureResultType)
 	a, err := json.Marshal(arrayDataFeatureResultType)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
