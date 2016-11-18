@@ -1,10 +1,5 @@
 {
   "Sessions": {
-    "sess_15gCr4Enc75AK13SOgvn": {
-      "ID": "sess_15gCr4Enc75AK13SOgvn",
-      "UserID": "usr_tNtJkWIH9L4g44tw",
-      "Expiry": "2016-11-15T13:39:36.8644017-05:00"
-    },
     "sess_1Q47ieDPTS7uIRTKWgT6": {
       "ID": "sess_1Q47ieDPTS7uIRTKWgT6",
       "UserID": "usr_NS3JrKPCigeT66Tn",
@@ -180,6 +175,11 @@
       "UserID": "usr_tNtJkWIH9L4g44tw",
       "Expiry": "2016-08-30T11:01:10.7712503-04:00"
     },
+    "sess_TxpM8GpF9CMMdQ5aCSsc": {
+      "ID": "sess_TxpM8GpF9CMMdQ5aCSsc",
+      "UserID": "usr_tNtJkWIH9L4g44tw",
+      "Expiry": "2016-11-19T18:24:35.6772002-05:00"
+    },
     "sess_VREvOxNWa3hKPpXslnpd": {
       "ID": "sess_VREvOxNWa3hKPpXslnpd",
       "UserID": "usr_tNtJkWIH9L4g44tw",
@@ -279,6 +279,11 @@
       "ID": "sess_kXQztiujlda3C0dh1AUL",
       "UserID": "usr_tNtJkWIH9L4g44tw",
       "Expiry": "2016-11-09T19:05:52.2652075-05:00"
+    },
+    "sess_lnPTDhATHo6Dy00fQoLP": {
+      "ID": "sess_lnPTDhATHo6Dy00fQoLP",
+      "UserID": "usr_tNtJkWIH9L4g44tw",
+      "Expiry": "2016-11-16T08:45:26.2940231-05:00"
     },
     "sess_mMIvCXWGw2mjx4Z6A3jf": {
       "ID": "sess_mMIvCXWGw2mjx4Z6A3jf",
@@ -409,6 +414,11 @@
       "ID": "sess_yeSa23E1qul7rQFSi4mt",
       "UserID": "usr_tNtJkWIH9L4g44tw",
       "Expiry": "2016-10-03T13:33:22.8045189-04:00"
+    },
+    "sess_z2HIHJXJc72Gd747L20y": {
+      "ID": "sess_z2HIHJXJc72Gd747L20y",
+      "UserID": "usr_tNtJkWIH9L4g44tw",
+      "Expiry": "2016-11-19T10:51:42.9236273-05:00"
     },
     "sess_zX7kkUwsmbMhz0vfwFPZ": {
       "ID": "sess_zX7kkUwsmbMhz0vfwFPZ",

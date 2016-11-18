@@ -50,25 +50,25 @@
         <div class="stepwizard-row">
             <div class="liner"></div>
             <div class="stepwizard-step">
-                <a id="process-icon1" class="btn icon-btn btn-danger" ><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span><span id="process-status1"></span></a>
+                <a id="process-icon1" class="btn icon-btn btn-danger"><span class="glyphicon btn-glyphicon glyphicon-grain img-circle text-danger"></span><span id="process-status1"></span></a>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon2" class="btn icon-btn btn-default" ><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span><span id="process-status2"></span></a>
+                <a id="process-icon2" class="btn icon-btn btn-default"><span  class="glyphicon btn-glyphicon glyphicon-cog img-circle text-default"></span><span id="process-status2"></span></a>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon3" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span><span id="process-status3"></span></a>
+                <a id="process-icon3" class="btn icon-btn btn-default"><span class="glyphicon btn-glyphicon glyphicon-random img-circle text-default"></span><span id="process-status3"></span></a>
                 <p>
                     <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
                 </p>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon4" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span><span id="process-status4"></span></a>
+                <a id="process-icon4" class="btn icon-btn btn-default"><span class="glyphicon btn-glyphicon glyphicon-usd img-circle text-default"></span><span id="process-status4"></span></a>
                 <p>
                     <small class="text-muted"><i class="glyphicon glyphicon-time"></i> Optional</small>
                 </p>
             </div>
             <div class="stepwizard-step">
-                <a id="process-icon5" class="btn icon-btn btn-default" ><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span><span id="process-status5"></span></a>
+                <a id="process-icon5" class="btn icon-btn btn-default"><span class="glyphicon btn-glyphicon glyphicon-save-file img-circle text-default"></span><span id="process-status5"></span></a>
             </div>
         </div>
     </div>
@@ -146,7 +146,7 @@
                         <div class="text-center">
                             <button type="button" class="btn btn-primary" id="bmp-submit">Confirm</button>
                         </div>
-                    </div>                    
+                    </div>
                     <div id="feature-info">
                     </div>
                 </div>
@@ -266,7 +266,6 @@
                             <div class="col-sm-10 col-sm-push-1" id="talk-title">
                             </div>
                             <div class="col-sm-10 col-sm-push-1" id="talk-content">
-                                <hr> this is a test comment
                             </div>
                             <div class="col-sm-12" id="talk-reply">
                                 <div class="row">
@@ -288,9 +287,30 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="report-generate col-sm-12 text-right">
-                        <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button">Compare scenarios</a>
-                        <button type="submit" class="btn btn-primary map-btn">Generate report</button>
+                    <div id="report-generate" class="report-generate col-sm-12 text-right">
+                        <div class="report_enter">
+                            <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button">Compare scenarios</a>
+                            <button id="generate-report-btn" type="button" class="btn btn-success btn-sm ">
+                                Generate report
+                            </button>
+                        </div>
+                        <div class="report_exit row">
+                            <div class="divide col-sm-6 text-right">
+                                <button type="button" class="btn btn-success btn-sm">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> HTML
+                                </button>
+                            </div>
+                            <div class="col-sm-4 text-left">
+                                <button type="button" class="btn btn-success btn-sm ">
+                                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span> PDF
+                                </button>
+                            </div>
+                            <div class="col-sm-2 text-left">
+                                <button id="close-report" type="button" class="btn btn-danger btn-sm " aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -349,12 +369,9 @@
                                         <p>Conventional</p>
                                         <hr>
                                         <ul>
-                                            <li><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></li>
+                                            <li>
+                                                The conventional scenario represents the landscape under traditional agriculture. By default, there is no existing BMPs applied to the investigated fields/subbasins.
+                                            </li>
                                             <hr>
                                         </ul>
                                     </li>
@@ -362,12 +379,9 @@
                                         <p>Historical</p>
                                         <hr>
                                         <ul>
-                                            <li><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></li>
+                                            <li>
+                                                The historical scenario represents the existing Gully Creek watershed conditions including both existing WasCobs and land management practices.
+                                            </li>
                                             <hr>
                                         </ul>
                                     </li>

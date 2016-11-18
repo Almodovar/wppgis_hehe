@@ -111,6 +111,8 @@ $(document).ready(function() {
         var h2 = $("#result-issue-talk2").height() - 190;
         $("#talk-content2").css('height', h2 + "px");
 
+        // $("#view-report").css('top', position.top);
+
         // $("#result-issue-talk").css('left', $(".scenario-task").position().left);
 
         switch (resizePage) {
@@ -132,6 +134,9 @@ $(document).ready(function() {
         }
 
     }
+
+    $(".report_exit").hide();
+
     setHeight();
 
     $(window).resize(function() {
@@ -144,6 +149,19 @@ $(document).ready(function() {
     $("#result-issue-talk").hide();
     $("#result-issue-talk2").hide();
 
+    $("#generate-report-btn").click(function(event) {
+        /* Act on the event */
+        $(".report_enter").slideUp("slow", function() {
+            $(".report_exit").show("slow");
+        });
+
+    });
+
+    $("#close-report").click(function(event) {
+        /* Act on the event */
+        $(".report_exit").hide();
+        $(".report_enter").show("slow");
+    });
 
     // ****************************************************
     //              BOOTSTRAP PLUGINS
@@ -204,6 +222,41 @@ $(document).ready(function() {
     var tiledRaster = new ol.layer.Tile({
         source: new ol.source.OSM()
     });
+
+    var streamStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: 'rgba(99,179,235,0.6)',
+            width: 2
+        }),
+
+    });
+
+    var streamJsonp = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/stream.geojson',
+            format: new ol.format.GeoJSON()
+        }),
+        style: streamStyle,
+        zIndex: 20
+    });
+
+    var boundaryStyle = new ol.style.Style({
+        // fill: new ol.style.Fill({
+        //     color: 'rgba(17,34,68,0.6)'
+        // }),
+        stroke: new ol.style.Stroke({
+            color: 'black',
+        })
+    });
+
+    var boundaryJsonp = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: '/assets/data/geojson/boundary.geojson',
+            format: new ol.format.GeoJSON()
+        }),
+        style: boundaryStyle
+    });
+
 
     // ************************************************************************************************************************************************************
     //
@@ -358,7 +411,7 @@ $(document).ready(function() {
 
     var map = new ol.Map({
         target: 'map',
-        layers: [tiledRaster, subbasinJsonp],
+        layers: [tiledRaster, streamJsonp, subbasinJsonp],
         view: new ol.View({
             center: ol.proj.transform([-81.6555, 43.614], 'EPSG:4326', 'EPSG:3857'),
             zoom: 13
@@ -1096,10 +1149,11 @@ $(document).ready(function() {
 
                 $("#loading-page").css("visibility", "hidden");
                 $("#model-result-page").css('visibility', 'visible');
-
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
                 $("#progress-info").empty();
                 $("#progress-info").append('<div id="box1"><p><span> Preparing modeling files ... </span></p></div><div id="box2"><p><span> Modeling BMPs ... </span></p></div>  <div id="box3"><p><span> Writing results to database ... </span></p></div>  <div id="box4"><p><span> Visualizing the output ... </span></p></div><div id="box5"><p><span> Thanks for your patience ... </span></p></div><div id="box6"><p><span> Finishing in seconds ... </span></p></div>   ');
+
+
             }
         });
     });
@@ -1582,8 +1636,9 @@ $(document).ready(function() {
             },
             yAxis: {
                 title: {
-                    text: 'Value'
+                    text: 'Value' + " ( Outlet )"
                 },
+                lineWidth: 1,
                 plotLines: [{
                     value: 0,
                     width: 1,
@@ -1681,6 +1736,8 @@ $(document).ready(function() {
                         title: {
                             text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
                         },
+                        lineWidth: 1,
+
                         plotLines: [{
                             value: 0,
                             width: 1,

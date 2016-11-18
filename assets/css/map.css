@@ -207,7 +207,6 @@ body {
     .show-p:before {
         content: 'P';
     }
-    
     #process-status1:before {
         content: 'Create S';
     }
@@ -222,6 +221,9 @@ body {
     }
     #process-status5:before {
         content: 'Optimize S';
+    }
+    #report-link:before {
+        display: none;
     }
 }
 
@@ -649,6 +651,20 @@ body {
 
 #talk-reply {
     height: 150px;
+}
+
+.report-enter,
+.report-exit {
+    position: absolute;
+    top: 20px;
+}
+
+.report-exit button {
+    font-size: 12px;
+}
+
+.divide {
+    border-right: 2px solid #D2D2D2
 }
 
 
