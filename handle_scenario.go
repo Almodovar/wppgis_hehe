@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -113,6 +114,44 @@ func HandleScenarioCreate(w http.ResponseWriter, r *http.Request, params httprou
 		"User":     user,
 	})
 
+}
+
+func HandleConfigUpdate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d ScenarioInfo
+
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	fmt.Println(d.Config)
+	fmt.Println(d.ScenarioID)
+
+	globalScenarioStore.UpdateConfig(d.ScenarioID, d.Config)
+
+	a, err := json.Marshal(d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(a)
+
+}
+
+func HandleReportGenerate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d ScenarioInfo
+
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	fmt.Println(d.Config)
+	fmt.Println(d.ScenarioID)
+	fmt.Println(d.State)
+
+	t := template.New("report template")
+	t, _ = t.ParseFiles("templates/scenarios/report.html")
+	t.Execute(w, d)
 }
 
 // func HandleScenarioRetrieve(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

@@ -51,6 +51,8 @@ func main() {
 	secureRouter.Handle("POST", "/runmodel", HandleModelRun)
 	secureRouter.Handle("POST", "/readmodelresult", HandleModelResultGet)
 	secureRouter.Handle("POST", "/comparemodelresult", HandleModelCompare)
+	secureRouter.Handle("POST", "/writeconfig", HandleConfigUpdate)
+	secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
 
 	secureRouter.Handle("POST", "/chart", HandleChart)
 	secureRouter.Handle("POST", "/comparechart", HandleCompareChart)

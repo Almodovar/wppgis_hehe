@@ -21,6 +21,7 @@ type BMPCodeFeature struct {
 	BMPCode     int
 	FeatureType string
 	Wascob      string
+	// Config      string
 }
 
 type BMPCodeHRU struct {
@@ -142,6 +143,8 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
+	// globalScenarioStore.UpdateConfig(d[0].Config, )
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -312,6 +315,8 @@ type ScenarioInfo struct {
 	UserName     string
 	ScenarioName string
 	ScenarioGet  string
+	Config       string
+	State        string
 }
 
 func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

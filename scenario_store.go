@@ -11,6 +11,7 @@ type ScenarioStore interface {
 	FindAll() ([]Scenario, error)
 	FindAllByUser(user *User) ([]Scenario, error)
 	Delete(id string) error
+	UpdateConfig(id string, config string) error
 }
 
 var globalScenarioStore ScenarioStore
@@ -136,5 +137,28 @@ func (store *DBScenarioStore) Delete(id string) error {
 		id,
 	)
 
+	return err
+}
+
+func (store *DBScenarioStore) UpdateConfig(id string, config string) error {
+
+	// stmt, err := store.Prepare("update scenarios set config=$1 where id=$2")
+	// checkErr(err)
+
+	// res, err := stmt.Exec(config, id)
+	// checkErr(err)
+
+	// affect, err := res.RowsAffected()
+	// checkErr(err)
+
+	fmt.Println(id)
+	fmt.Println(config)
+
+	_, err := store.db.Exec(
+		`
+		update scenarios set config=$1 where id=$2
+		`,
+		config, id,
+	)
 	return err
 }

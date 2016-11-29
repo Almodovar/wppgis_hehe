@@ -1068,9 +1068,25 @@ $(document).ready(function() {
             } else bmpAssignment.bmpCode = null;
             bmpAssignment.featureType = selectedLayer;
             bmpAssignment.wascob = wascob;
+            // bmpAssignment.config = $("#bmp-select-table").html();
             bmpAssignmentArray.push(bmpAssignment);
         });
 
+        var bmpConfig = $("#bmp-select-table").html();
+        scenarioInfo.Config = bmpConfig.trim();
+        var scenarioConfig = JSON.stringify(scenarioInfo);
+
+
+        $.ajax({
+            url: '/writeconfig',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: scenarioConfig,
+            dataType: 'json',
+            success: function(r) {
+                console.log("hello");
+            },
+        });
 
 
         var jsonArray = JSON.stringify(bmpAssignmentArray);
@@ -1152,7 +1168,6 @@ $(document).ready(function() {
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
                 $("#progress-info").empty();
                 $("#progress-info").append('<div id="box1"><p><span> Preparing modeling files ... </span></p></div><div id="box2"><p><span> Modeling BMPs ... </span></p></div>  <div id="box3"><p><span> Writing results to database ... </span></p></div>  <div id="box4"><p><span> Visualizing the output ... </span></p></div><div id="box5"><p><span> Thanks for your patience ... </span></p></div><div id="box6"><p><span> Finishing in seconds ... </span></p></div>   ');
-
 
             }
         });
@@ -1869,7 +1884,27 @@ $(document).ready(function() {
     });
 
 
+    $("#report-html").click(function(event) {
+        /* Act on the event */
 
+
+        scenarioInfo.state = "modelruncomplete";
+
+        var scenario = JSON.stringify(scenarioInfo);
+        alert("hello");
+
+        $.ajax({
+            url: '/reportgenerator',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: scenario,
+            dataType: 'json',
+            success: function(r) {
+                alert("hello");
+            },
+        });
+
+    });
 
     // ************************************************************************************************************************************************************
     //
@@ -1881,9 +1916,9 @@ $(document).ready(function() {
     var scenarioID = $("#scenario-id").html();
 
     var scenarioInfo = new Object();
-    scenarioInfo.userName = userName;
-    scenarioInfo.scenarioName = scenarioName;
-    scenarioInfo.scenarioID = scenarioID;
+    scenarioInfo.userName = userName.trim();
+    scenarioInfo.scenarioName = scenarioName.trim();
+    scenarioInfo.scenarioID = scenarioID.trim();
 
     var fieldCompare = new ol.layer.Vector({
         source: new ol.source.Vector({
