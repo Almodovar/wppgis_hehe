@@ -50,6 +50,8 @@ func HandleScenarioShow(w http.ResponseWriter, r *http.Request, params httproute
 		params.ByName("userID"),
 		r.FormValue("scenarioname"),
 		r.FormValue("description"),
+		"",
+		"",
 	)
 	if err != nil {
 		if IsValidationError(err) {
@@ -137,21 +139,29 @@ func HandleConfigUpdate(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 
 }
 
-func HandleReportGenerate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	var d ScenarioInfo
+type Friend struct {
+	Fname string
+}
 
-	err := json.NewDecoder(r.Body).Decode(&d)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+type Person struct {
+	UserName string
+	Emails   []string
+	Friends  []*Friend
+}
 
-	fmt.Println(d.Config)
-	fmt.Println(d.ScenarioID)
-	fmt.Println(d.State)
+func HandleReportGenerate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	status := params.ByName("reportProgress")
+	globalScenarioStore.UpdateStatus(params.ByName("scenarioID"), string(status))
 
-	t := template.New("report template")
+	t := template.New("")
 	t, _ = t.ParseFiles("templates/scenarios/report.html")
-	t.Execute(w, d)
+	scenario, err := globalScenarioStore.Find(params.ByName("scenarioID"))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(scenario)
+	t.ExecuteTemplate(w, "report.html", scenario)
+
 }
 
 // func HandleScenarioRetrieve(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

@@ -1890,19 +1890,25 @@ $(document).ready(function() {
 
         scenarioInfo.state = "modelruncomplete";
 
-        var scenario = JSON.stringify(scenarioInfo);
-        alert("hello");
+        var url = window.location.href + "/report/" + scenarioInfo.state;
 
-        $.ajax({
-            url: '/reportgenerator',
-            type: "post",
-            contentType: 'application/json; charset=utf-8',
-            data: scenario,
-            dataType: 'json',
-            success: function(r) {
-                alert("hello");
-            },
-        });
+        var win = window.open(url, '_blank');
+        win.focus();
+
+        // window.location.replace(url + "/report/" + scenarioInfo.state);
+
+        // alert("hello");
+
+        // $.ajax({
+        //     url: '/reportgenerator',
+        //     type: "post",
+        //     contentType: 'application/json; charset=utf-8',
+        //     data: scenario,
+        //     dataType: 'json',
+        //     success: function(r) {
+        //         alert(r);
+        //     },
+        // });
 
     });
 

@@ -1,0 +1,9 @@
+hello {{.UserName}}!
+            {{range .Emails}}
+                an email {{.}}
+            {{end}}
+            {{with .Friends}}
+            {{range .}}
+                my friend name is {{.Fname}}
+            {{end}}
+            {{end}}

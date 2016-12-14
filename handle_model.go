@@ -16,6 +16,24 @@ import (
 	"github.com/montanaflynn/stats"
 )
 
+type ScenarioInfo struct {
+	ScenarioID   string
+	UserName     string
+	ScenarioName string
+	ScenarioGet  string
+	Config       string
+	State        string
+	BMPConfig    []BMPAssignment
+}
+
+type BMPAssignment struct {
+	FeatureID int
+	CC        string
+	CT        string
+	NM        string
+	Wascobs   string
+}
+
 type BMPCodeFeature struct {
 	FeatureID   int
 	BMPCode     int
@@ -310,15 +328,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 }
 
-type ScenarioInfo struct {
-	ScenarioID   string
-	UserName     string
-	ScenarioName string
-	ScenarioGet  string
-	Config       string
-	State        string
-}
-
 func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var scenario = new(ScenarioInfo)
 	err := json.NewDecoder(r.Body).Decode(&scenario)
@@ -326,7 +335,7 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(scenario.ScenarioGet)
+	fmt.Println(scenario)
 
 	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
 	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
@@ -491,6 +500,8 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
+	fmt.Println(scenario)
 
 	var fieldCompareResult = make(map[int]*Result)
 	var subbasinCompareResult = make(map[int]*Result)

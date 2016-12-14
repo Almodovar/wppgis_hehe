@@ -28,6 +28,7 @@ func init() {
 	}
 	globalPostgreDB = db
 	globalScenarioStore = NewDBScenarioStore()
+	globalScenario := new(ScenarioInfo)
 }
 
 func main() {
@@ -45,6 +46,8 @@ func main() {
 	)
 
 	secureRouter := NewRouter()
+
+	secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID/report/:reportProgress", HandleReportGenerate)
 	secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID", HandleScenarioCreate)
 	secureRouter.Handle("GET", "/userID/:userID", HandleScenarioList)
 	secureRouter.Handle("POST", "/userID/:userID", HandleScenarioShow)
@@ -52,7 +55,7 @@ func main() {
 	secureRouter.Handle("POST", "/readmodelresult", HandleModelResultGet)
 	secureRouter.Handle("POST", "/comparemodelresult", HandleModelCompare)
 	secureRouter.Handle("POST", "/writeconfig", HandleConfigUpdate)
-	secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
+	// secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
 
 	secureRouter.Handle("POST", "/chart", HandleChart)
 	secureRouter.Handle("POST", "/comparechart", HandleCompareChart)

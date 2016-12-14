@@ -12,6 +12,7 @@ type ScenarioStore interface {
 	FindAllByUser(user *User) ([]Scenario, error)
 	Delete(id string) error
 	UpdateConfig(id string, config string) error
+	UpdateStatus(id string, status string) error
 }
 
 var globalScenarioStore ScenarioStore
@@ -30,9 +31,9 @@ func (store *DBScenarioStore) Save(scenario *Scenario) error {
 
 	_, err := store.db.Exec(
 		`
-		INSERT INTO scenarios(id, user_id, name, description, created_at) VALUES($1,$2,$3,$4,$5)
+		INSERT INTO scenarios(id, user_id, name, description, created_at, config, status) VALUES($1,$2,$3,$4,$5, $6, $7)
 		`,
-		scenario.ID, scenario.UserID, scenario.Name, scenario.Description, scenario.CreatedAt,
+		scenario.ID, scenario.UserID, scenario.Name, scenario.Description, scenario.CreatedAt, scenario.Config, scenario.Status,
 	)
 	return err
 
@@ -43,7 +44,7 @@ func (store *DBScenarioStore) Find(id string) (*Scenario, error) {
 
 	row := store.db.QueryRow(
 		`
-		SELECT id, user_id, name,  description, created_at
+		SELECT id, user_id, name,  description, created_at, config, status
 		FROM scenarios
 		WHERE id = $1`,
 		id,
@@ -56,6 +57,8 @@ func (store *DBScenarioStore) Find(id string) (*Scenario, error) {
 		&scenario.Name,
 		&scenario.Description,
 		&scenario.CreatedAt,
+		&scenario.Config,
+		&scenario.Status,
 	)
 
 	fmt.Println(err)
@@ -159,6 +162,28 @@ func (store *DBScenarioStore) UpdateConfig(id string, config string) error {
 		update scenarios set config=$1 where id=$2
 		`,
 		config, id,
+	)
+	return err
+}
+
+func (store *DBScenarioStore) UpdateStatus(id string, status string) error {
+
+	// stmt, err := store.Prepare("update scenarios set config=$1 where id=$2")
+	// checkErr(err)
+
+	// res, err := stmt.Exec(config, id)
+	// checkErr(err)
+
+	// affect, err := res.RowsAffected()
+	// checkErr(err)
+	fmt.Println(id)
+	fmt.Println(status)
+
+	_, err := store.db.Exec(
+		`
+		update scenarios set status=$1 where id=$2
+		`,
+		status, id,
 	)
 	return err
 }

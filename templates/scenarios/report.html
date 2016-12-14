@@ -1,14 +1,276 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
-	<link rel="stylesheet" href="">
-</head>
-<body>
-	This is a report
 
-	{{.Scenario.Name}}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/report.css">
+    <script src="/assets/js/ol.js" type="text/javascript"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="/assets/js/report.js"></script>
+    <!-- <script src="report.js"></script> -->
+</head>
+
+<body>
+    <div class="book">
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover1.png" alt="">
+            <div class="subpage">
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/outline.png" alt="">
+            <div class="subpage">
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content right">
+                    <h2>BACKGROUND</h2>
+                    <hr>
+                    <p>
+                        The Gully Creek watershed is a typical small agricultural watershed along the shoreline of Lake Huron. The watershed occupies 14.3 km2 within the larger North Gully watershed, and is located in northwest portion of the ABCA service area. The township of Goderich and Clinton are located 14 km north and 10 km east of the watershed, respectively. Similar to other lakeshore streams, the Gully Creek directly drains into Lake Huron, which has direct impacts on near shore water quality. The watershed has been classified as an Environmentally Sensitive Area.
+                    </p>
+                    <p>
+                        In 2010, Ontario Ministry of Agriculture, Food, and Rural Affairs (OMAFRA) established a Watershed Based BMP Evaluation (WBBE) program. The Gully Creek watershed, along with Zurich and Ridgeway watersheds, was selected as the study sites for the WBBE program. Extended from ABCA’s previous BMP initiatives and monitoring program, the WBBE program invested on implementation of BMPs, primarily conservation tillage, cover crop, and WASCoBs (Table 1), and monitoring of BMP effects. A modelling component was also built into the project to simulate watershed processes and examine water quality effects of various BMP scenarios.
+                    </p>
+                    <p align="center">Table 1: Description of four BMPs</p>
+                    <table id="t01">
+                        <tr>
+                            <th>BMP</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>Conservation Tillage</td>
+                            <td>Conservation tillage is any combination of tillage and planting practices that reduce the loss of soil and water relative to losses with conventional tillage.</td>
+                        </tr>
+                        <tr>
+                            <td>Cover Crop</td>
+                            <td>Cover crop is typically planted after wheat harvest and plowed before next crop. Cover crop production has the benefit of reducing soil erosion and also supplies nitrogen to the soil.</td>
+                        </tr>
+                        <tr>
+                            <td>Nutrient Management</td>
+                            <td>Nutrient Management is a tool you can use to determine the best way to store, treat and use materials, such as manure, on your farm. </td>
+                        </tr>
+                        <tr>
+                            <td>WASCoBs</td>
+                            <td>A water and sediment control basin (WASCOB) is a small earthen ridge-and-channel or embankment built across (perpendicular to) a small watercourse or area of concentrated flow within a field.</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p>
+                        The purpose of this report was to illustrate the potential benefit from implementing the designed BMP scenario. The cost effectiveness of the scenario is evaluated by a continuous and physically-based watershed model, named <i>the Soil and Water Assessment Tool (SWAT) </i>.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content left">
+                    <h2>MODEL INTRODUCTION</h2>
+                    <hr>
+                    <p>
+                        SWAT is a process based watershed model allowing the assessment of land management practice impacts on water, sediment, nutrient and other agricultural chemical yields in a watershed with varying soils, land use and management conditions over a long period of time. The model performs continuous simulations at a daily time step, and hence supports montly and annually predictions. The model is intended for long term simulations and is not capable of conducting detailed single-event flood routing. Weather, soil properties, topography, vegetation, and land management practices are the main inputs to the SWAT for simulating hydrologic and water quality processes in a watershed. For the Gully Creek watershed, input data can be obtained from OMAFRA, Environment Canada, and ABCA. Although data intensive, the integration of SWAT into GIS makes it convenient to use readily available datasets from various sources of climate, soil, topography, and land use information. Calibration and validation of the SWAT has been carried out based on flow and water quality data at in-stream and field-edge stations. By the comparison between the simulated and observed data, a reasonable model performance was achieved.
+                    </p>
+                    <br>
+                    <h4>MODELLING PROCESSES</h4>
+                    <p>
+                        SWAT has eight major components including hydrology, weather, sedimentation, soil temperature, crop growth, nutrients, pesticides, and agricultural management. Additional components such as canopy storage, water redistribution within the snow and soil profile, lateral subsurface flow, reservoirs, ponds and wetlands, tributary channels, and return flow are also integrated into the hydrological component. Within the SWAT land phase hydrologic cycle (Figure 1), climate conditions in the watershed provide the moisture and energy inputs, and determine the relative importance of different components of the hydrologic cycle. </p>
+                    <br>
+                    <img class="embeded-image" src="/assets/images/watercircle.png" alt="">
+                    <br>
+                    <br>
+                    <p align="center">Figure 1: Schematic of SWAT land phase hydrologic cycle</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content right">
+                    <h4>BMP CHARACTERIZATION</h4>
+                    <p>
+                        In order to examine the effects of land management changes, four BMPs – conservation tillage, nutrient management, cover crop, and berm or water and sediment control basin (WASCOB) in SWAT were characterized. The characterization set up a basis for examining various BMP scenarios.
+                    </p>
+                    <p>
+                        <b>Conservation Tillage</b>: The SWAT modelling for the Gully Creek watershed characterized the following tillage practices: Chisel plow, generic conservation tillage, culti-packer pulverizer, disk plow, field cultivator, harrow, moldboard plow, no tillage done, deep ripper-subsoiler, rolling cultivator, and generic zero tillage. Five parameters are required to simulate tillage management in SWAT including month, day, operation number, tillage code and operational SCS-CN (CNOP).
+                    </p>
+                    <p>
+                        <b>Cover Crop</b>: In Ontario, the typical cover crop is red clover. For cover crop characterization in the SWAT modelling for the Gully Creek watershed, red clover was added to all crop fields with wheat production and corresponding production parameters such as seeding and harvesting dates.
+                    </p>
+                    <p>
+                        <b>Nutrient Management</b>: In SWAT modelling, fertilizer application is characterized by parameters such as date, month, fertilizer type, and fertilizer amount. For Gully Creek watershed, nutrient management is represented by fertilizer reduction (N and P). The fertilizer BMP (N and P) rates were calculated using NMAN3 software to represent optimal fertilizer rates without crop yield loss in comparing to the base scenario.
+                    </p>
+                    <p>
+                        <b>WASCoBs</b>: SWAT initially does not include a WASCobs module. The module was developed independently by Guelph WEG as an important innovation to the SWAT modeling. For more information, please refer to the <i>SWAT Modelling of Agricultural BMPs in the Gully Creek Watershed</i> .
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content left">
+                    <h2>SCENARIO CREATION</h2>
+                    <p>
+                        In this scenario, BMPs are applied to 4 subbasins* in total and the assignment of BMPs to the subbasins* is as the Table below.
+                    </p>
+                    <p align="center">Table 2: BMP Selection and Assignment</p>
+                    <div id="scenario-config-table">
+                    {{.Config}}
+<!--                         <table>
+                            <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>CC</th>
+                                    <th>CT</th>
+                                    <th>NM</th>
+                                    <th>WasCobs</th>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>Y</a></td>
+                                    <td><a>N</a></td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content left">
+                    <h2>SCENARIO RESULT</h2>
+                    <div class="btn-group" id="result-btn-group">
+                        <p class="layer-switch" style="float: left">
+                            <a class="button" type="button">Field</a>
+                            <a class="button" type="button">Subbasin</a>
+                        </p>
+                        <p class="result-switch" style="float: right">
+                            <a class="button" type="button">Flow</a>
+                            <a class="button" type="button">Sediment</a>
+                            <a class="button" type="button">Phosphorus</a>
+                            <a class="button" type="button">Nitrigen</a>
+                        </p>
+                    </div>
+                    <div class="map" id="result-map">
+                    </div>
+                    <div class="chart" id="result-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content left">
+                    <h2>SCENARIO COMPARISON</h2>
+                    <div class="map" id="compare-map">
+                    </div>
+                    <div class="chart" id="compare-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page">
+            <img class="background-image" src="/assets/images/cover.jpeg" alt="">
+            <div class="subpage">
+                <div class="content left">
+                    <h2>SCENARIO OPTIMIZATION</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="/assets/js/report.js" "></script> -->
 </body>
+
 </html>

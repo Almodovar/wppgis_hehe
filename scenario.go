@@ -10,10 +10,11 @@ type Scenario struct {
 	Name        string
 	CreatedAt   string
 	Description string
-	status      string
+	Config      string
+	Status      string
 }
 
-func NewScenario(user_id, scenarioname, description string) (Scenario, error) {
+func NewScenario(user_id, scenarioname, description, config, status string) (Scenario, error) {
 
 	scenario := Scenario{
 		ID:          GenerateID("scenario", scenarioIDLength),
@@ -21,6 +22,8 @@ func NewScenario(user_id, scenarioname, description string) (Scenario, error) {
 		CreatedAt:   time.Now().Format("Mon Jan _2 15:04:05 2006"),
 		Name:        scenarioname,
 		Description: description,
+		Config:      config,
+		Status:      status,
 	}
 
 	if scenarioname == "" {
