@@ -159,8 +159,14 @@ func HandleReportGenerate(w http.ResponseWriter, r *http.Request, params httprou
 	if err != nil {
 		panic(err)
 	}
+
+	globalScenario.UserName = scenario.Name
+	globalScenario.ScenarioID = scenario.ID
+	globalScenario.State = status
+
 	fmt.Println(scenario)
-	t.ExecuteTemplate(w, "report.html", scenario)
+	fmt.Println(globalScenario)
+	t.ExecuteTemplate(w, "report.html", globalScenario)
 
 }
 

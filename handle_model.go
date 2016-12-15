@@ -17,13 +17,14 @@ import (
 )
 
 type ScenarioInfo struct {
-	ScenarioID   string
-	UserName     string
-	ScenarioName string
-	ScenarioGet  string
-	Config       string
-	State        string
-	BMPConfig    []BMPAssignment
+	ScenarioID     string
+	UserName       string
+	ScenarioName   string
+	ScenarioGet    string
+	Config         string
+	State          string
+	BMPFeatureType string
+	BMPConfig      []BMPAssignment
 }
 
 type BMPAssignment struct {
@@ -33,6 +34,8 @@ type BMPAssignment struct {
 	NM        string
 	Wascobs   string
 }
+
+var globalScenario = new(ScenarioInfo)
 
 type BMPCodeFeature struct {
 	FeatureID   int
@@ -148,6 +151,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	var BMPCodeArray [518]int
 	var BMPWascobArray = make([]string, 32)
 	var BMPCodeHRUString string
+	var BMPConfig []BMPAssignment
 
 	for i := 0; i < 32; i++ {
 		BMPWascobArray[i] = "0"
@@ -166,6 +170,36 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
+
+	for _, i := range d {
+		var id = i.FeatureID
+		var bmpCode = i.BMPCode
+
+		var b = new(BMPAssignment)
+		b.FeatureID = id
+		b.CC = "N"
+		b.CT = "N"
+		b.NM = "N"
+		b.Wascobs = "N"
+		if bmpCode == 9 {
+			b.CC = "Y"
+			b.CT = "Y"
+			b.NM = "Y"
+			if i.Wascob == string('Y') {
+				b.Wascobs = "Y"
+			}
+		}
+
+		BMPConfig = append(BMPConfig, *b)
+	}
+
+	globalScenario.BMPConfig = BMPConfig
+	globalScenario.BMPFeatureType = d[0].FeatureType
+
+	for _, bmp := range BMPConfig {
+		fmt.Println(bmp)
+	}
+	fmt.Println(globalScenario.BMPFeatureType)
 
 	if d[0].FeatureType == "field" {
 		for _, i := range d {
@@ -207,7 +241,10 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			}
 
 		}
+		// fmt.Println(s)
 	}
+
+	// fmt.Println(d)
 
 	for _, i := range d {
 		var id = i.FeatureID
@@ -222,7 +259,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			err = rows.Scan(&subbasinID, &hruID)
 			checkErr(err)
 
-			if subbasinID == id {
+			if subbasinID == id && i.FeatureType == "subbasin" {
 				var a BMPCodeHRU
 				a.BMPCode = bmpCode
 				a.HRUID = hruID
@@ -321,7 +358,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	compareTofieldArray = fieldArray
 	compareTofieldAverage = fieldAverage
 
-	fmt.Println(compareTosubbasinArray[61])
+	// fmt.Println(compareTosubbasinArray[61])
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
@@ -335,7 +372,7 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(scenario)
+	// fmt.Println(scenario)
 
 	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
 	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
@@ -347,7 +384,7 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	compareFromfieldArray = fieldArray
 	compareFromfieldAverage = fieldAverage
 
-	fmt.Println(compareFromsubbasinArray[61])
+	// fmt.Println(compareFromsubbasinArray[61])
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
@@ -429,11 +466,11 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(d.ID)
-	fmt.Println(d.Type)
-	fmt.Println(d.ResultType)
-	fmt.Println(compareTosubbasinArray[61])
-	fmt.Println(compareFromsubbasinArray[61])
+	// fmt.Println(d.ID)
+	// fmt.Println(d.Type)
+	// fmt.Println(d.ResultType)
+	// fmt.Println(compareTosubbasinArray[61])
+	// fmt.Println(compareFromsubbasinArray[61])
 
 	var arrayDataFeatureResultType []float64
 	if d.Type == "subbasin" {
@@ -445,8 +482,8 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		if d.ResultType == "sediment" {
 			for i := 2002; i <= 2011; i++ {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Sediment-compareFromsubbasinArray[d.ID][i].Sediment)*100/compareFromsubbasinArray[d.ID][i].Sediment)
-				fmt.Println(compareTosubbasinArray[d.ID][i].Sediment)
-				fmt.Println(compareFromsubbasinArray[d.ID][i].Sediment)
+				// fmt.Println(compareTosubbasinArray[d.ID][i].Sediment)
+				// fmt.Println(compareFromsubbasinArray[d.ID][i].Sediment)
 			}
 		}
 
@@ -486,7 +523,7 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		}
 	}
 
-	fmt.Println(arrayDataFeatureResultType)
+	// fmt.Println(arrayDataFeatureResultType)
 	a, err := json.Marshal(arrayDataFeatureResultType)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -501,7 +538,8 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(scenario)
+	globalScenario.ScenarioGet = scenario.ScenarioGet
+	// fmt.Println(scenario)
 
 	var fieldCompareResult = make(map[int]*Result)
 	var subbasinCompareResult = make(map[int]*Result)
@@ -535,7 +573,7 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	GenerateResultJsonFile("field", "fieldcompareresult", fieldCompareResult)
 	GenerateResultJsonFile("basin", "basincompareresult", subbasinCompareResult)
 
-	fmt.Println(scenario.ScenarioGet)
+	// fmt.Println(scenario.ScenarioGet)
 	OutletCompareResultArray(scenario.ScenarioGet)
 
 	a, err := json.Marshal(outletCompareArray)

@@ -28,7 +28,6 @@ func init() {
 	}
 	globalPostgreDB = db
 	globalScenarioStore = NewDBScenarioStore()
-	globalScenario := new(ScenarioInfo)
 }
 
 func main() {

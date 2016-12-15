@@ -4,7 +4,16 @@ $(document).ready(function() {
     //              Dimension calculation
     //   calculate the height for pages and sections
     // ****************************************************
+    var userName = $("#user-id").html();
+    var scenarioName = $("#scenario-name").html();
+    var scenarioID = $("#scenario-id").html();
 
+
+    var scenarioInfo = new Object();
+    scenarioInfo.userName = userName.trim();
+    scenarioInfo.scenarioName = scenarioName.trim();
+    scenarioInfo.scenarioID = scenarioID.trim();
+    
     var wascobToField = [68,
         113,
         113,
@@ -1917,14 +1926,7 @@ $(document).ready(function() {
     //                                                                      BMP COMPARE PAGE
     //                                  
     // ************************************************************************************************************************************************************
-    var userName = $("#user-id").html();
-    var scenarioName = $("#scenario-name").html();
-    var scenarioID = $("#scenario-id").html();
 
-    var scenarioInfo = new Object();
-    scenarioInfo.userName = userName.trim();
-    scenarioInfo.scenarioName = scenarioName.trim();
-    scenarioInfo.scenarioID = scenarioID.trim();
 
     var fieldCompare = new ol.layer.Vector({
         source: new ol.source.Vector({
