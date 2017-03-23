@@ -170,18 +170,19 @@ func HandleReportGenerate(w http.ResponseWriter, r *http.Request, params httprou
 
 }
 
-// func HandleScenarioRetrieve(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-// 	var s Scenario
-// 	err := json.NewDecoder(r.Body).Decode(&s)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 	}
-// 	fmt.Println(s.ID)
+func HandleGetScenarioConfig(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-// 	err = globalScenarioStore.Delete(s.ID)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	fmt.Fprintln(w, "success")
+	// var s Scenario
+	// err := json.NewDecoder(r.Body).Decode(&s)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// }
+	// fmt.Println(s.ID)
 
-// }
+	// err = globalScenarioStore.Delete(s.ID)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Fprintln(w, "success")
+
+}

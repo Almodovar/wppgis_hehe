@@ -195,6 +195,8 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	globalScenario.BMPConfig = BMPConfig
 	globalScenario.BMPFeatureType = d[0].FeatureType
+	scenarioConfigJson, err := json.Marshal(globalScenario)
+	ioutil.WriteFile("scenarioconfig.json", scenarioConfigJson, 0644)
 
 	for _, bmp := range BMPConfig {
 		fmt.Println(bmp)

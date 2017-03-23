@@ -290,9 +290,11 @@
                     <div id="report-generate" class="report-generate col-sm-12 text-right">
                         <div class="report_enter">
                             <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button">Compare scenarios</a>
-                            <button id="generate-report-btn" type="button" class="btn btn-success btn-sm ">
-                                Generate report
-                            </button>
+<!-- <button id="generate-report-btn" type="button" class="btn btn-default btn-sm ">
+    Generate report
+</button>
+ -->
+<button id="generate-report-btn" type="button" class="btn btn-primary map-btn">Generate report</button>                            
                         </div>
                         <div class="report_exit row">
                             <div class="divide col-sm-6 text-right">
@@ -543,8 +545,27 @@
                         </div>
                     </div>
                     <div class="report-generate col-sm-12 text-right">
-                        <a id="model-optimize-btn" class="btn btn-success map-btn" role="button" href="#model-optimize-page">Optimize scenario</a>
-                        <button type="submit" class="btn btn-primary map-btn">Generate report</button>
+                        <div class="report_enter">
+                            <a id="model-optimize-btn" class="btn btn-success map-btn" role="button" >Optimize scenario</a>
+                            <button id="generate-report-btn2" type="button" class="btn btn-primary map-btn">Generate report</button>
+                        </div>
+                        <div class="report_exit row">
+                            <div class="divide col-sm-6 text-right">
+                                <button type="button" class="btn btn-success btn-sm html-report-btn" id="report-html2">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> HTML
+                                </button>
+                            </div>
+                            <div class="col-sm-4 text-left">
+                                <button type="button" class="btn btn-success btn-sm pdf-report-btn" id="report-pdf2">
+                                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span> PDF
+                                </button>
+                            </div>
+                            <div class="col-sm-2 text-left">
+                                <button id="close-report2" type="button" class="btn btn-danger btn-sm " aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

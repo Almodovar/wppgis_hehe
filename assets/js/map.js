@@ -13,7 +13,7 @@ $(document).ready(function() {
     scenarioInfo.userName = userName.trim();
     scenarioInfo.scenarioName = scenarioName.trim();
     scenarioInfo.scenarioID = scenarioID.trim();
-    
+
     var wascobToField = [68,
         113,
         113,
@@ -166,7 +166,21 @@ $(document).ready(function() {
 
     });
 
+    $("#generate-report-btn2").click(function(event) {
+        /* Act on the event */
+        $(".report_enter").slideUp("slow", function() {
+            $(".report_exit").show("slow");
+        });
+
+    });
+
     $("#close-report").click(function(event) {
+        /* Act on the event */
+        $(".report_exit").hide();
+        $(".report_enter").show("slow");
+    });
+
+    $("#close-report2").click(function(event) {
         /* Act on the event */
         $(".report_exit").hide();
         $(".report_enter").show("slow");
@@ -1921,6 +1935,34 @@ $(document).ready(function() {
 
     });
 
+    $("#report-html2").click(function(event) {
+        /* Act on the event */
+
+
+        scenarioInfo.state = "modelcompare";
+
+        var url = window.location.href + "/report/" + scenarioInfo.state;
+
+        var win = window.open(url, '_blank');
+        win.focus();
+
+        // window.location.replace(url + "/report/" + scenarioInfo.state);
+
+        // alert("hello");
+
+        // $.ajax({
+        //     url: '/reportgenerator',
+        //     type: "post",
+        //     contentType: 'application/json; charset=utf-8',
+        //     data: scenario,
+        //     dataType: 'json',
+        //     success: function(r) {
+        //         alert(r);
+        //     },
+        // });
+
+    });
+
     // ************************************************************************************************************************************************************
     //
     //                                                                      BMP COMPARE PAGE
@@ -2954,6 +2996,26 @@ $(document).ready(function() {
     $("#result-issue-comment-close2").click(function(event) {
         $("#result-issue-talk2").hide();
     });
+
+    $("#model-optimize-btn").click(function(event) {
+        /* Act on the event */
+        getSelectedFeatures(scenarioID);
+        addLayertoOptimizeresultMap();
+        $("html, body").animate({ scrollTop: $('#model-optimize-page').offset().top }, 1000);
+    });
+
+    // function getSelectedFeatures(scenarioID) {
+    //     $.ajax({
+    //         url: '/getscenarioconfig',
+    //         type: "post",
+    //         contentType: 'application/json; charset=utf-8',
+    //         data: scenarioID,
+    //         dataType: 'json',
+    //         success: function(r) {
+    //             console.log("hello");
+    //         },
+    //     });
+    // }
 
     // ************************************************************************************************************************************************************
     //

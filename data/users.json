@@ -18,6 +18,12 @@
       "HashedPassword": "$2a$10$PYkWdLi5yXxwXGV8gAG14.lUTK.owubRYh2gcLV/iPTbAhyGXYuTW",
       "Username": "hahaha"
     },
+    "usr_C8gJinavg3OBRand": {
+      "ID": "usr_C8gJinavg3OBRand",
+      "Email": "ksafd@qq.com",
+      "HashedPassword": "$2a$10$/UCdc7J5H/3TVDi7gXz9U.k1UCCn3KmYZqn7gt9/fjl9TyxF7Ay0e",
+      "Username": "kunchen123123"
+    },
     "usr_JiJrDw8zudKhN2jF": {
       "ID": "usr_JiJrDw8zudKhN2jF",
       "Email": "hello",
@@ -90,6 +96,18 @@
       "HashedPassword": "$2a$10$5YCaJe5RII0ahBDqDYOuHOmdvOnvH.Aze3Sl4bMuQVTmv5JlnLuCS",
       "Username": "delisen@sina.com"
     },
+    "usr_kMp62furTZ8RULka": {
+      "ID": "usr_kMp62furTZ8RULka",
+      "Email": "chris@qq.com",
+      "HashedPassword": "$2a$10$4TlFMV9ud//d7JEqRV8/ve.x.1qSyok00X0gEX6Gp1CrO.0B60HHK",
+      "Username": "ChrisMallon"
+    },
+    "usr_lF1kMpgaku6D9UWQ": {
+      "ID": "usr_lF1kMpgaku6D9UWQ",
+      "Email": "123123@asdfsfd.com",
+      "HashedPassword": "$2a$10$mVxcsHupV5gRLlCP893iM.qKghB3lmP5OFSOqQm7qJtYPz20p4A5a",
+      "Username": "geokunchen123"
+    },
     "usr_tNtJkWIH9L4g44tw": {
       "ID": "usr_tNtJkWIH9L4g44tw",
       "Email": "kchen08@uoguelph.ca",
@@ -101,6 +119,12 @@
       "Email": "de222lisen@sina.com",
       "HashedPassword": "$2a$10$PtirlHka/yfbnM08gSoQveEhAxSeNWEG6/DfOzeM.voxIeTBVIesi",
       "Username": "kunchen1233"
+    },
+    "usr_yoI7A1uaQjPeRHJG": {
+      "ID": "usr_yoI7A1uaQjPeRHJG",
+      "Email": "kweili@qq.com",
+      "HashedPassword": "$2a$10$CTRlEIzDFkBmkOuCxm3PveXVqdk0lygV4u6DeGUYn18M/2ryIvC2S",
+      "Username": "geokunchen"
     }
   }
 }
