@@ -2190,7 +2190,7 @@ $(document).ready(function() {
                 outletTp = r[2].ResultData;
                 outletTn = r[3].ResultData;
 
-                alert(outletSediment);
+                // alert(outletSediment);
 
                 outletSedimentAverage = 0;
                 outletFlowAverage = 0;
@@ -2999,24 +2999,33 @@ $(document).ready(function() {
 
     $("#model-optimize-btn").click(function(event) {
         /* Act on the event */
-        getSelectedFeatures(scenarioID);
-        addLayertoOptimizeresultMap();
+        // getSelectedFeatures(scenarioID);
+        addLayertoOptimizeresultMap(selectedLayer);
+
+
         $("html, body").animate({ scrollTop: $('#model-optimize-page').offset().top }, 1000);
+
     });
 
-    // function getSelectedFeatures(scenarioID) {
-    //     $.ajax({
-    //         url: '/getscenarioconfig',
-    //         type: "post",
-    //         contentType: 'application/json; charset=utf-8',
-    //         data: scenarioID,
-    //         dataType: 'json',
-    //         success: function(r) {
-    //             console.log("hello");
-    //         },
-    //     });
-    // }
+    function addLayertoOptimizeresultMap(selectedLayer) {
+        if (selectedLayer === "subbasin") {
+            optimizeresultMap.removeLayer(optimizeresultMap.getLayers().getArray()[1]);
+            optimizeresultMap.addLayer(subbasinJsonp);
+        }
+        if (selectedLayer === "field") {
+            optimizeresultMap.removeLayer(optimizeresultMap.getLayers().getArray()[1]);
+            optimizeresultMap.addLayer(fieldJsonp);
+        }
+    }
 
+    function getSelectedFeatureIDs() {
+        var selectedFeatureIDs = [];
+        $('#bmp-select-table table .selectedFeatureID').each(function() {
+            var m = $(this).html();
+            selectedFeatureIDs.push(m);
+        });
+        return selectedFeatureIDs;
+    }
     // ************************************************************************************************************************************************************
     //
     //                                                                      BMP OPTIMIZE PAGE
@@ -3032,6 +3041,130 @@ $(document).ready(function() {
         })
     });
 
+    var optimizationConfig = new Object();
+
+
+    $("#environmentLimit").focus(function(event) {
+        /* Act on the event */
+        $("#environmentLimit").prop('disabled', false);
+        $("#budgetLimit").prop('disabled', true);
+
+
+    });
+
+
+
+    $('#environmentType1').change(function(event) {
+        /* Act on the event */
+        $('#budgetLimit').attr('placeholder', "Loading suggested value");
+
+        optimizationConfig.selectedLayer = selectedLayer;
+        optimizationConfig.selectedFeatureIDs = getSelectedFeatureIDs();
+        optimizationConfig.selectedType = $(this).find(':selected').text();
+        optimizationConfig.optimizationMode = "Budget";
+
+        var jsonArray = JSON.stringify(optimizationConfig);
+        $.ajax({
+            url: '/getlowerupperlimites',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: jsonArray,
+            dataType: 'json',
+            success: function(r) {
+                // console.log(r.lowerLimit);
+                // console.log(r.lowerLimit + r.upperLimit);
+                console.log(r.LowerLimit);
+                console.log(r.UpperLimit);
+                optimizationConfig.lowerLimit = r.LowerLimit;
+                optimizationConfig.upperLimit = r.UpperLimit;
+                $('#budgetLimit').attr('placeholder', r.UpperLimit + " " + r.LowerLimit);
+            },
+        });
+    });
+
+    $('#environmentType2').change(function(event) {
+        $('#environmentLimit').attr('placeholder', "Loading suggested value");
+
+        /* Act on the event */
+        optimizationConfig.selectedLayer = selectedLayer;
+        optimizationConfig.selectedFeatureIDs = getSelectedFeatureIDs();
+        optimizationConfig.selectedType = $(this).find(':selected').text();
+        optimizationConfig.optimizationMode = "Environmental";
+        var jsonArray = JSON.stringify(optimizationConfig);
+        $.ajax({
+            url: '/getlowerupperlimites',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: jsonArray,
+            dataType: 'json',
+            success: function(r) {
+                // console.log(r.lowerLimit);
+                // console.log(r.lowerLimit + r.upperLimit);
+                console.log(r.LowerLimit);
+                console.log(r.UpperLimit);
+                optimizationConfig.lowerLimit = r.LowerLimit;
+                optimizationConfig.upperLimit = r.UpperLimit;
+                $('#environmentLimit').attr('placeholder', "Between:" + r.UpperLimit + " to " + r.LowerLimit);
+            },
+        });
+    });
+
+
+    $("#budgetCheck").change(function() {
+        if (this.checked) {
+
+            $("#environmentLimit").prop('disabled', true);
+            $("#budgetLimit").prop('disabled', false);
+        }
+        $("#environmentCheck").prop('checked', false);
+
+    });
+
+    $("#environmentCheck").change(function() {
+
+        if (this.checked) {
+
+
+            $("#environmentLimit").prop('disabled', false);
+            $("#budgetLimit").prop('disabled', true);
+        }
+        $("#budgetCheck").prop('checked', false);
+    });
+
+    $("#runOptimizationModel").click(function(event) {
+        /* Act on the event */
+        optimizationConfig.getLimit = false;
+
+        var jsonArray = JSON.stringify(optimizationConfig);
+        $.ajax({
+            url: '/runoptimizationmodel',
+            type: "post",
+            contentType: 'application/json; charset=utf-8',
+            data: jsonArray,
+            dataType: 'json',
+            success: function(r) {
+                // console.log(r.lowerLimit);
+                // console.log(r.lowerLimit + r.upperLimit);
+                console.log("optimization done");
+            },
+        });
+    });
+
+    // document.getElementById("environmentLimit").addEventListener("change", function(event) {
+    //     /* Act on the event */
+    //     console.log("this.value");
+    //     document.getElementById("budgetLimit").disabled = true;
+    // });
+    // document.getElementById("environmentLimit").addEventListener("focus", function(event) {
+    //     /* Act on the event */
+    //     document.getElementById("environmentLimit").disabled = false;
+    //     document.getElementById("budgetLimit").disabled = true;
+    // });
+
+    // document.getElementById("budgetLimit").addEventListener("focus", function(event) {
+    //     document.getElementById("budgetLimit").disabled = false;
+    //     document.getElementById("environmentLimit").disabled = true;
+    // });
 
 
 

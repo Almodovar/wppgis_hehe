@@ -290,11 +290,11 @@
                     <div id="report-generate" class="report-generate col-sm-12 text-right">
                         <div class="report_enter">
                             <a id="bmp-compare-btn" class="btn btn-success map-btn" role="button">Compare scenarios</a>
-<!-- <button id="generate-report-btn" type="button" class="btn btn-default btn-sm ">
+                            <!-- <button id="generate-report-btn" type="button" class="btn btn-default btn-sm ">
     Generate report
 </button>
  -->
-<button id="generate-report-btn" type="button" class="btn btn-primary map-btn">Generate report</button>                            
+                            <button id="generate-report-btn" type="button" class="btn btn-primary map-btn">Generate report</button>
                         </div>
                         <div class="report_exit row">
                             <div class="divide col-sm-6 text-right">
@@ -546,7 +546,7 @@
                     </div>
                     <div class="report-generate col-sm-12 text-right">
                         <div class="report_enter">
-                            <a id="model-optimize-btn" class="btn btn-success map-btn" role="button" >Optimize scenario</a>
+                            <a id="model-optimize-btn" class="btn btn-success map-btn" role="button">Optimize scenario</a>
                             <button id="generate-report-btn2" type="button" class="btn btn-primary map-btn">Generate report</button>
                         </div>
                         <div class="report_exit row">
@@ -594,23 +594,40 @@
             </div>
             <div class="col-sm-4">
                 <div class="row" id="model-optimize-input">
-                    <div class="col-sm-12 input-group">
-                        <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                        <span class="input-group-addon">.00</span> </div>
-                    <div class="col-sm-12 input-group">
-                        <input type="text" class="form-control">
+                    <div class="col-sm-3 ">
+                        <label>
+                            <input type="checkbox" id="budgetCheck"> Budget
+                        </label>
+                    </div>
+                    <div class="col-sm-9 input-group">
                         <span class="input-group-btn">
-                            <select class="btn">
-                                <option>F</option>
-                                <option>S</option>
-                                <option>N</option>
-                                <option>P</option>
+                            <select class="btn" id="environmentType1">
+                                <option>Water</option>
+                                <option>Sediment</option>
+                                <option>Total N</option>
+                                <option>Total P</option>
                             </select>
                         </span>
+                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="budgetLimit">
+                    </div>
+                    <div class="col-sm-3 ">
+                        <label>
+                            <input type="checkbox" id="environmentCheck"> Environment
+                        </label>
+                    </div>
+                    <div class="col-sm-9 input-group">
+                        <span class="input-group-btn">
+                            <select class="btn" id="environmentType2">
+                                <option>Water</option>
+                                <option>Sediment</option>
+                                <option>Total N</option>
+                                <option>Total P</option>
+                            </select>
+                        </span>
+                        <input type="text" class="form-control" id="environmentLimit">
                     </div>
                     <div class="col-sm-12 text-right">
-                        <button type="submit" class="btn btn-danger map-btn">Submit</button>
+                        <button type="submit" class="btn btn-danger map-btn" id="runOptimizationModel">Submit</button>
                     </div>
                 </div>
                 <div class="row">

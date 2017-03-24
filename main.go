@@ -46,7 +46,6 @@ func main() {
 
 	secureRouter := NewRouter()
 
-	// secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID/getscenarioconfig", HandleGetScenarioConfig)
 	secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID/report/:reportProgress", HandleReportGenerate)
 	secureRouter.Handle("GET", "/userID/:userID/scenarioID/:scenarioID", HandleScenarioCreate)
 	secureRouter.Handle("GET", "/userID/:userID", HandleScenarioList)
@@ -55,6 +54,8 @@ func main() {
 	secureRouter.Handle("POST", "/readmodelresult", HandleModelResultGet)
 	secureRouter.Handle("POST", "/comparemodelresult", HandleModelCompare)
 	secureRouter.Handle("POST", "/writeconfig", HandleConfigUpdate)
+	secureRouter.Handle("POST", "/getlowerupperlimites", HandleOptimizationLimites)
+	secureRouter.Handle("POST", "/runoptimizationmodel", HandleOptimizationRun)
 
 	// secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
 

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -195,8 +196,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	globalScenario.BMPConfig = BMPConfig
 	globalScenario.BMPFeatureType = d[0].FeatureType
-	scenarioConfigJson, err := json.Marshal(globalScenario)
-	ioutil.WriteFile("scenarioconfig.json", scenarioConfigJson, 0644)
 
 	for _, bmp := range BMPConfig {
 		fmt.Println(bmp)
@@ -979,4 +978,198 @@ func OutletCompareResultArray(s string) {
 	outletCompareArray = append(outletCompareArray, tndataArray)
 
 	db.Close()
+}
+
+type OptimizationConfig struct {
+	OptimizationMode string
+	BaseScenario     string
+	FieldIDs         string
+	ConstrainType    string
+	UpperLimit       string
+	LowerLimit       string
+	IncludedBMPs     string
+	StartYear        string
+	EndYear          string
+	IsIncrementMode  string
+	IterationNumber  string
+	OutPath          string
+	IsUpDown         string
+	OutUpDownPath    string
+}
+
+type OptimizationConfigInfo struct {
+	SelectedLayer      string
+	SelectedFeatureIDs []string
+	OptimizationMode   string
+	SelectedType       string
+	LowerLimit         string
+	UpperLimit         string
+}
+
+type LowerUpperLimits struct {
+	LowerLimit string
+	UpperLimit string
+}
+
+func HandleOptimizationLimites(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d = new(OptimizationConfigInfo)
+
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	fmt.Println(d.SelectedLayer)
+	fmt.Println(d.OptimizationMode)
+	fmt.Println(d.SelectedFeatureIDs)
+	fmt.Println(d.SelectedType)
+
+	var featureIDString = ""
+	for i := 0; i < len(d.SelectedFeatureIDs); i++ {
+		featureIDString = d.SelectedFeatureIDs[i] + ";" + featureIDString
+	}
+
+	featureIDString = featureIDString[:len(featureIDString)-1]
+
+	optimizationConfig := new(OptimizationConfig)
+	optimizationConfig.OptimizationMode = d.OptimizationMode
+	optimizationConfig.BaseScenario = "Conventional"
+	optimizationConfig.FieldIDs = featureIDString
+	optimizationConfig.ConstrainType = d.SelectedType
+	optimizationConfig.UpperLimit = "0"
+	optimizationConfig.LowerLimit = "0"
+	optimizationConfig.IncludedBMPs = "true;true;true;true"
+	optimizationConfig.StartYear = "2000"
+	optimizationConfig.EndYear = "2011"
+	optimizationConfig.IsIncrementMode = "true"
+	optimizationConfig.IterationNumber = "10"
+	optimizationConfig.OutPath = "C:\\xxKun_Learn\\Go\\Go\\src\\wppgis\\assets\\WEBsOptimization\\OptOut.db3"
+	optimizationConfig.IsUpDown = "true"
+	optimizationConfig.OutUpDownPath = "C:\\xxKun_Learn\\Go\\Go\\src\\wppgis\\assets\\WEBsOptimization\\UpLow.txt"
+
+	optimizationConfigJson, err := json.Marshal(optimizationConfig)
+	check(err)
+	err = ioutil.WriteFile("./assets/WEBsOptimization/optimization.txt", optimizationConfigJson, 0644)
+	check(err)
+
+	done := make(chan bool, 1)
+	go func() {
+
+		cmd := "java"
+		args := []string{"-jar", "./assets/WEBsOptimization/WEBsInterface_WB.jar"}
+		if err := exec.Command(cmd, args...).Run(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		done <- true
+
+	}()
+
+	fmt.Println("awaiting")
+
+	<-done
+
+	if _, err := os.Stat("./assets/WEBsOptimization/done.txt"); err == nil {
+		fmt.Println("complete")
+	}
+
+	fileString := readFile("./assets/WEBsOptimization/UpLow.txt")
+	fmt.Println(fileString)
+
+	re := regexp.MustCompile("(-|\\d)\\d?.\\d+")
+	limitsSlice := re.FindAllString(fileString, -1)
+	fmt.Println(re.FindAllString(fileString, -1))
+
+	var lowerUpperLimits = new(LowerUpperLimits)
+	lowerUpperLimits.LowerLimit = limitsSlice[1]
+	lowerUpperLimits.UpperLimit = limitsSlice[0]
+
+	fmt.Println(limitsSlice[1])
+	fmt.Println(limitsSlice[0])
+
+	// create json response from struct
+	a, err := json.Marshal(lowerUpperLimits)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(a)
+}
+
+func HandleOptimizationRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d = new(OptimizationConfigInfo)
+
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	var featureIDString = ""
+
+	for i := 0; i < len(d.SelectedFeatureIDs); i++ {
+		featureIDString = d.SelectedFeatureIDs[i] + ";" + featureIDString
+	}
+
+	featureIDString = featureIDString[:len(featureIDString)-1]
+
+	optimizationConfig := new(OptimizationConfig)
+	optimizationConfig.OptimizationMode = d.OptimizationMode
+	optimizationConfig.BaseScenario = "Conventional"
+	optimizationConfig.FieldIDs = featureIDString
+	optimizationConfig.ConstrainType = d.SelectedType
+	optimizationConfig.UpperLimit = d.UpperLimit
+	optimizationConfig.LowerLimit = d.LowerLimit
+	optimizationConfig.IncludedBMPs = "true;true;true;true"
+	optimizationConfig.StartYear = "2000"
+	optimizationConfig.EndYear = "2011"
+	optimizationConfig.IsIncrementMode = "true"
+	optimizationConfig.IterationNumber = "10"
+	optimizationConfig.OutPath = "C:\\xxKun_Learn\\Go\\Go\\src\\wppgis\\assets\\WEBsOptimization\\OptOut.db3"
+	optimizationConfig.IsUpDown = "false"
+	optimizationConfig.OutUpDownPath = "C:\\xxKun_Learn\\Go\\Go\\src\\wppgis\\assets\\WEBsOptimization\\UpLow.txt"
+
+	optimizationConfigJson, err := json.Marshal(optimizationConfig)
+	check(err)
+	err = ioutil.WriteFile("./assets/WEBsOptimization/optimization.txt", optimizationConfigJson, 0644)
+	check(err)
+
+	done := make(chan bool, 1)
+	go func() {
+
+		cmd := exec.Command("java", "-jar", "C:/xxKun_Learn/Go/Go/src/wppgis/assets/WEBsOptimization/WEBsInterface_WB.jar")
+		cmd.Dir = "C:/xxKun_Learn/Go/Go/src/wppgis/assets/WEBsOptimization"
+		cmd.Run()
+		// cmd := "java"
+		// args := []string{"-jar", "./assets/WEBsOptimization/WEBsInterface_WB.jar"}
+		// if err := exec.Command(cmd, args...).Run(); err != nil {
+		// 	fmt.Fprintln(os.Stderr, err)
+		// 	os.Exit(1)
+		// }
+		done <- true
+
+	}()
+
+	fmt.Println("awaiting")
+
+	<-done
+
+	a, err := json.Marshal("optimization done!")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(a)
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func readFile(path string) string {
+	f, err := os.Open(path)
+	check(err)
+	b1 := make([]byte, 100)
+	n1, err := f.Read(b1)
+	check(err)
+	fmt.Printf("%d bytes: %s\n", n1, string(b1))
+	return string(b1)
 }
