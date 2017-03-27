@@ -76,6 +76,7 @@ type FeatureProperties struct {
 	FlowLevel     string  `json:"flowlevel"`
 	TpLevel       string  `json:"tplevel"`
 	TnLevel       string  `json:"tnlevel"`
+	OptBMPs       string
 }
 
 type Geometry struct {
@@ -1011,6 +1012,23 @@ type LowerUpperLimits struct {
 	UpperLimit string
 }
 
+type ResultData struct {
+	FeatureID          int
+	FeatureBMPAssigned string
+	Iteration          int
+	EcoResult          float64
+	EnvResult          *Result
+}
+
+type OptChartData struct {
+	NetReturn    float64
+	IterationNum int
+	Water        float64
+	Sediment     float64
+	TP           float64
+	TN           float64
+}
+
 func HandleOptimizationLimites(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var d = new(OptimizationConfigInfo)
 
@@ -1151,7 +1169,14 @@ func HandleOptimizationRun(w http.ResponseWriter, r *http.Request, _ httprouter.
 
 	<-done
 
-	a, err := json.Marshal("optimization done!")
+	optResultDB := createSQLConnector("./assets/WEBsOptimization/OptOut.db3")
+	generateOptResultJsonFiles(optResultDB)
+	// createOptGeoJson(resultDataSet)
+
+	var optChartDataSet = getOptChartDataSet(optResultDB)
+	optResultDB.Close()
+
+	a, err := json.Marshal(optChartDataSet)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -1172,4 +1197,149 @@ func readFile(path string) string {
 	check(err)
 	fmt.Printf("%d bytes: %s\n", n1, string(b1))
 	return string(b1)
+}
+
+func createSQLConnector(path string) *sql.DB {
+	optResultDB, err := sql.Open("sqlite3", path)
+	check(err)
+	return optResultDB
+}
+
+func getResultByIteration(optResultDB *sql.DB, iteration int) []*ResultData {
+
+	var resultDataSet []*ResultData
+
+	var rows *sql.Rows
+	var err error
+
+	switch iteration {
+	case 2001:
+		rows, err = optResultDB.Query("select * from Iter_000_field")
+	case 2002:
+		rows, err = optResultDB.Query("select * from Iter_001_field")
+	case 2003:
+		rows, err = optResultDB.Query("select * from Iter_002_field")
+	case 2004:
+		rows, err = optResultDB.Query("select * from Iter_003_field")
+	case 2005:
+		rows, err = optResultDB.Query("select * from Iter_004_field")
+	case 2006:
+		rows, err = optResultDB.Query("select * from Iter_005_field")
+	case 2007:
+		rows, err = optResultDB.Query("select * from Iter_006_field")
+	case 2008:
+		rows, err = optResultDB.Query("select * from Iter_007_field")
+	case 2009:
+		rows, err = optResultDB.Query("select * from Iter_008_field")
+	case 2010:
+		rows, err = optResultDB.Query("select * from Iter_009_field")
+	default:
+		fmt.Println("the year does not exist!")
+	}
+
+	if err != nil {
+		panic(err)
+	}
+	for rows.Next() {
+		resultData := new(ResultData)
+		var featureID int
+		var featureBMPAssigned string
+		var netReturn float64
+		var water float64
+		var sediment float64
+		var tn float64
+		var tp float64
+		err = rows.Scan(&featureID, &featureBMPAssigned, &netReturn, &water, &sediment, &tn, &tp)
+		if err != nil {
+			panic(err)
+		}
+		resultData.FeatureID = featureID
+		resultData.Iteration = iteration
+		resultData.FeatureBMPAssigned = featureBMPAssigned
+		resultData.EcoResult = netReturn
+		resultData.EnvResult = new(Result)
+		resultData.EnvResult.Water = water
+		resultData.EnvResult.Sediment = sediment
+		resultData.EnvResult.Tn = tn
+		resultData.EnvResult.Tp = tp
+		fmt.Println(*resultData)
+		resultDataSet = append(resultDataSet, resultData)
+	}
+
+	return resultDataSet
+}
+
+func generateOptResultJsonFiles(optResultDB *sql.DB) {
+
+	for i := 2001; i < 2011; i++ {
+		var resultDataSet = getResultByIteration(optResultDB, i)
+		var tempResultsforFileCreation = make(map[int]*Result)
+		var tempFeatureAssignedBMPs = make(map[int]string)
+		for j := 0; j < len(resultDataSet); j++ {
+			tempResultsforFileCreation[resultDataSet[j].FeatureID] = resultDataSet[j].EnvResult
+			tempFeatureAssignedBMPs[resultDataSet[j].FeatureID] = resultDataSet[j].FeatureBMPAssigned
+		}
+		GenerateOptResultJsonFile("field", "optfield"+strconv.Itoa(i), tempResultsforFileCreation, tempFeatureAssignedBMPs)
+
+	}
+
+}
+func GenerateOptResultJsonFile(sin string, sout string, array map[int]*Result, assignedBMPs map[int]string) {
+	var featureCollection = new(MapFeature)
+	configFile, err := os.Open("./assets/data/geojson/" + sin + ".json")
+	if err != nil {
+		fmt.Println("fail 1")
+	}
+
+	jsonParser := json.NewDecoder(configFile)
+	if err = jsonParser.Decode(&featureCollection); err != nil {
+		fmt.Println("fail 2")
+	}
+
+	for id := range array {
+		for i := 0; i < len(featureCollection.Features); i++ {
+			if strconv.Itoa(id) == featureCollection.Features[i].Properties.Name {
+				featureCollection.Features[i].Properties.Flow = array[id].Water
+				featureCollection.Features[i].Properties.Sediment = array[id].Sediment
+				featureCollection.Features[i].Properties.Tp = array[id].Tp
+				featureCollection.Features[i].Properties.Tn = array[id].Tn
+				featureCollection.Features[i].Properties.OptBMPs = assignedBMPs[id]
+			}
+		}
+	}
+
+	b, err := json.MarshalIndent(featureCollection, "", "  ")
+	// var i = len(featureCollection.Features)
+	err = ioutil.WriteFile("./assets/data/geojson/"+sout+".json", b, 0644)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func getOptChartDataSet(optResultDB *sql.DB) []*OptChartData {
+	var rows *sql.Rows
+	var err error
+	rows, err = optResultDB.Query("select * from OptMaster")
+	var optChartDataSet []*OptChartData
+	for rows.Next() {
+		var optChartData = new(OptChartData)
+		var iteration int
+		var netReturn float64
+		var water float64
+		var sediment float64
+		var tp float64
+		var tn float64
+		err = rows.Scan(&iteration, &netReturn, &water, &sediment, &tn, &tp)
+		if err != nil {
+			panic(err)
+		}
+		optChartData.IterationNum = iteration
+		optChartData.NetReturn = netReturn
+		optChartData.Water = water
+		optChartData.Sediment = sediment
+		optChartData.TN = tn
+		optChartData.TP = tp
+		optChartDataSet = append(optChartDataSet, optChartData)
+	}
+	return optChartDataSet
 }

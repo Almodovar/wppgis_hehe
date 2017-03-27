@@ -137,6 +137,9 @@ $(document).ready(function() {
             case 4:
                 $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
                 break;
+            case 5:
+                $("html, body").animate({ scrollTop: $('#model-optimize-page').offset().top }, 'slow');
+                break;
             default:
                 // $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 1000);
                 break;
@@ -1043,23 +1046,30 @@ $(document).ready(function() {
         });
 
         $("#process-icon2").on('click', function(event) {
-            if (progress == "bmpEvaluation" || progress == "checkScenario" || progress == "compareScenario") {
+            if (progress == "bmpEvaluation" || progress == "checkScenario" || progress == "compareScenario" || progress == "optimizeScenario") {
                 resizePage = 2;
                 $("html, body").animate({ scrollTop: $('#model-result-page').offset().top }, 'slow');
             }
         });
 
         $("#process-icon3").on('click', function(event) {
-            if (progress == "checkScenario" || progress == "compareScenario") {
+            if (progress == "checkScenario" || progress == "compareScenario" || progress == "optimizeScenario") {
                 resizePage = 3;
                 $("html, body").animate({ scrollTop: $('#bmp-compare-page').offset().top }, 'slow');
             }
         });
 
         $("#process-icon4").on('click', function(event) {
-            if (progress == "compareScenario") {
+            if (progress == "compareScenario" || progress == "optimizeScenario") {
                 resizePage = 4;
                 $("html, body").animate({ scrollTop: $('#model-compare-page').offset().top }, 'slow');
+            }
+        });
+
+        $("#process-icon5").on('click', function(event) {
+            if (progress == "optimizeScenario") {
+                resizePage = 5;
+                $("html, body").animate({ scrollTop: $('#model-optimize-page').offset().top }, 'slow');
             }
         });
 
@@ -3002,6 +3012,12 @@ $(document).ready(function() {
         // getSelectedFeatures(scenarioID);
         addLayertoOptimizeresultMap(selectedLayer);
 
+        $("#process-icon4").removeClass('btn-danger').addClass('btn-success');
+        $("#process-icon4 span:first").removeClass('text-danger').addClass('text-success');
+        $("#process-icon5").removeClass('btn-default').addClass('btn-danger');
+        $("#process-icon5 span:first").removeClass('text-default').addClass('text-danger');
+        progress = "optimizeScenario";
+        resizePage = 5;
 
         $("html, body").animate({ scrollTop: $('#model-optimize-page').offset().top }, 1000);
 
@@ -3032,6 +3048,64 @@ $(document).ready(function() {
     //                                  
     // ************************************************************************************************************************************************************
 
+
+    function optStyleSedimentFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var value = feature.getProperties().sediment;
+        if (value !== 0) {
+            return selectedStyle;
+        } else {
+            return fieldStyle;
+        }
+    }
+
+    function optStyleFlowFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var value = feature.getProperties().flow;
+        if (value !== 0) {
+            return selectedStyle;
+        } else {
+            return fieldStyle;
+        }
+    }
+
+    function optStyleTpFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var value = feature.getProperties().tp;
+        if (value !== 0) {
+            return selectedStyle;
+        } else {
+            return fieldStyle;
+        }
+    }
+
+    function optStyleTnFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var value = feature.getProperties().tn;
+        if (value !== 0) {
+            return selectedStyle;
+        } else {
+            return fieldStyle;
+        }
+    }
+
+
+
+    var optimizationMapPointerMove = new ol.interaction.Select({
+        condition: ol.events.condition.pointerMove,
+        filter: function(feature, layer) {
+
+            for (var i = 0; i < bmpAssignmentArray.length; i++) {
+                if (bmpAssignmentArray[i].featureID == feature.getProperties().name) {
+                    return true;
+                }
+            }
+            return false;
+        },
+    });
+
+
+
     var optimizeresultMap = new ol.Map({
         target: 'optimize-result-map',
         layers: [tiledRaster, fieldJsonp],
@@ -3041,6 +3115,10 @@ $(document).ready(function() {
         })
     });
 
+
+    optimizeresultMap.addInteraction(optimizationMapPointerMove);
+
+
     var optimizationConfig = new Object();
 
 
@@ -3049,7 +3127,117 @@ $(document).ready(function() {
         $("#environmentLimit").prop('disabled', false);
         $("#budgetLimit").prop('disabled', true);
 
+    });
 
+    var optResultInfoElement = document.getElementById('optimization-result-feature-info');
+
+    var optResultInfoOverlay = new ol.Overlay({
+        element: document.getElementById('optimization-result-feature-info'),
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+
+    optimizeresultMap.addOverlay(optResultInfoOverlay);
+
+    var hoveredOptimizationResultFeature;
+    optimizationMapPointerMove.on('select', function(event) {
+        hoveredOptimizationResultFeature = event.selected[0];
+        var num;
+        if (hoveredOptimizationResultFeature) {
+
+            // if (hoveredCompareResultFeature.getProperties().name == "outlet") {
+            //     var coordinate = ol.extent.getCenter(hoveredCompareResultFeature.getGeometry().getExtent());
+            //     var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
+            //     compareResultInfoOverlay.setPosition(offsetCoordinate);
+            //     if ($('#show-flow-compare-result').prop("disabled") === true) {
+            //         num = hoveredCompareResultFeature.getProperties().flow;
+            //         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+            //         $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Flow " + num);
+            //     }
+            //     if ($('#show-sediment-compare-result').prop("disabled") === true) {
+            //         num = hoveredCompareResultFeature.getProperties().sediment;
+            //         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+            //         $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Sediment " + num);
+            //     }
+            //     if ($('#show-tn-compare-result').prop("disabled") === true) {
+            //         num = hoveredCompareResultFeature.getProperties().tn;
+            //         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+            //         $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total N " + num);
+            //     }
+            //     if ($('#show-tp-compare-result').prop("disabled") === true) {
+            //         num = hoveredCompareResultFeature.getProperties().tp;
+            //         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+            //         $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total P " + num);
+            //     }
+
+            //     $(compareResultInfoElement).show();
+            //     compareResultInfoOverlay.setPosition(offsetCoordinate);
+            // }
+
+
+
+            var coordinate = ol.extent.getCenter(hoveredOptimizationResultFeature.getGeometry().getExtent());
+            var offsetCoordinate = [coordinate[0], coordinate[1] + 500];
+            optResultInfoOverlay.setPosition(offsetCoordinate);
+            if ($('#show-opt-flow-result').prop("disabled") === true) {
+                num = hoveredOptimizationResultFeature.getProperties().flow;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(optResultInfoElement).html("FeatureID: " + hoveredOptimizationResultFeature.getProperties().name + "<br />" + "Flow " + num);
+            }
+            if ($('#show-opt-sediment-result').prop("disabled") === true) {
+                num = hoveredOptimizationResultFeature.getProperties().sediment;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(optResultInfoElement).html("FeatureID: " + hoveredOptimizationResultFeature.getProperties().name + "<br />" + "Sediment " + num);
+            }
+            if ($('#show-opt-tn-result').prop("disabled") === true) {
+                num = hoveredOptimizationResultFeature.getProperties().tn;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(optResultInfoElement).html("FeatureID: " + hoveredOptimizationResultFeature.getProperties().name + "<br />" + "Total N " + num);
+            }
+            if ($('#show-opt-tp-result').prop("disabled") === true) {
+                num = hoveredOptimizationResultFeature.getProperties().tp;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(optResultInfoElement).html("FeatureID: " + hoveredOptimizationResultFeature.getProperties().name + "<br />" + "Total P " + num);
+            }
+
+            $(optResultInfoElement).show();
+            optResultInfoOverlay.setPosition(offsetCoordinate);
+
+
+        } else {
+            $(optResultInfoElement).hide();
+        }
+    });
+
+    $("#show-opt-flow-result").click(function(event) {
+        var a = optimizeresultMap.getLayers().getArray()[1];
+        a.setStyle(optStyleFlowFunction);
+        // var b = optimizeresultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        $('#show-opt-flow-result').attr("disabled", true);
+        $('#show-opt-flow-result').siblings().attr("disabled", false);
+    });
+    $("#show-opt-sediment-result").click(function(event) {
+        /* Act on the event */
+        var a = optimizeresultMap.getLayers().getArray()[1];
+        a.setStyle(optStyleSedimentFunction);
+        $('#show-opt-sediment-result').attr("disabled", true);
+        $('#show-opt-sediment-result').siblings().attr("disabled", false);
+    });
+    $("#show-opt-tn-result").click(function(event) {
+        /* Act on the event */
+        var a = optimizeresultMap.getLayers().getArray()[1];
+        a.setStyle(optStyleTpFunction);
+        $('#show-opt-tn-result').attr("disabled", true);
+        $('#show-opt-tn-result').siblings().attr("disabled", false);
+
+    });
+    $("#show-opt-tp-result").click(function(event) {
+        /* Act on the event */
+        var a = optimizeresultMap.getLayers().getArray()[1];
+        a.setStyle(optStyleTnFunction);
+        $('#show-opt-tp-result').attr("disabled", true);
+        $('#show-opt-tp-result').siblings().attr("disabled", false);
     });
 
 
@@ -3145,11 +3333,338 @@ $(document).ready(function() {
             success: function(r) {
                 // console.log(r.lowerLimit);
                 // console.log(r.lowerLimit + r.upperLimit);
+                console.log(r[0].IterationNum);
+                console.log(r[0].Water);
+                console.log(r[0].NetReturn);
                 console.log("optimization done");
+
+
+                drawOptimizationChart(r);
+                var optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
+                drawOptimizationTable(optimizationLayer);
             },
         });
     });
 
+
+    function drawOptimizationChart(result) {
+
+        var chartData = new Object();
+        var chartBudgetData = new Object();
+
+        chartData.name = optimizationConfig.selectedType;
+        chartBudgetData.name = "Cost";
+
+        var resultArray = [];
+        var budgetResultArray = [];
+        var yAxisValue = "";
+        if (optimizationConfig.selectedType === "Water") {
+            for (i = 0; i < result.length; i++) {
+                resultArray.push(result[i].Water);
+                budgetResultArray.push(result[i].NetReturn);
+            }
+            yAxisValue = "Water m^3";
+            unit = "m^3";
+        }
+        if (optimizationConfig.selectedType === "Sediment") {
+            for (i = 0; i < result.length; i++) {
+                resultArray.push(result[i].Sediment);
+                budgetResultArray.push(result[i].NetReturn);
+
+            }
+            yAxisValue = "Sediment ton";
+            unit = "ton";
+
+        }
+        if (optimizationConfig.selectedType === "Total P") {
+            for (i = 0; i < result.length; i++) {
+                resultArray.push(result[i].TP);
+                budgetResultArray.push(result[i].NetReturn);
+
+            }
+            yAxisValue = "Total P kg";
+            unit = "kg";
+        }
+        if (optimizationConfig.selectedType === "Total N") {
+            for (i = 0; i < result.length; i++) {
+                resultArray.push(result[i].TN);
+                budgetResultArray.push(result[i].NetReturn);
+
+            }
+            yAxisValue = "Total N kg";
+            unit = "kg";
+        }
+
+        chartData.data = resultArray;
+        chartBudgetData.data = budgetResultArray;
+
+        // Highcharts.chart('model-optimize-chart', {
+
+        //     title: {
+        //         text: 'Pollution Reduction by Constraint'
+        //     },
+        //     xAxis: {
+        //         categories: ['Reduction:100% Reduction', 'Reduction:90%', 'Reduction:80%', 'Reduction:70%', 'Reduction:60%', 'Reduction:50%',
+        //             'Reduction:40%', 'Reduction:30%', 'Reduction:20%', 'Reduction:10%'
+        //         ],
+        //     },
+        //     yAxis: {
+        //         title: {
+        //             text: yAxisValue
+        //         }
+        //     },
+        //     legend: {
+        //         layout: 'vertical',
+        //         align: 'right',
+        //         verticalAlign: 'middle'
+        //     },
+
+        //     credits: {
+        //         enabled: false
+        //     },
+        //     plotOptions: {
+        //         series: {
+        //             pointStart: 1
+        //         }
+        //     },
+
+        //     series: [chartData]
+
+        // });
+
+
+        Highcharts.chart('model-optimize-chart', {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Pollution Reduction on Constraint',
+                style: { "fontsize": "8px" }
+            },
+            // subtitle: {
+            //     text: 'Source: WorldClimate.com'
+            // },
+            xAxis: [{
+                categories: ['Reduction:100% Reduction', 'Reduction:90%', 'Reduction:80%', 'Reduction:70%', 'Reduction:60%', 'Reduction:50%',
+                    'Reduction:40%', 'Reduction:30%', 'Reduction:20%', 'Reduction:10%'
+                ],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '$ {value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                title: {
+                    text: 'Net Return',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: yAxisValue,
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                labels: {
+                    format: '{value} ' + unit,
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                opposite: true
+            }],
+            tooltip: {
+                shared: true
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 120,
+                verticalAlign: 'top',
+                y: 10,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            series: [{
+                name: 'NetReturn',
+                type: 'column',
+                yAxis: 1,
+                data: chartBudgetData.data,
+                tooltip: {
+                    valueSuffix: ' $'
+                }
+
+            }, {
+                name: yAxisValue,
+                type: 'spline',
+                data: chartData.data,
+                tooltip: {
+                    valueSuffix: " " + unit
+                }
+            }],
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function() {
+                                alert('Category: ' + this.category + ', value: ' + this.y);
+                            }
+                        }
+                    }
+                }
+            },
+        });
+    }
+
+
+    var fieldOptimizationResult = function(iterationNum, selectedOptimizationType) {
+
+        if (selectedOptimizationType === "Water") {
+            $("#show-opt-flow-result").attr("disabled", true);
+            $('#show-opt-flow-result').siblings().attr("disabled", false);
+
+            return new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    url: '/assets/data/geojson/optfield20' + iterationNum + '.json',
+                    format: new ol.format.GeoJSON()
+                }),
+                style: optStyleFlowFunction
+            });
+        }
+        if (selectedOptimizationType === "Sediment") {
+            $("#show-opt-sediment-result").attr("disabled", true);
+            $('#show-opt-sediment-result').siblings().attr("disabled", false);
+
+            return new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    url: '/assets/data/geojson/optfield20' + iterationNum + '.json',
+                    format: new ol.format.GeoJSON()
+                }),
+                style: optStyleSedimentFunction
+            });
+        }
+        if (selectedOptimizationType === "Total P") {
+            $("#show-opt-tp-result").attr("disabled", true);
+            $('#show-opt-tp-result').siblings().attr("disabled", false);
+
+            return new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    url: '/assets/data/geojson/optfield20' + iterationNum + '.json',
+                    format: new ol.format.GeoJSON()
+                }),
+                style: optStyleTpFunction
+            });
+        }
+        if (selectedOptimizationType === "Total N") {
+            $("#show-opt-tn-result").attr("disabled", true);
+            $('#show-opt-tn-result').siblings().attr("disabled", false);
+
+            return new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    url: '/assets/data/geojson/optfield20' + iterationNum + '.json',
+                    format: new ol.format.GeoJSON()
+                }),
+                style: optStyleTnFunction
+            });
+        }
+    };
+
+    function renderOptimizationMap(iterationNum, selectedOptimizationType) {
+        var optimizationFieldLayer = fieldOptimizationResult(iterationNum, selectedOptimizationType);
+        optimizeresultMap.removeLayer(optimizeresultMap.getLayers().getArray()[1]);
+        optimizeresultMap.addLayer(optimizationFieldLayer);
+        return optimizationFieldLayer;
+    }
+
+
+
+    function drawOptimizationTable(optimizationLayer) {
+
+        var optTableHeader = '<tr><th style="padding-top:11px;">ID</th><th style="padding-top:11px;">CC</th><th style="padding-top:11px;">CT</th><th style="padding-top:11px;">NM</th><th style="padding-top:11px;">WasCobs</th></tr>';
+        var optTableString = '<table class="table table-condensed table-hover" id="optmizationTable">' + optTableHeader;
+        var optimizationFeatures;
+        setTimeout(function() {
+            optimizationFeatures = optimizationLayer.getSource().getFeatures();
+            for (var i = 0; i < optimizationFeatures.length; i++) {
+                if (optimizationFeatures[i].getProperties().OptBMPs.length !== 0) {
+                    optTableString += '<tr><td style="padding-top:11px;">' + optimizationFeatures[i].getProperties().name + '</td><td style="padding-top:11px;">' + hasCrp(optimizationFeatures[i].getProperties().OptBMPs) + ' </td><td style="padding-top:11px;">' + hasCov(optimizationFeatures[i].getProperties().OptBMPs) + '</td><td style="padding-top:11px;">' + hasNMAN(optimizationFeatures[i].getProperties().OptBMPs) + '</td><td style="padding-top:11px;">' + hasWAS(optimizationFeatures[i].getProperties().OptBMPs) + '</td></tr>';
+                }
+            }
+            optTableString += "</table>";
+
+            document.getElementById("bmp-optimize-table").innerHTML = optTableString;
+        }, 1000);
+
+        // for (var i = 0; i < bmpAssignmentArray.length; i++) {
+        //      if (featureID == bmpAssignmentArray[i].featureID) {
+        //          var level = feature.getProperties().flow;
+        //          level = parseFloat(level.toFixed(2));
+        //          if (level > 0) {
+        //              return [customizedStyleBad];
+        //          } else if (0 >= level && level > -1) {
+        //              return [customizedStyleLow];
+        //          } else if (-1 >= level && level > -2) {
+        //              return [customizedStyleMedium];
+        //          } else if (-2 >= level && level > -2.5) {
+        //              return [customizedStyleHigh];
+        //          } else {
+        //              return [customizedStyleGreat];
+        //          }
+        //      }
+        //  }
+    }
+
+    function hasCov(s) {
+        var str = s;
+
+        var n = str.search(/Cov/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        return "N";
+
+
+    }
+
+    function hasNMAN(s) {
+        var str = s;
+
+        var n = str.search(/NMAN/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        return "N";
+
+    }
+
+    function hasCrp(s) {
+        var str = s;
+        var n = str.search(/Crp/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        return "N";
+
+    }
+
+    function hasWAS(s) {
+        var str = s;
+
+        var n = str.search(/Was/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        return "N";
+    }
     // document.getElementById("environmentLimit").addEventListener("change", function(event) {
     //     /* Act on the event */
     //     console.log("this.value");
@@ -3172,6 +3687,8 @@ $(document).ready(function() {
     //                      DRAW CHART
     // ****************************************************
 
+
+
     $('#model-compare-chart').highcharts({
         title: {
             text: '',
@@ -3179,9 +3696,9 @@ $(document).ready(function() {
         },
 
         xAxis: {
-            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
-                '2008', '2009', '2010', '2011'
-            ]
+            categories: ['Iter:10', 'Iter:9', 'Iter:8', 'Iter:7', 'Iter:6', 'Iter:5',
+                'Iter:4', 'Iter:3', 'Iter:2', 'Iter:1'
+            ],
         },
         yAxis: {
             title: {
@@ -3211,33 +3728,88 @@ $(document).ready(function() {
         }]
     });
 
-
-    $('#model-optimize-chart').highcharts({
-        legend: {
-            enabled: false
-        },
+    Highcharts.chart('model-optimize-chart', {
         chart: {
-            type: 'column'
+            zoomType: 'xy'
         },
         title: {
-            text: null
+            text: 'Pollution Reduction on Constraint',
+            style: { "fontsize": "8px" }
         },
-        xAxis: {
-            categories: ['Flow', 'Sediment', 'Phosphorus', 'Nitrigen']
-        },
+        // subtitle: {
+        //     text: 'Source: WorldClimate.com'
+        // },
         credits: {
             enabled: false
         },
-
+        xAxis: [{
+            categories: ['Iter:10', 'Iter:9', 'Iter:8', 'Iter:7', 'Iter:6', 'Iter:5',
+                'Iter:4', 'Iter:3', 'Iter:2', 'Iter:1'
+            ],
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '$ ',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: 'Net Return',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            }
+        }, { // Secondary yAxis
+            title: {
+                text: "",
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 120,
+            verticalAlign: 'top',
+            y: 20,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+            enabled: false
+        },
         series: [{
-            name: 'John',
-            data: [5, 3, 4, 7]
+            name: 'NetReturn',
+            type: 'column',
+            yAxis: 1,
+            data: [],
+            tooltip: {
+                valueSuffix: ' $'
+            }
+
         }, {
-            name: 'Jane',
-            data: [2, -2, -3, 2]
-        }, {
-            name: 'Joe',
-            data: [3, 4, 4, -2]
+            name: "",
+            type: 'spline',
+            data: [],
+            tooltip: {
+                valueSuffix: " "
+            }
         }]
     });
+
+
+
+
+
 });

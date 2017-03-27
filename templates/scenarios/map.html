@@ -577,13 +577,35 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row map-tool-bar">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <input type="text" class="form-control" placeholder="Search for...">
+                            <div class="col-sm-6">
+                                <form class="navbar-form navbar-left" id="search-result-prevent" role="search">
+                                    <button class="btn btn-success map-switch-btn map-btn" type="button" id="show-field-map-result"><span class="show-field"></span></button>
+                                    <button class="btn btn-primary map-switch-btn map-btn" type="button" id="show-subbasin-map-result"><span class="show-subbasin"></span></button>
+                                    <div class="form-group search-field-subbasin">
+                                        <div class="input-group">
+                                            <input type="text" id="search-result-feature" class="form-control" placeholder="Search for...">
+                                            <span class="input-group-btn">
+                                </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6">
+                                <form class="navbar-form navbar-right" role="search">
+                                    <div class="text-right">
+                                        <button class="btn btn-primary result-switch-btn map-btn" type="button" id="show-opt-flow-result" href="#show-flow">Flow</button>
+                                        <button class="btn btn-warning result-switch-btn map-btn" type="button" id="show-opt-sediment-result" href="#show-sediment">Sediment</button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-opt-tn-result" href="#show-n"><span class="show-n"></span></button>
+                                        <button class="btn btn-info result-switch-btn map-btn" type="button" id="show-opt-tp-result" href="#show-p"><span class="show-p"></span></button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="model-result-map">
                             <div id="optimize-result-map">
                             </div>
+                            <div id="optimization-result-feature-info">
+                            </div>                            
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -632,7 +654,7 @@
                 </div>
                 <div class="row">
                     <div id="bmp-optimize-table" class="col-sm-12">
-                        <table class="table table-condensed table-hover">
+                        <table class="table table-condensed table-hover" id="optmizationTable">
                             <tr>
                                 <th style="padding-top:11px;">ID</th>
                                 <th style="padding-top:11px;">CC</th>
