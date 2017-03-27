@@ -3445,7 +3445,7 @@ $(document).ready(function() {
             //     text: 'Source: WorldClimate.com'
             // },
             xAxis: [{
-                categories: ['Reduction:100% Reduction', 'Reduction:90%', 'Reduction:80%', 'Reduction:70%', 'Reduction:60%', 'Reduction:50%',
+                categories: ['Reduction:100%', 'Reduction:90%', 'Reduction:80%', 'Reduction:70%', 'Reduction:60%', 'Reduction:50%',
                     'Reduction:40%', 'Reduction:30%', 'Reduction:20%', 'Reduction:10%'
                 ],
                 crosshair: true
@@ -3517,6 +3517,48 @@ $(document).ready(function() {
                         events: {
                             click: function() {
                                 alert('Category: ' + this.category + ', value: ' + this.y);
+                                var optimizationLayer;
+                                if (this.category == "Reduction:100%") {
+                                    optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+
+                                if (this.category == "Reduction:90%") {
+                                    optimizationLayer = renderOptimizationMap("02", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:80%") {
+                                    optimizationLayer = renderOptimizationMap("03", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:70%") {
+                                    optimizationLayer = renderOptimizationMap("04", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:60%") {
+                                    optimizationLayer = renderOptimizationMap("05", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:50%") {
+                                    optimizationLayer = renderOptimizationMap("06", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:40%") {
+                                    optimizationLayer = renderOptimizationMap("07", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:30%") {
+                                    optimizationLayer = renderOptimizationMap("08", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:20%") {
+                                    optimizationLayer = renderOptimizationMap("09", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
+                                if (this.category == "Reduction:10%") {
+                                    optimizationLayer = renderOptimizationMap("10", optimizationConfig.selectedType);
+                                    drawOptimizationTable(optimizationLayer);
+                                }
                             }
                         }
                     }
@@ -3625,20 +3667,25 @@ $(document).ready(function() {
 
     function hasCov(s) {
         var str = s;
-
-        var n = str.search(/Cov/i);
+        var n = str.search(/All/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        n = str.search(/Til/i);
         if (n !== -1) {
             return "Y";
         }
         return "N";
-
-
     }
 
     function hasNMAN(s) {
         var str = s;
 
-        var n = str.search(/NMAN/i);
+        var n = str.search(/All/i);
+        if (n !== -1) {
+            return "Y";
+        }
+         n = str.search(/NMAN/i);
         if (n !== -1) {
             return "Y";
         }
@@ -3648,7 +3695,11 @@ $(document).ready(function() {
 
     function hasCrp(s) {
         var str = s;
-        var n = str.search(/Crp/i);
+        var n = str.search(/All/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        n = str.search(/Crp/i);
         if (n !== -1) {
             return "Y";
         }
@@ -3659,7 +3710,11 @@ $(document).ready(function() {
     function hasWAS(s) {
         var str = s;
 
-        var n = str.search(/Was/i);
+        var n = str.search(/All/i);
+        if (n !== -1) {
+            return "Y";
+        }
+        n = str.search(/Was/i);
         if (n !== -1) {
             return "Y";
         }

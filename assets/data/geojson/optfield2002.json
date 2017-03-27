@@ -2662,15 +2662,15 @@
       "properties": {
         "name": "11",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -42.73694550878981,
+        "flow": -5515.722134234637,
+        "tp": -84.40065202446226,
+        "tn": -262.38008447958947,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_Cov_Crp"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9062,15 +9062,15 @@
       "properties": {
         "name": "44",
         "description": "",
-        "sediment": -67.59571599968835,
-        "flow": -10789.123843103283,
-        "tp": -136.49814676845563,
-        "tn": -208.74976487717953,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_Con_Til_Cov_Crp"
+        "OptBMPs": ""
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -14451,15 +14451,15 @@
       "properties": {
         "name": "64",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -103.70486892765834,
+        "flow": -15438.596943449573,
+        "tp": -125.34185147744236,
+        "tn": -501.5376366728218,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_Con_Til_Cov_Crp"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -15756,15 +15756,15 @@
       "properties": {
         "name": "69",
         "description": "",
-        "sediment": -63.034713618734,
-        "flow": -8966.070550888711,
-        "tp": -105.90038026744055,
-        "tn": -225.98750969085995,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_Con_Til_Cov_Crp"
+        "OptBMPs": ""
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -18266,15 +18266,15 @@
       "properties": {
         "name": "78",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -191.1220662867749,
+        "flow": -28945.829700395265,
+        "tp": -397.2391295880075,
+        "tn": -1907.7698166740795,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_NMAN_Cov_Crp"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -20686,15 +20686,15 @@
       "properties": {
         "name": "86",
         "description": "",
-        "sediment": -376.4590660337516,
-        "flow": -12946.814927747137,
-        "tp": -668.2778207901906,
-        "tn": -2424.5270732580475,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_Con_Til_Cov_Crp"
+        "OptBMPs": ""
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -21781,15 +21781,15 @@
       "properties": {
         "name": "92",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -151.2204844941684,
+        "flow": -18084.063117572703,
+        "tp": -256.02593212747934,
+        "tn": -830.8585491300307,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_Con_Til_NMAN"
       },
       "geometry": {
         "type": "MultiPolygon",
