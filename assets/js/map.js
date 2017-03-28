@@ -3048,6 +3048,7 @@ $(document).ready(function() {
     //                                  
     // ************************************************************************************************************************************************************
 
+    $("#runOptimizationModel").attr('disabled', true);
 
     function optStyleSedimentFunction(feature, resolution) {
         var properties = feature.getProperties();
@@ -3265,7 +3266,10 @@ $(document).ready(function() {
                 console.log(r.UpperLimit);
                 optimizationConfig.lowerLimit = r.LowerLimit;
                 optimizationConfig.upperLimit = r.UpperLimit;
-                $('#budgetLimit').attr('placeholder', r.UpperLimit + " " + r.LowerLimit);
+                $('#budgetLimit').attr('placeholder', "Between:" + r.UpperLimit + " to " + r.LowerLimit);
+
+                $("#runOptimizationModel").attr('disabled', false);
+
             },
         });
     });
@@ -3293,9 +3297,13 @@ $(document).ready(function() {
                 optimizationConfig.lowerLimit = r.LowerLimit;
                 optimizationConfig.upperLimit = r.UpperLimit;
                 $('#environmentLimit').attr('placeholder', "Between:" + r.UpperLimit + " to " + r.LowerLimit);
+
+                $("#runOptimizationModel").attr('disabled', false);
+
             },
         });
     });
+
 
 
     $("#budgetCheck").change(function() {
@@ -3321,8 +3329,17 @@ $(document).ready(function() {
 
     $("#runOptimizationModel").click(function(event) {
         /* Act on the event */
-        optimizationConfig.getLimit = false;
+        // optimizationConfig.upperLimit = document.getElementById();
 
+        if (optimizationConfig.optimizationMode === "Budget") {
+            optimizationConfig.lowerLimit = $("#budgetLimit").val();
+        }
+        if (optimizationConfig.optimizationMode === "Environmental") {
+            optimizationConfig.lowerLimit = $("#environmentLimit").val();
+        }
+
+
+        $("#runOptimizationModel").html('Calculating ...');
         var jsonArray = JSON.stringify(optimizationConfig);
         $.ajax({
             url: '/runoptimizationmodel',
@@ -3338,10 +3355,10 @@ $(document).ready(function() {
                 console.log(r[0].NetReturn);
                 console.log("optimization done");
 
-
                 drawOptimizationChart(r);
                 var optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
                 drawOptimizationTable(optimizationLayer);
+                $("#runOptimizationModel").html('Completed');
             },
         });
     });
@@ -3433,137 +3450,201 @@ $(document).ready(function() {
         // });
 
 
-        Highcharts.chart('model-optimize-chart', {
-            chart: {
-                zoomType: 'xy'
-            },
-            title: {
-                text: 'Pollution Reduction on Constraint',
+        // var optimizationChart = Highcharts.chart('model-optimize-chart', {
+        //     chart: {
+        //         type: 'line'
+        //     },
+        //     title: {
+        //         text: 'Net Return Change on Reduction Constraint',
+        //         style: { "fontsize": "8px" }
+        //     },
+        //     // subtitle: {
+        //     //     text: 'Source: WorldClimate.com'
+        //     // },
+        //     xAxis: [{
+        //         categories: chartData.data,
+        //     }],
+        //     yAxis: [{ // Primary yAxis
+        //         labels: {
+        //             format: '$ {value}',
+        //             style: {
+        //                 color: Highcharts.getOptions().colors[0]
+        //             }
+        //         },
+        //         title: {
+        //             text: 'Net Return Change',
+        //             style: {
+        //                 color: Highcharts.getOptions().colors[0]
+        //             }
+        //         }
+        //     }, ],
+        //     tooltip: {
+        //         shared: true
+        //     },
+        //     credits: {
+        //         enabled: false
+        //     },
+        //     legend: {
+        //         layout: 'vertical',
+        //         align: 'left',
+        //         x: 120,
+        //         verticalAlign: 'top',
+        //         y: 10,
+        //         floating: true,
+        //         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        //     },
+        //     series: [{
+        //         name: 'NetReturn',
+        //         data: chartBudgetData.data,
+        //         tooltip: {
+        //             valueSuffix: ' $'
+        //         },
+        //         point: {
+        //             events: {
+        //                 select: function() {
+        //                     // alert('Category: ' + this.category + ', value: ' + this.y);
+        //                     var optimizationLayer;
+
+        //                     if (optimizationChart.series[0].data[0].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+
+        //                     if (optimizationChart.series[0].data[1].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("02", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[2].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("03", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[3].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("04", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[4].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("05", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[5].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("06", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[6].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("07", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[7].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("08", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[8].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("09", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                     if (optimizationChart.series[0].data[9].selected === true) {
+        //                         optimizationLayer = renderOptimizationMap("10", optimizationConfig.selectedType);
+        //                         drawOptimizationTable(optimizationLayer);
+        //                     }
+        //                 }
+        //             }
+        //         }
+
+
+
+        //     }],
+        //     plotOptions: {
+        //         series: {
+        //             cursor: 'pointer',
+
+        //         }
+        //     },
+        // });
+
+
+        var optimizationChart = $('#model-optimize-chart').highcharts({
+                        title: {
+                text: 'Net Return Change on Reduction Constraint',
                 style: { "fontsize": "8px" }
             },
-            // subtitle: {
-            //     text: 'Source: WorldClimate.com'
-            // },
-            xAxis: [{
-                categories: ['Reduction:100%', 'Reduction:90%', 'Reduction:80%', 'Reduction:70%', 'Reduction:60%', 'Reduction:50%',
-                    'Reduction:40%', 'Reduction:30%', 'Reduction:20%', 'Reduction:10%'
-                ],
-                crosshair: true
-            }],
-            yAxis: [{ // Primary yAxis
-                labels: {
-                    format: '$ {value}',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                title: {
-                    text: 'Net Return',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                }
-            }, { // Secondary yAxis
-                title: {
-                    text: yAxisValue,
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-                labels: {
-                    format: '{value} ' + unit,
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-                opposite: true
-            }],
-            tooltip: {
-                shared: true
+            xAxis: {
+                categories: chartData.data
             },
-            credits: {
-                enabled: false
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'left',
-                x: 120,
-                verticalAlign: 'top',
-                y: 10,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-            },
-            series: [{
-                name: 'NetReturn',
-                type: 'column',
-                yAxis: 1,
-                data: chartBudgetData.data,
-                tooltip: {
-                    valueSuffix: ' $'
-                }
+                        credits: {
+                            enabled: false
+                        },
 
-            }, {
-                name: yAxisValue,
-                type: 'spline',
-                data: chartData.data,
-                tooltip: {
-                    valueSuffix: " " + unit
-                }
-            }],
             plotOptions: {
                 series: {
-                    cursor: 'pointer',
-                    point: {
-                        events: {
-                            click: function() {
-                                alert('Category: ' + this.category + ', value: ' + this.y);
-                                var optimizationLayer;
-                                if (this.category == "Reduction:100%") {
-                                    optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-
-                                if (this.category == "Reduction:90%") {
-                                    optimizationLayer = renderOptimizationMap("02", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:80%") {
-                                    optimizationLayer = renderOptimizationMap("03", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:70%") {
-                                    optimizationLayer = renderOptimizationMap("04", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:60%") {
-                                    optimizationLayer = renderOptimizationMap("05", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:50%") {
-                                    optimizationLayer = renderOptimizationMap("06", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:40%") {
-                                    optimizationLayer = renderOptimizationMap("07", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:30%") {
-                                    optimizationLayer = renderOptimizationMap("08", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:20%") {
-                                    optimizationLayer = renderOptimizationMap("09", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                                if (this.category == "Reduction:10%") {
-                                    optimizationLayer = renderOptimizationMap("10", optimizationConfig.selectedType);
-                                    drawOptimizationTable(optimizationLayer);
-                                }
-                            }
-                        }
-                    }
+                    allowPointSelect: true
                 }
             },
+            series: [{
+                data: chartBudgetData.data,
+                showInLegend: false,
+                point: {
+                    events: {
+                        select: function(event) {
+
+                            // console.log(this.series.data[1].selected);
+                            // console.log(this == this.series.data[1]);
+                            var optimizationLayer;
+
+                            if (this == this.series.data[0]) {
+                                optimizationLayer = renderOptimizationMap("01", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+
+                            if (this == this.series.data[1]) {
+                                optimizationLayer = renderOptimizationMap("02", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[2]) {
+                                optimizationLayer = renderOptimizationMap("03", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[3]) {
+                                optimizationLayer = renderOptimizationMap("04", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[4]) {
+                                optimizationLayer = renderOptimizationMap("05", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[5]) {
+                                optimizationLayer = renderOptimizationMap("06", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[6]) {
+                                optimizationLayer = renderOptimizationMap("07", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[7]) {
+                                optimizationLayer = renderOptimizationMap("08", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[8]) {
+                                optimizationLayer = renderOptimizationMap("09", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            if (this == this.series.data[9]) {
+                                optimizationLayer = renderOptimizationMap("10", optimizationConfig.selectedType);
+                                drawOptimizationTable(optimizationLayer);
+                            }
+                            // if (optimizationChart.series[0].data[1] === this) {
+                            //     optimizationLayer = renderOptimizationMap("02", optimizationConfig.selectedType);
+                            //     drawOptimizationTable(optimizationLayer);
+                            // }                        
+                        },
+                        // unselect: function(event) {
+                        //     var p = this.series.chart.getSelectedPoints();
+                        //     if(p.length > 0 && p[0].x == this.x) {
+                        //         $('#label').text('point unselected');
+                        //     }
+                        // }
+                    }
+                }
+            }]
         });
     }
 
@@ -3685,7 +3766,7 @@ $(document).ready(function() {
         if (n !== -1) {
             return "Y";
         }
-         n = str.search(/NMAN/i);
+        n = str.search(/NMAN/i);
         if (n !== -1) {
             return "Y";
         }
@@ -3864,7 +3945,17 @@ $(document).ready(function() {
     });
 
 
+    $("#generate-report-btn3").click(function(event) {
+        /* Act on the event */
+        $(".report_enter").slideUp("slow", function() {
+            $(".report_exit").show("slow");
+        });
 
-
+    });
+    $("#close-report3").click(function(event) {
+        /* Act on the event */
+        $(".report_exit").hide();
+        $(".report_enter").show("slow");
+    });
 
 });

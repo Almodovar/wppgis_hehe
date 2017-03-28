@@ -649,7 +649,7 @@
                         <input type="text" class="form-control" id="environmentLimit">
                     </div>
                     <div class="col-sm-12 text-right">
-                        <button type="submit" class="btn btn-danger map-btn" id="runOptimizationModel">Submit</button>
+                        <button type="submit" class="btn btn-danger map-btn" id="runOptimizationModel">Optimize</button>
                     </div>
                 </div>
                 <div class="row">
@@ -679,7 +679,26 @@
                         </table>
                     </div>
                     <div class="report-generate col-sm-12 text-right">
-                        <button type="submit" class="btn btn-primary map-btn">Generate report</button>
+                        <div class="report_enter">
+                            <button id="generate-report-btn3" type="button" class="btn btn-primary map-btn">Generate report</button>
+                        </div>
+                        <div class="report_exit row">
+                            <div class="divide col-sm-6 text-right">
+                                <button type="button" class="btn btn-success btn-sm html-report-btn" id="report-html3">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> HTML
+                                </button>
+                            </div>
+                            <div class="col-sm-4 text-left">
+                                <button type="button" class="btn btn-success btn-sm pdf-report-btn" id="report-pdf3">
+                                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span> PDF
+                                </button>
+                            </div>
+                            <div class="col-sm-2 text-left">
+                                <button id="close-report3" type="button" class="btn btn-danger btn-sm " aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
