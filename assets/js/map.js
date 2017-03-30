@@ -1341,6 +1341,66 @@ $(document).ready(function() {
         return [styleCache[level]];
     }
 
+    function styleCostFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().costlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleRevenueFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().revenuelevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
+    function styleNetReturnFunction(feature, resolution) {
+        var properties = feature.getProperties();
+        var level = feature.getProperties().netreturnlevel;
+        if (!level || !SeverityLevel[level]) {
+            return [defaultStyle];
+        }
+        if (!styleCache[level]) {
+            styleCache[level] = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: SeverityLevel[level]
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 1
+                })
+            });
+        }
+        return [styleCache[level]];
+    }
+
     var fieldOutput = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: '/assets/data/geojson/fieldoutput.json',
@@ -1517,6 +1577,22 @@ $(document).ready(function() {
                 $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Total P " + num);
             }
 
+            if ($('#show-c-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().cost;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Cost " + num);
+            }
+            if ($('#show-nr-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().netreturn;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "NetReturn " + num);
+            }
+            if ($('#show-r-result').prop("disabled") === true) {
+                num = hoveredResultFeature.getProperties().revenue;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(resultInfo).html("FeatureID: " + hoveredResultFeature.getProperties().name + "<br />" + "Revenue " + num);
+            }
+
             $(resultInfo).show();
             resultInfoOverlay.setPosition(offsetCoordinate);
         } else {
@@ -1620,6 +1696,43 @@ $(document).ready(function() {
         drawOutletChart("tp");
         $('#show-p-result').attr("disabled", true);
         $('#show-p-result').siblings().attr("disabled", false);
+    });
+
+
+    $("#show-c-result").click(function(event) {
+        /* Act on the event */
+        resultMapSingleClick.getFeatures().clear();
+        var a = resultMap.getLayers().getArray()[2];
+        a.setStyle(styleCostFunction);
+        // var b = resultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        // drawOutletChart("tp");
+        $('#show-c-result').attr("disabled", true);
+        $('#show-c-result').siblings().attr("disabled", false);
+    });
+
+    $("#show-r-result").click(function(event) {
+        /* Act on the event */
+        resultMapSingleClick.getFeatures().clear();
+        var a = resultMap.getLayers().getArray()[2];
+        a.setStyle(styleRevenueFunction);
+        // var b = resultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        // drawOutletChart("tp");
+        $('#show-r-result').attr("disabled", true);
+        $('#show-r-result').siblings().attr("disabled", false);
+    });
+
+    $("#show-nr-result").click(function(event) {
+        /* Act on the event */
+        resultMapSingleClick.getFeatures().clear();
+        var a = resultMap.getLayers().getArray()[2];
+        a.setStyle(styleNetReturnFunction);
+        // var b = resultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        // drawOutletChart("tp");
+        $('#show-nr-result').attr("disabled", true);
+        $('#show-nr-result').siblings().attr("disabled", false);
     });
 
 

@@ -67,20 +67,23 @@ type Crs struct {
 }
 
 type FeatureProperties struct {
-	Name          string  `json:"name"`
-	Description   string  `json:"description"`
-	Sediment      float64 `json:"sediment"`
-	Flow          float64 `json:"flow"`
-	Tp            float64 `json:"tp"`
-	Tn            float64 `json:"tn"`
-	SedimentLevel string  `json:"sedimentlevel"`
-	FlowLevel     string  `json:"flowlevel"`
-	TpLevel       string  `json:"tplevel"`
-	TnLevel       string  `json:"tnlevel"`
-	OptBMPs       string
-	Cost          float64 `json:"cost"`
-	Revenue       float64 `json:"revenue"`
-	NetReturn     float64 `json:"netreturn"`
+	Name           string  `json:"name"`
+	Description    string  `json:"description"`
+	Sediment       float64 `json:"sediment"`
+	Flow           float64 `json:"flow"`
+	Tp             float64 `json:"tp"`
+	Tn             float64 `json:"tn"`
+	SedimentLevel  string  `json:"sedimentlevel"`
+	FlowLevel      string  `json:"flowlevel"`
+	TpLevel        string  `json:"tplevel"`
+	TnLevel        string  `json:"tnlevel"`
+	OptBMPs        string
+	Cost           float64 `json:"cost"`
+	Revenue        float64 `json:"revenue"`
+	NetReturn      float64 `json:"netreturn"`
+	CostLevel      string  `json:"costlevel"`
+	RevenueLevel   string  `json:"revenuelevel"`
+	NetReturnLevel string  `json:"netreturnlevel"`
 }
 
 type Geometry struct {
@@ -117,6 +120,12 @@ var SedimentQuartile []float64
 var FlowQuartile []float64
 var TpQuartile []float64
 var TnQuartile []float64
+var CostFieldQuartile []float64
+var RevenueFieldQuartile []float64
+var NetReturnFieldQuartile []float64
+var CostSubbasinQuartile []float64
+var RevenueSubbasinQuartile []float64
+var NetReturnSubbasinQuartile []float64
 
 var subbasinArray map[int]map[int]Result
 
@@ -159,7 +168,8 @@ var fieldIDArray = make(map[int]float64)
 var subbasinIDArray = make(map[int]float64)
 var fieldEcoResult = make(map[int]map[int]*EcoResult)
 var subbasinEcoResult = make(map[int]map[int]*EcoResult)
-
+var fieldEcoAverageResult = make(map[int]*EcoResult)
+var subbasinEcoAverageResult = make(map[int]*EcoResult)
 var fieldInSubbasin = make(map[int]map[int]float64)
 var subbasinInField = make(map[int]map[int]float64)
 
@@ -231,6 +241,9 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 			fieldEcoResult[s] = fieldEcoResultFromSubbasin(s)
 		}
 	}
+
+	initFieldAverageEcoResultArray()
+	initSubbasinAverageEcoResultArray()
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -657,6 +670,7 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 		fmt.Println("fail 2")
 	}
 
+	QuartileEcoResult()
 	Quartile(array)
 
 	for id := range array {
@@ -680,6 +694,10 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 						featureCollection.Features[i].Properties.Cost = getAverageResult(fieldEcoResult[id]).Cost
 						featureCollection.Features[i].Properties.NetReturn = getAverageResult(fieldEcoResult[id]).NetReturn
 						featureCollection.Features[i].Properties.Revenue = getAverageResult(fieldEcoResult[id]).Revenue
+
+						featureCollection.Features[i].Properties.CostLevel = SelectLevel(fieldEcoAverageResult[id].Cost, CostFieldQuartile)
+						featureCollection.Features[i].Properties.RevenueLevel = SelectLevel(fieldEcoAverageResult[id].Revenue, RevenueFieldQuartile)
+						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(fieldEcoAverageResult[id].Cost, NetReturnFieldQuartile)
 					}
 				}
 				if sin == "basin" {
@@ -687,16 +705,20 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 						featureCollection.Features[i].Properties.Cost = 0
 					} else {
 						featureCollection.Features[i].Properties.Cost = getAverageResult(subbasinEcoResult[id]).Cost
+						featureCollection.Features[i].Properties.CostLevel = SelectLevel(subbasinEcoAverageResult[id].Cost, CostSubbasinQuartile)
 					}
 					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).Revenue) {
 						featureCollection.Features[i].Properties.Revenue = 0
 					} else {
 						featureCollection.Features[i].Properties.Revenue = getAverageResult(subbasinEcoResult[id]).Revenue
+						featureCollection.Features[i].Properties.RevenueLevel = SelectLevel(subbasinEcoAverageResult[id].Revenue, RevenueSubbasinQuartile)
+
 					}
 					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).NetReturn) {
 						featureCollection.Features[i].Properties.NetReturn = 0
 					} else {
 						featureCollection.Features[i].Properties.NetReturn = getAverageResult(subbasinEcoResult[id]).NetReturn
+						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(subbasinEcoAverageResult[id].Cost, NetReturnSubbasinQuartile)
 					}
 				}
 			}
@@ -708,6 +730,18 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 	err = ioutil.WriteFile("./assets/data/geojson/"+sout+".json", b, 0644)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func initFieldAverageEcoResultArray() {
+	for i, _ := range fieldEcoResult {
+		fieldEcoAverageResult[i] = getAverageResult(fieldEcoResult[i])
+	}
+}
+
+func initSubbasinAverageEcoResultArray() {
+	for i, _ := range subbasinEcoResult {
+		subbasinEcoAverageResult[i] = getAverageResult(subbasinEcoResult[i])
 	}
 }
 
@@ -837,7 +871,6 @@ func BasintoField(database string) {
 
 		// fmt.Println(fieldAverage[k])
 	}
-
 }
 
 func Quartile(m map[int]*Result) {
@@ -845,6 +878,7 @@ func Quartile(m map[int]*Result) {
 	var sedimentArray []float64
 	var tnArray []float64
 	var tpArray []float64
+	// var costArray []float64
 
 	for i := range m {
 		sedimentArray = append(sedimentArray, m[i].Sediment)
@@ -888,6 +922,80 @@ func Quartile(m map[int]*Result) {
 	// fmt.Println(TnQuartile)
 	// fmt.Println(TpQuartile) // 4
 	// fmt.Println(q)          // {15 37.5 40}}
+}
+
+func QuartileEcoResult() {
+	var costFieldArray []float64
+	var revenueFieldArray []float64
+	var netreturnFieldArray []float64
+
+	var costSubbasinArray []float64
+	var revenueSubbasinArray []float64
+	var netreturnSubbasinArray []float64
+
+	for i, _ := range fieldEcoAverageResult {
+		costFieldArray = append(costFieldArray, fieldEcoAverageResult[i].Cost)
+		revenueFieldArray = append(revenueFieldArray, fieldEcoAverageResult[i].Revenue)
+		netreturnFieldArray = append(netreturnFieldArray, fieldEcoAverageResult[i].Cost)
+	}
+
+	for i, _ := range subbasinEcoAverageResult {
+		costSubbasinArray = append(costSubbasinArray, subbasinEcoAverageResult[i].Cost)
+		revenueSubbasinArray = append(revenueSubbasinArray, subbasinEcoAverageResult[i].Revenue)
+		netreturnSubbasinArray = append(netreturnSubbasinArray, subbasinEcoAverageResult[i].NetReturn)
+	}
+
+	a5, _ := stats.Percentile(costFieldArray, 10)
+	b5, _ := stats.Percentile(costFieldArray, 30)
+	c5, _ := stats.Percentile(costFieldArray, 50)
+	d5, _ := stats.Percentile(costFieldArray, 70)
+	e5, _ := stats.Percentile(costFieldArray, 90)
+	CostFieldQuartile = []float64{a5, b5, c5, d5, e5}
+	fmt.Println(CostFieldQuartile)
+
+	a6, _ := stats.Percentile(revenueFieldArray, 10)
+	b6, _ := stats.Percentile(revenueFieldArray, 30)
+	c6, _ := stats.Percentile(revenueFieldArray, 50)
+	d6, _ := stats.Percentile(revenueFieldArray, 70)
+	e6, _ := stats.Percentile(revenueFieldArray, 90)
+
+	RevenueFieldQuartile = []float64{a6, b6, c6, d6, e6}
+	fmt.Println(RevenueFieldQuartile)
+
+	a7, _ := stats.Percentile(netreturnFieldArray, 10)
+	b7, _ := stats.Percentile(netreturnFieldArray, 30)
+	c7, _ := stats.Percentile(netreturnFieldArray, 50)
+	d7, _ := stats.Percentile(netreturnFieldArray, 70)
+	e7, _ := stats.Percentile(netreturnFieldArray, 90)
+
+	NetReturnFieldQuartile = []float64{a7, b7, c7, d7, e7}
+	fmt.Println("quartile", NetReturnFieldQuartile)
+
+	a8, _ := stats.Percentile(costSubbasinArray, 10)
+	b8, _ := stats.Percentile(costSubbasinArray, 30)
+	c8, _ := stats.Percentile(costSubbasinArray, 50)
+	d8, _ := stats.Percentile(costSubbasinArray, 70)
+	e8, _ := stats.Percentile(costSubbasinArray, 90)
+	CostSubbasinQuartile = []float64{a8, b8, c8, d8, e8}
+	fmt.Println(CostSubbasinQuartile)
+
+	a9, _ := stats.Percentile(revenueSubbasinArray, 10)
+	b9, _ := stats.Percentile(revenueSubbasinArray, 30)
+	c9, _ := stats.Percentile(revenueSubbasinArray, 50)
+	d9, _ := stats.Percentile(revenueSubbasinArray, 70)
+	e9, _ := stats.Percentile(revenueSubbasinArray, 90)
+
+	RevenueSubbasinQuartile = []float64{a9, b9, c9, d9, e9}
+	fmt.Println(RevenueSubbasinQuartile)
+
+	a10, _ := stats.Percentile(netreturnSubbasinArray, 10)
+	b10, _ := stats.Percentile(netreturnSubbasinArray, 30)
+	c10, _ := stats.Percentile(netreturnSubbasinArray, 50)
+	d10, _ := stats.Percentile(netreturnSubbasinArray, 70)
+	e10, _ := stats.Percentile(netreturnSubbasinArray, 90)
+
+	NetReturnSubbasinQuartile = []float64{a10, b10, c10, d10, e10}
+	fmt.Println("quartile", NetReturnSubbasinQuartile)
 }
 
 var Level = []string{"Great", "Good", "Normal", "Slight", "Bad", "Severe"}
@@ -1129,10 +1237,10 @@ func HandleOptimizationLimites(w http.ResponseWriter, r *http.Request, _ httprou
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	fmt.Println(d.SelectedLayer)
-	fmt.Println(d.OptimizationMode)
-	fmt.Println(d.SelectedFeatureIDs)
-	fmt.Println(d.SelectedType)
+	// fmt.Println(d.SelectedLayer)
+	// fmt.Println(d.OptimizationMode)
+	// fmt.Println(d.SelectedFeatureIDs)
+	// fmt.Println(d.SelectedType)
 
 	var featureIDString = ""
 	for i := 0; i < len(d.SelectedFeatureIDs); i++ {
@@ -1184,18 +1292,18 @@ func HandleOptimizationLimites(w http.ResponseWriter, r *http.Request, _ httprou
 	}
 
 	fileString := readFile("./assets/WEBsOptimization/UpLow.txt")
-	fmt.Println(fileString)
+	// fmt.Println(fileString)
 
 	re := regexp.MustCompile("(-|\\d)\\d?.\\d+")
 	limitsSlice := re.FindAllString(fileString, -1)
-	fmt.Println(re.FindAllString(fileString, -1))
+	// fmt.Println(re.FindAllString(fileString, -1))
 
 	var lowerUpperLimits = new(LowerUpperLimits)
 	lowerUpperLimits.LowerLimit = limitsSlice[1]
 	lowerUpperLimits.UpperLimit = limitsSlice[0]
 
-	fmt.Println(limitsSlice[1])
-	fmt.Println(limitsSlice[0])
+	// fmt.Println(limitsSlice[1])
+	// fmt.Println(limitsSlice[0])
 
 	// create json response from struct
 	a, err := json.Marshal(lowerUpperLimits)
@@ -1354,7 +1462,7 @@ func getResultByIteration(optResultDB *sql.DB, iteration int) []*ResultData {
 		resultData.EnvResult.Sediment = sediment
 		resultData.EnvResult.Tn = tn
 		resultData.EnvResult.Tp = tp
-		fmt.Println(*resultData)
+		// fmt.Println(*resultData)
 		resultDataSet = append(resultDataSet, resultData)
 	}
 
@@ -1519,11 +1627,11 @@ func updateEconomicBySubbasinID(subbasinID int, bmpCode int) map[int]*EcoResult 
 			if subbasinEcoResult[subbasinID][y] == nil {
 				subbasinEcoResult[subbasinID][y] = new(EcoResult)
 			}
-			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Cost, j, y)
+			// fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Cost, j, y)
 			subbasinEcoResult[subbasinID][y].Cost += updateEconomicByFieldID(i, bmpCode)[y].Cost * j
-			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Revenue, j, y)
+			// fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Revenue, j, y)
 			subbasinEcoResult[subbasinID][y].Revenue += updateEconomicByFieldID(i, bmpCode)[y].Revenue * j
-			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].NetReturn, j, y)
+			// fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].NetReturn, j, y)
 			subbasinEcoResult[subbasinID][y].NetReturn += updateEconomicByFieldID(i, bmpCode)[y].NetReturn * j
 		}
 	}
