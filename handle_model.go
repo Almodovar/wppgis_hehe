@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"os"
 	"os/exec"
@@ -77,6 +78,9 @@ type FeatureProperties struct {
 	TpLevel       string  `json:"tplevel"`
 	TnLevel       string  `json:"tnlevel"`
 	OptBMPs       string
+	Cost          float64 `json:"cost"`
+	Revenue       float64 `json:"revenue"`
+	NetReturn     float64 `json:"netreturn"`
 }
 
 type Geometry struct {
@@ -101,6 +105,12 @@ type Result struct {
 	Sediment float64
 	Tp       float64
 	Tn       float64
+}
+
+type EcoResult struct {
+	Cost      float64
+	Revenue   float64
+	NetReturn float64
 }
 
 var SedimentQuartile []float64
@@ -144,7 +154,22 @@ type OutletResultTypeArray struct {
 var outletArray []*OutletResultTypeArray
 var outletCompareArray []*OutletResultTypeArray
 
+// =============================================================================
+var fieldIDArray = make(map[int]float64)
+var subbasinIDArray = make(map[int]float64)
+var fieldEcoResult = make(map[int]map[int]*EcoResult)
+var subbasinEcoResult = make(map[int]map[int]*EcoResult)
+
+var fieldInSubbasin = make(map[int]map[int]float64)
+var subbasinInField = make(map[int]map[int]float64)
+
+// ==============================================================================
+
 func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+	initFeatureArray()
+	fieldEcoResult, subbasinEcoResult = initEcoData()
+	initConvertTable()
 
 	var err error
 	var d []BMPCodeFeature
@@ -169,6 +194,43 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	}
 
 	// globalScenarioStore.UpdateConfig(d[0].Config, )
+
+	if d[0].FeatureType == "field" {
+		var effectedSubbasinIDs = []int{}
+		for _, i := range d {
+			updateEconomicByFieldID(i.FeatureID, i.BMPCode)
+			for m, _ := range subbasinInField {
+				if m == i.FeatureID {
+					for j, _ := range subbasinInField[m] {
+						effectedSubbasinIDs = append(effectedSubbasinIDs, j)
+					}
+				}
+			}
+		}
+		// fmt.Println(effectedSubbasinIDs)
+		for s := 0; s < len(effectedSubbasinIDs); s++ {
+			subbasinEcoResult[s] = subbasinEcoResultFromField(s)
+		}
+	}
+
+	if d[0].FeatureType == "subbasin" {
+		var effectedFieldIDs = []int{}
+		for _, i := range d {
+			updateEconomicBySubbasinID(i.FeatureID, i.BMPCode)
+
+			for m, _ := range fieldInSubbasin {
+				if m == i.FeatureID {
+					for j, _ := range fieldInSubbasin[m] {
+						effectedFieldIDs = append(effectedFieldIDs, j)
+					}
+				}
+			}
+		}
+
+		for s := 0; s < len(effectedFieldIDs); s++ {
+			fieldEcoResult[s] = fieldEcoResultFromSubbasin(s)
+		}
+	}
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -351,6 +413,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	fmt.Println("done")
 
 	BasintoField("result")
+	// AssignEcoResult()
 	GenerateResultJsonFile("field", "fieldoutput", fieldAverage)
 	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage)
 	OutletResultArray("result")
@@ -607,6 +670,35 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 				featureCollection.Features[i].Properties.SedimentLevel = SelectLevel(array[id].Sediment, SedimentQuartile)
 				featureCollection.Features[i].Properties.TpLevel = SelectLevel(array[id].Tp, TpQuartile)
 				featureCollection.Features[i].Properties.TnLevel = SelectLevel(array[id].Tn, TnQuartile)
+				if sin == "field" {
+					if id > 600 {
+						featureCollection.Features[i].Properties.Cost = 0.0
+						featureCollection.Features[i].Properties.NetReturn = 0.0
+						featureCollection.Features[i].Properties.Revenue = 0.0
+
+					} else {
+						featureCollection.Features[i].Properties.Cost = getAverageResult(fieldEcoResult[id]).Cost
+						featureCollection.Features[i].Properties.NetReturn = getAverageResult(fieldEcoResult[id]).NetReturn
+						featureCollection.Features[i].Properties.Revenue = getAverageResult(fieldEcoResult[id]).Revenue
+					}
+				}
+				if sin == "basin" {
+					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).Cost) {
+						featureCollection.Features[i].Properties.Cost = 0
+					} else {
+						featureCollection.Features[i].Properties.Cost = getAverageResult(subbasinEcoResult[id]).Cost
+					}
+					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).Revenue) {
+						featureCollection.Features[i].Properties.Revenue = 0
+					} else {
+						featureCollection.Features[i].Properties.Revenue = getAverageResult(subbasinEcoResult[id]).Revenue
+					}
+					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).NetReturn) {
+						featureCollection.Features[i].Properties.NetReturn = 0
+					} else {
+						featureCollection.Features[i].Properties.NetReturn = getAverageResult(subbasinEcoResult[id]).NetReturn
+					}
+				}
 			}
 		}
 	}
@@ -738,11 +830,11 @@ func BasintoField(database string) {
 		}
 
 		fieldAverage[k] = new(Result)
-
 		fieldAverage[k].Sediment = result.Sediment / 10
 		fieldAverage[k].Water = result.Water / 10
 		fieldAverage[k].Tn = result.Tn / 10
 		fieldAverage[k].Tp = result.Tp / 10
+
 		// fmt.Println(fieldAverage[k])
 	}
 
@@ -1342,4 +1434,263 @@ func getOptChartDataSet(optResultDB *sql.DB) []*OptChartData {
 		optChartDataSet = append(optChartDataSet, optChartData)
 	}
 	return optChartDataSet
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+
+func updateEconomicByFieldID(fieldID int, bmpCode int) map[int]*EcoResult {
+
+	economicDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
+	checkErr(err)
+	var rows = new(sql.Rows)
+	if bmpCode == 3 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_conservation_tillage")
+		checkErr(err)
+	} else if bmpCode == 4 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_NMAN")
+		checkErr(err)
+	} else if bmpCode == 5 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_cover_crop")
+		checkErr(err)
+	} else if bmpCode == 6 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_con_til_NMAN")
+		checkErr(err)
+	} else if bmpCode == 7 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_con_til_cov_crp")
+		checkErr(err)
+	} else if bmpCode == 8 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_NMAN_cov_crp")
+		checkErr(err)
+	} else if bmpCode == 9 {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_all_BMPs")
+		checkErr(err)
+	} else {
+		rows, err = economicDB.Query("SELECT field,year,revenue,cost,netreturn from yield_historic")
+		checkErr(err)
+	}
+
+	for rows.Next() {
+		var id int
+		var year int
+		var revenue float64
+		var cost float64
+		var netreturn float64
+		err = rows.Scan(&id, &year, &revenue, &cost, &netreturn)
+		checkErr(err)
+
+		if len(fieldEcoResult[id]) == 0 {
+			fieldEcoResult[id] = make(map[int]*EcoResult)
+		}
+		fieldEcoResult[id][year] = &EcoResult{cost, revenue, netreturn}
+	}
+
+	// for m := range results[fieldID] {
+	// 	fmt.Println(results[fieldID][m])
+	// }
+	economicDB.Close()
+	return fieldEcoResult[fieldID]
+}
+
+func updateEconomicBySubbasinID(subbasinID int, bmpCode int) map[int]*EcoResult {
+	subbasinEcoResult[subbasinID] = make(map[int]*EcoResult)
+	// var resultByYear = make(map[int]*EcoResult)
+	spatialDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
+	checkErr(err)
+	rows, err := spatialDB.Query("SELECT * from field_subbasin")
+	checkErr(err)
+	var fieldofSubbasin = make(map[int]float64)
+	for rows.Next() {
+		var field int
+		var subbasin int
+		var percentage float64
+		err = rows.Scan(&field, &subbasin, &percentage)
+		checkErr(err)
+		if subbasin == subbasinID {
+			fieldofSubbasin[field] = percentage
+		}
+	}
+
+	for i, j := range fieldofSubbasin {
+
+		for y, _ := range updateEconomicByFieldID(i, bmpCode) {
+			// if len(subbasinEcoResult[subbasinID]) == 0 {
+			// 	subbasinEcoResult[subbasinID] = make(map[int]*EcoResult)
+			// }
+			if subbasinEcoResult[subbasinID][y] == nil {
+				subbasinEcoResult[subbasinID][y] = new(EcoResult)
+			}
+			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Cost, j, y)
+			subbasinEcoResult[subbasinID][y].Cost += updateEconomicByFieldID(i, bmpCode)[y].Cost * j
+			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].Revenue, j, y)
+			subbasinEcoResult[subbasinID][y].Revenue += updateEconomicByFieldID(i, bmpCode)[y].Revenue * j
+			fmt.Println(updateEconomicByFieldID(i, bmpCode)[y].NetReturn, j, y)
+			subbasinEcoResult[subbasinID][y].NetReturn += updateEconomicByFieldID(i, bmpCode)[y].NetReturn * j
+		}
+	}
+
+	// for m := range results[subbasinID] {
+	// 	fmt.Println(results[subbasinID][m])
+	// }
+	spatialDB.Close()
+	return subbasinEcoResult[subbasinID]
+}
+
+func initFeatureArray() {
+	spatialDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
+	checkErr(err)
+	rows, err := spatialDB.Query("SELECT id,area from field_area")
+	checkErr(err)
+	for rows.Next() {
+		var fieldID int
+		var area float64
+		rows.Scan(&fieldID, &area)
+		fieldIDArray[fieldID] = area
+	}
+
+	rows, err = spatialDB.Query("SELECT id,area from subbasin_area")
+	checkErr(err)
+	for rows.Next() {
+		var fieldID int
+		var area float64
+		rows.Scan(&fieldID, &area)
+		subbasinIDArray[fieldID] = area
+	}
+	spatialDB.Close()
+	// fmt.Println(len(fieldIDArray))
+	// fmt.Println(len(subbasinIDArray))
+}
+
+func initEcoData() (map[int]map[int]*EcoResult, map[int]map[int]*EcoResult) {
+	var fieldEcoResult = make(map[int]map[int]*EcoResult)
+	var subbasinEcoResult = make(map[int]map[int]*EcoResult)
+	spatialDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
+	checkErr(err)
+	rows, err := spatialDB.Query("SELECT field,year,revenue,cost,netreturn from yield_historic")
+	checkErr(err)
+	for rows.Next() {
+		var fieldID int
+		var year int
+		var revenue float64
+		var cost float64
+		var netreturn float64
+		rows.Scan(&fieldID, &year, &revenue, &cost, &netreturn)
+		if len(fieldEcoResult[fieldID]) == 0 {
+			fieldEcoResult[fieldID] = make(map[int]*EcoResult)
+		}
+		fieldEcoResult[fieldID][year] = &EcoResult{cost, revenue, netreturn}
+	}
+
+	for z, _ := range subbasinIDArray {
+		rows, err = spatialDB.Query("SELECT * from field_subbasin")
+		checkErr(err)
+		var fieldofSubbasin = make(map[int]float64)
+		for rows.Next() {
+			var field int
+			var subbasin int
+			var percentage float64
+			err = rows.Scan(&field, &subbasin, &percentage)
+			checkErr(err)
+			if subbasin == z {
+				fieldofSubbasin[field] = percentage
+			}
+		}
+		for i, j := range fieldofSubbasin {
+			for y, _ := range fieldEcoResult[i] {
+				if len(subbasinEcoResult[z]) == 0 {
+					subbasinEcoResult[z] = make(map[int]*EcoResult)
+				}
+				if subbasinEcoResult[z][y] == nil {
+					subbasinEcoResult[z][y] = new(EcoResult)
+				}
+				subbasinEcoResult[z][y].Cost += fieldEcoResult[i][y].Cost * j
+				subbasinEcoResult[z][y].Revenue += fieldEcoResult[i][y].Revenue * j
+				subbasinEcoResult[z][y].NetReturn += fieldEcoResult[i][y].NetReturn * j
+			}
+		}
+	}
+
+	// fmt.Println(len(fieldEcoResult))
+	// fmt.Println(len(subbasinEcoResult))
+	spatialDB.Close()
+	return fieldEcoResult, subbasinEcoResult
+}
+
+func initConvertTable() {
+	spatialDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
+	checkErr(err)
+	rows, err := spatialDB.Query("SELECT field,subbasin,percent from field_subbasin")
+	checkErr(err)
+	for rows.Next() {
+		var fieldID int
+		var subbasinID int
+		var percent float64
+		rows.Scan(&fieldID, &subbasinID, &percent)
+		if len(fieldInSubbasin[fieldID]) == 0 {
+			fieldInSubbasin[fieldID] = make(map[int]float64)
+		}
+		fieldInSubbasin[fieldID][subbasinID] = percent
+	}
+
+	rows, err = spatialDB.Query("SELECT field,subbasin,percent from subbasin_field")
+	checkErr(err)
+	for rows.Next() {
+		var fieldID int
+		var subbasinID int
+		var percent float64
+		rows.Scan(&fieldID, &subbasinID, &percent)
+		if len(subbasinInField[subbasinID]) == 0 {
+			subbasinInField[subbasinID] = make(map[int]float64)
+		}
+		subbasinInField[subbasinID][fieldID] = percent
+	}
+
+	spatialDB.Close()
+	// fmt.Println(fieldInSubbasin[63])
+	// fmt.Println(subbasinInField[975])
+}
+
+func subbasinEcoResultFromField(subbasinID int) map[int]*EcoResult {
+	var ecoResultBySubbasinID = make(map[int]*EcoResult)
+	for i, j := range subbasinInField[subbasinID] {
+		for y, _ := range fieldEcoResult[i] {
+			if ecoResultBySubbasinID[y] == nil {
+				ecoResultBySubbasinID[y] = new(EcoResult)
+			}
+			ecoResultBySubbasinID[y].Cost += fieldEcoResult[i][y].Cost * j
+			ecoResultBySubbasinID[y].Revenue += fieldEcoResult[i][y].Revenue * j
+			ecoResultBySubbasinID[y].NetReturn += fieldEcoResult[i][y].NetReturn * j
+		}
+	}
+	// fmt.Println(ecoResultBySubbasinID)
+	return ecoResultBySubbasinID
+}
+
+func fieldEcoResultFromSubbasin(fieldID int) map[int]*EcoResult {
+	var ecoResultByFieldID = make(map[int]*EcoResult)
+	for i, j := range fieldInSubbasin[fieldID] {
+		for y, _ := range subbasinEcoResult[i] {
+			if ecoResultByFieldID[y] == nil {
+				ecoResultByFieldID[y] = new(EcoResult)
+			}
+			ecoResultByFieldID[y].Cost += subbasinEcoResult[i][y].Cost * j
+			ecoResultByFieldID[y].Revenue += subbasinEcoResult[i][y].Revenue * j
+			ecoResultByFieldID[y].NetReturn += subbasinEcoResult[i][y].NetReturn * j
+		}
+	}
+	// fmt.Println(ecoResultByFieldID)
+	return ecoResultByFieldID
+}
+
+func getAverageResult(ecoResult map[int]*EcoResult) *EcoResult {
+	var ecoAverageResult = new(EcoResult)
+	for i, _ := range ecoResult {
+		ecoAverageResult.Cost += ecoResult[i].Cost
+		ecoAverageResult.Revenue += ecoResult[i].Revenue
+		ecoAverageResult.NetReturn += ecoResult[i].NetReturn
+	}
+	ecoAverageResult.Cost = ecoAverageResult.Cost / float64(len(ecoResult))
+	ecoAverageResult.Revenue = ecoAverageResult.Revenue / float64(len(ecoResult))
+	ecoAverageResult.NetReturn = ecoAverageResult.NetReturn / float64(len(ecoResult))
+	// fmt.Println(ecoAverageResult)
+	return ecoAverageResult
 }

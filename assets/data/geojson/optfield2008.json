@@ -20,7 +20,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -697,15 +700,18 @@
       "properties": {
         "name": "6",
         "description": "",
-        "sediment": -90.66330527800362,
-        "flow": -20371.231888727645,
-        "tp": -212.66291484880327,
-        "tn": -1037.0943462043635,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_NMAN_Cov_Crp"
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -1730,7 +1736,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -1915,7 +1924,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -2235,7 +2247,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -2515,7 +2530,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -2670,7 +2688,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -2885,7 +2906,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -3065,7 +3089,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -3460,7 +3487,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -3885,7 +3915,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -4060,7 +4093,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -4140,7 +4176,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -4250,7 +4289,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -4883,7 +4925,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -4943,7 +4988,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -5057,7 +5105,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -5252,7 +5303,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -5837,7 +5891,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -6127,7 +6184,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -6670,7 +6730,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -6885,7 +6948,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -7420,7 +7486,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -7595,7 +7664,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -7805,7 +7877,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8210,7 +8285,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8450,7 +8528,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8590,7 +8671,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8650,7 +8734,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8730,7 +8817,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8875,7 +8965,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -8960,7 +9053,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9070,7 +9166,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9450,7 +9549,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9650,7 +9752,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9730,7 +9835,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -9965,7 +10073,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -10105,7 +10216,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -10555,7 +10669,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -11005,7 +11122,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -11435,7 +11555,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -11800,7 +11923,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -12160,7 +12286,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -12455,7 +12584,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -12755,7 +12887,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -12970,7 +13105,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13207,15 +13345,18 @@
       "properties": {
         "name": "59",
         "description": "",
-        "sediment": -4.7879953193732865,
-        "flow": -2246.8572226615684,
-        "tp": -8.672414858688649,
-        "tn": -48.39992374575792,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_NMAN"
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13705,7 +13846,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13990,7 +14134,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -14189,7 +14336,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -14451,15 +14601,18 @@
       "properties": {
         "name": "64",
         "description": "",
-        "sediment": -22.35125004738892,
-        "flow": -8235.634408147786,
-        "tp": -20.9671366040072,
-        "tn": -105.52942874489268,
+        "sediment": -34.1601512271532,
+        "flow": -7019.6426449177825,
+        "tp": -30.304022861959737,
+        "tn": -148.50199145879014,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_NMAN_Cov_Crp"
+        "OptBMPs": "BMP_NMAN_Cov_Crp",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -14744,7 +14897,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -15089,7 +15245,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -15764,7 +15923,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -16214,7 +16376,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -16654,7 +16819,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -17034,7 +17202,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -17364,7 +17535,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -17864,7 +18038,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -18266,15 +18443,18 @@
       "properties": {
         "name": "78",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -44.052112895923266,
+        "flow": -593.7543274580146,
+        "tp": -109.84147948744504,
+        "tn": -294.35879885242116,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_NMAN",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -18589,7 +18769,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -19009,7 +19192,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -19254,7 +19440,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -19739,7 +19928,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -19854,7 +20046,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -19901,15 +20096,18 @@
       "properties": {
         "name": "84",
         "description": "",
-        "sediment": -43.171275442190726,
-        "flow": -15711.511402202135,
-        "tp": -51.25666412328359,
-        "tn": -277.5858665223773,
+        "sediment": 0,
+        "flow": 0,
+        "tp": 0,
+        "tn": 0,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": "BMP_NMAN_Cov_Crp"
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -20124,7 +20322,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -20694,7 +20895,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -20921,15 +21125,18 @@
       "properties": {
         "name": "88",
         "description": "",
-        "sediment": 0,
-        "flow": 0,
-        "tp": 0,
-        "tn": 0,
+        "sediment": -67.68060544214096,
+        "flow": -2805.2747493633337,
+        "tp": -126.01884547668224,
+        "tn": -151.46529664531045,
         "sedimentlevel": "",
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "BMP_Con_Til_NMAN",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -21329,7 +21536,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -21589,7 +21799,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -21669,7 +21882,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -21789,7 +22005,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22034,7 +22253,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22364,7 +22586,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22529,7 +22754,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22714,7 +22942,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22809,7 +23040,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22869,7 +23103,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -22929,7 +23166,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23249,7 +23489,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23519,7 +23762,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23634,7 +23880,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23699,7 +23948,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23804,7 +24056,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -23879,7 +24134,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -24069,7 +24327,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -24239,7 +24500,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -24369,7 +24633,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -24754,7 +25021,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -24949,7 +25219,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -25751,7 +26024,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -25906,7 +26182,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -25996,7 +26275,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -26136,7 +26418,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -26459,7 +26744,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -26584,7 +26872,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -26874,7 +27165,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27149,7 +27443,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27284,7 +27581,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27563,7 +27863,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27688,7 +27991,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -27868,7 +28174,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -28178,7 +28487,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -28458,7 +28770,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -28528,7 +28843,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -28993,7 +29311,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -29843,7 +30164,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -29913,7 +30237,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -30008,7 +30335,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -30173,7 +30503,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -30328,7 +30661,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -30688,7 +31024,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -30873,7 +31212,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -31153,7 +31495,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -31558,7 +31903,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -31813,7 +32161,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -32013,7 +32364,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -33062,7 +33416,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -36330,7 +36687,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -40444,7 +40804,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -44137,7 +44500,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -47286,7 +47652,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -47920,7 +48289,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -48150,7 +48522,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -49552,7 +49927,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -51147,7 +51525,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -63921,7 +64302,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -65862,7 +66246,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -66173,7 +66560,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -66547,7 +66937,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -68194,7 +68587,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -68547,7 +68943,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -70294,7 +70693,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -71143,7 +71545,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -72552,7 +72957,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -72827,7 +73235,10 @@
         "flowlevel": "",
         "tplevel": "",
         "tnlevel": "",
-        "OptBMPs": ""
+        "OptBMPs": "",
+        "cost": 0,
+        "revenue": 0,
+        "netreturn": 0
       },
       "geometry": {
         "type": "MultiPolygon",

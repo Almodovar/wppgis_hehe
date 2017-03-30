@@ -1648,7 +1648,6 @@ $(document).ready(function() {
         $('#show-flow-result').attr("disabled", true);
         $('#show-flow-result').siblings().attr("disabled", false);
         drawOutletChart("flow");
-        /* Act on the event */
     });
 
 
@@ -2822,6 +2821,7 @@ $(document).ready(function() {
                 title: {
                     text: 'Value'
                 },
+                lineWidth: 1,
                 plotLines: [{
                     value: 0,
                     width: 1,
@@ -2912,6 +2912,7 @@ $(document).ready(function() {
                         title: {
                             text: 'Value' + " ( " + feature.Type + " " + feature.ID + " )"
                         },
+                        lineWidth: 1,
                         plotLines: [{
                             value: 0,
                             width: 1,
@@ -3563,16 +3564,16 @@ $(document).ready(function() {
 
 
         var optimizationChart = $('#model-optimize-chart').highcharts({
-                        title: {
+            title: {
                 text: 'Net Return Change on Reduction Constraint',
                 style: { "fontsize": "8px" }
             },
             xAxis: {
                 categories: chartData.data
             },
-                        credits: {
-                            enabled: false
-                        },
+            credits: {
+                enabled: false
+            },
 
             plotOptions: {
                 series: {
@@ -3582,6 +3583,7 @@ $(document).ready(function() {
             series: [{
                 data: chartBudgetData.data,
                 showInLegend: false,
+
                 point: {
                     events: {
                         select: function(event) {
@@ -3840,6 +3842,7 @@ $(document).ready(function() {
             title: {
                 text: 'Value'
             },
+            lineWidth: 1,
             plotLines: [{
                 value: 0,
                 width: 1,

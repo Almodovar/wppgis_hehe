@@ -191,12 +191,33 @@ body {
     content: 'Subbasin';
 }
 
+.show-c:before {
+    content: 'Cost';
+}
+
+.show-r:before {
+    content: 'Revenue';
+}
+
+.show-nr:before {
+    content: 'NetReturn';
+}
+
 @media screen and (max-width: 1300px) {
     .show-field:before {
         content: 'F';
     }
     .show-subbasin:before {
         content: 'B';
+    }
+    .show-c:before {
+        content: 'C';
+    }
+    .show-r:before {
+        content: 'R';
+    }
+    .show-nr:before {
+        content: 'Net';
     }
     .search-field-subbasin input {
         font-size: 10px;
