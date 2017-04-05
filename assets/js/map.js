@@ -1121,7 +1121,6 @@ $(document).ready(function() {
             },
         });
 
-
         var jsonArray = JSON.stringify(bmpAssignmentArray);
         $.ajax({
             url: '/runmodel',
@@ -1626,6 +1625,15 @@ $(document).ready(function() {
             if ($('#show-p-result').prop("disabled") === true) {
                 drawOutletChart("tp");
             }
+            if ($('#show-c-result').prop("disabled") === true) {
+                drawOutletChart("cost");
+            }
+            if ($('#show-r-result').prop("disabled") === true) {
+                drawOutletChart("revenue");
+            }
+            if ($('#show-nr-result').prop("disabled") === true) {
+                drawOutletChart("netreturn");
+            }            
         }
     });
 
@@ -1649,6 +1657,15 @@ $(document).ready(function() {
         }
         if ($('#show-p-result').prop("disabled") === true) {
             return "tp";
+        }
+        if ($('#show-c-result').prop("disabled") === true) {
+            return "cost";
+        }
+        if ($('#show-r-result').prop("disabled") === true) {
+            return "revenue";
+        }
+        if ($('#show-nr-result').prop("disabled") === true) {
+            return "netreturn";
         }
     }
 
@@ -1704,9 +1721,9 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleCostFunction);
-        // var b = resultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
-        // drawOutletChart("tp");
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
+        drawOutletChart("cost");
         $('#show-c-result').attr("disabled", true);
         $('#show-c-result').siblings().attr("disabled", false);
     });
@@ -1716,9 +1733,9 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleRevenueFunction);
-        // var b = resultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
-        // drawOutletChart("tp");
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
+        drawOutletChart("revenue");
         $('#show-r-result').attr("disabled", true);
         $('#show-r-result').siblings().attr("disabled", false);
     });
@@ -1728,9 +1745,9 @@ $(document).ready(function() {
         resultMapSingleClick.getFeatures().clear();
         var a = resultMap.getLayers().getArray()[2];
         a.setStyle(styleNetReturnFunction);
-        // var b = resultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
-        // drawOutletChart("tp");
+        var b = resultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
+        drawOutletChart("netreturn");
         $('#show-nr-result').attr("disabled", true);
         $('#show-nr-result').siblings().attr("disabled", false);
     });
@@ -1773,52 +1790,320 @@ $(document).ready(function() {
         var data = [];
         if (s === "sediment") {
             data = outletSediment;
+            $('#model-result-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value' + " ( Outlet )"
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "flow") {
             data = outletFlow;
+            $('#model-result-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value' + " ( Outlet )"
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "tp") {
             data = outletTp;
+            $('#model-result-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value' + " ( Outlet )"
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "tn") {
             data = outletTn;
-        }
-        $('#model-result-chart').highcharts({
-            title: {
-                text: '',
-                x: -20 //center
-            },
-
-            xAxis: {
-                categories: ['2002', '2003', '2004', '2005', '2006', '2007',
-                    '2008', '2009', '2010', '2011'
-                ]
-            },
-            yAxis: {
+            $('#model-result-chart').highcharts({
                 title: {
-                    text: 'Value' + " ( Outlet )"
+                    text: '',
+                    x: -20 //center
                 },
-                lineWidth: 1,
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value' + " ( Outlet )"
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
                 }]
-            },
-            credits: {
-                enabled: false
-            },
-            tooltip: {
-                valueSuffix: ''
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Yr',
-                data: data
-            }]
-        });
+            });
+        }
+
+        if (s === "cost") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletchart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    console.log(r);
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                    }
+                    $('#model-result-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
+        if (s === "revenue") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletchart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    console.log(r);
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                    }
+                    $('#model-result-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
+        if (s === "netreturn") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletchart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    console.log(r);
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                    }
+                    $('#model-result-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
+        console.log(data);
+
+
     }
 
 
@@ -1877,7 +2162,27 @@ $(document).ready(function() {
                         average[i] = averageNum;
                     }
                 }
-
+                if (feature.ResultType == "cost") {
+                    averageNum = selectedResultFeature.getProperties().cost;
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "revenue") {
+                    averageNum = selectedResultFeature.getProperties().revenue;
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "netreturn") {
+                    averageNum = selectedResultFeature.getProperties().netreturn;
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
                 $("#offsite-chart").attr("disabled", false);
                 $("#onsite-chart").attr("disabled", true);
 

@@ -504,6 +504,21 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinArray[d.ID][i].Tn)
 			}
 		}
+		if d.ResultType == "cost" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].Cost)
+			}
+		}
+		if d.ResultType == "revenue" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].Revenue)
+			}
+		}
+		if d.ResultType == "netreturn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].NetReturn)
+			}
+		}
 	}
 
 	if d.Type == "field" {
@@ -528,12 +543,66 @@ func HandleChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldArray[d.ID][i].Tn)
 			}
 		}
+
+		if d.ResultType == "cost" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].Cost)
+			}
+		}
+		if d.ResultType == "revenue" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].Revenue)
+			}
+		}
+		if d.ResultType == "netreturn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].NetReturn)
+			}
+		}
 	}
 
 	a, err := json.Marshal(arrayDataFeatureResultType)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	w.Write(a)
+}
+
+func HandleEcoOutletChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d string
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	var result = []float64{}
+	var sumByYear = make(map[int]float64)
+
+	if d == "cost" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				sumByYear[j] += fieldEcoResult[i][j].Cost
+			}
+		}
+	}
+	if d == "revenue" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				sumByYear[j] += fieldEcoResult[i][j].Revenue
+			}
+		}
+	}
+	if d == "netreturn" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				sumByYear[j] += fieldEcoResult[i][j].NetReturn
+			}
+		}
+	}
+
+	for y := 2002; y <= 2011; y++ {
+		result = append(result, sumByYear[y])
+	}
+	a, err := json.Marshal(result)
 	w.Write(a)
 }
 
