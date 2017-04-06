@@ -57,6 +57,7 @@ func main() {
 	secureRouter.Handle("POST", "/getlowerupperlimites", HandleOptimizationLimites)
 	secureRouter.Handle("POST", "/runoptimizationmodel", HandleOptimizationRun)
 	secureRouter.Handle("POST", "/drawecooutletchart", HandleEcoOutletChart)
+	secureRouter.Handle("POST", "/readoutletecoresult", HandleEcoOutletResultGet)
 
 	// secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
 

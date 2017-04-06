@@ -14,6 +14,7 @@ $(document).ready(function() {
     scenarioInfo.scenarioName = scenarioName.trim();
     scenarioInfo.scenarioID = scenarioID.trim();
 
+
     var wascobToField = [68,
         113,
         113,
@@ -1633,7 +1634,7 @@ $(document).ready(function() {
             }
             if ($('#show-nr-result').prop("disabled") === true) {
                 drawOutletChart("netreturn");
-            }            
+            }
         }
     });
 
@@ -1954,7 +1955,7 @@ $(document).ready(function() {
                 data: ecoType,
                 dataType: 'json',
                 success: function(r) {
-                    console.log(r);
+                    // console.log(r);
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
                     }
@@ -2006,7 +2007,7 @@ $(document).ready(function() {
                 data: ecoType,
                 dataType: 'json',
                 success: function(r) {
-                    console.log(r);
+                    // console.log(r);
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
                     }
@@ -2058,7 +2059,7 @@ $(document).ready(function() {
                 data: ecoType,
                 dataType: 'json',
                 success: function(r) {
-                    console.log(r);
+                    // console.log(r);
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
                     }
@@ -2101,7 +2102,7 @@ $(document).ready(function() {
                 }
             });
         }
-        console.log(data);
+        // console.log(data);
 
 
     }
@@ -2492,6 +2493,22 @@ $(document).ready(function() {
                 $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "Total P " + num);
             }
 
+            if ($('#show-c2').prop("disabled") === true) {
+                num = hoveredCompareFeature.getProperties().cost;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "Cost " + num);
+            }
+            if ($('#show-r2').prop("disabled") === true) {
+                num = hoveredCompareFeature.getProperties().revenue;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "Revenue " + num);
+            }
+            if ($('#show-nr2').prop("disabled") === true) {
+                num = hoveredCompareFeature.getProperties().netreturn;
+                num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                $(compareInfoElement).html("FeatureID: " + hoveredCompareFeature.getProperties().name + "<br />" + "NetReturn " + num);
+            }
+
             $(compareInfoElement).show();
             compareInfoOverlay.setPosition(offsetCoordinate);
         } else {
@@ -2540,6 +2557,39 @@ $(document).ready(function() {
         $('#show-p2').siblings().attr("disabled", false);
     });
 
+    $("#show-c2").click(function(event) {
+        /* Act on the event */
+        compareMapSingleClick.getFeatures().clear();
+
+        var a = compareMap.getLayers().getArray()[2];
+        a.setStyle(styleCostFunction);
+
+        $('#show-c2').attr("disabled", true);
+        $('#show-c2').siblings().attr("disabled", false);
+    });
+    $("#show-r2").click(function(event) {
+        /* Act on the event */
+        compareMapSingleClick.getFeatures().clear();
+
+        var a = compareMap.getLayers().getArray()[2];
+        a.setStyle(styleRevenueFunction);
+
+        $('#show-r2').attr("disabled", true);
+        $('#show-r2').siblings().attr("disabled", false);
+
+    });
+    $("#show-nr2").click(function(event) {
+        /* Act on the event */
+        compareMapSingleClick.getFeatures().clear();
+
+        var a = compareMap.getLayers().getArray()[2];
+        a.setStyle(styleNetReturnFunction);
+
+        $('#show-nr2').attr("disabled", true);
+        $('#show-nr2').siblings().attr("disabled", false);
+    });
+
+
 
     $("#show-field-map2").click(function(event) {
         compareMapSingleClick.getFeatures().clear();
@@ -2550,6 +2600,9 @@ $(document).ready(function() {
         $('#show-field-map2').attr("disabled", true);
         $('#show-flow2').attr("disabled", true);
         $('#show-flow2').siblings().attr("disabled", false);
+        var a = compareMap.getLayers().getArray()[2];
+        a.setStyle(styleNetReturnFunction);
+
     });
 
     $("#show-subbasin-map2").click(function(event) {
@@ -2561,6 +2614,8 @@ $(document).ready(function() {
         $('#show-field-map2').attr("disabled", false);
         $('#show-flow2').attr("disabled", true);
         $('#show-flow2').siblings().attr("disabled", false);
+        var a = compareMap.getLayers().getArray()[2];
+        a.setStyle(styleNetReturnFunction);
         /* Act on the event */
     });
 
@@ -2598,6 +2653,8 @@ $(document).ready(function() {
 
                 if (selectedLayer === "field") {
                     compareMap.addLayer(fieldCompare);
+                    var a = compareMap.getLayers().getArray()[2];
+                    a.setStyle(styleFlowFunction);
                     $("#show-field-map2").attr('disabled', true);
                     $("#show-subbasin-map2").attr('disabled', false);
                     $('#show-flow2').attr("disabled", true);
@@ -2606,6 +2663,8 @@ $(document).ready(function() {
                 }
                 if (selectedLayer === "subbasin") {
                     compareMap.addLayer(subbasinCompare);
+                    var a = compareMap.getLayers().getArray()[2];
+                    a.setStyle(styleFlowFunction);
                     $("#show-subbasin-map2").attr('disabled', true);
                     $("#show-field-map2").attr('disabled', false);
                     $('#show-flow2').attr("disabled", true);
@@ -2623,6 +2682,7 @@ $(document).ready(function() {
                 outletFlowAverage = 0;
                 outletTpAverage = 0;
                 outletTnAverage = 0;
+
                 for (var i = 0; i < outletSediment.length; i++) {
                     outletSedimentAverage = outletSedimentAverage + outletSediment[i];
                     outletFlowAverage = outletFlowAverage + outletFlow[i];
@@ -2635,19 +2695,59 @@ $(document).ready(function() {
                 outletTpAverage = outletTpAverage / 10;
                 outletTnAverage = outletTnAverage / 10;
 
+                var fieldFeatures = fieldCompare.getSource().getFeatures();
+                var outletCost;
+                var outletRevenue;
+                var outletNetreturn;
 
-                outlet2.setProperties({
-                    'sediment': outletSedimentAverage,
-                    'flow': outletFlowAverage,
-                    'tp': outletTpAverage,
-                    'tn': outletTnAverage,
-                    'name': 'outlet'
+
+                $.ajax({
+                    url: '/readoutletecoresult',
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: scenario,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response[0]);
+                        outletCost = response[0];
+                        outletRevenue = response[1];
+                        outletNetreturn = response[2];
+
+                        outlet2.setProperties({
+                            'sediment': outletSedimentAverage,
+                            'flow': outletFlowAverage,
+                            'tp': outletTpAverage,
+                            'tn': outletTnAverage,
+                            'name': 'outlet',
+                            'cost': outletCost,
+                            'revenue': outletRevenue,
+                            'netreturn': outletNetreturn
+                        });
+                    }
                 });
-
             }
         });
 
     });
+
+
+    // fieldCompare.getSource().on('addfeature', function(event) {
+    //     var fieldFeatures = fieldCompare.getSource().getFeatures();
+    //     var outletCost;
+    //     var outletRevenue;
+    //     var outletNetreturn;
+    //     for (i = 0; i < fieldFeatures.length; i++) {
+    //         outletCost += fieldFeatures[i].getProperties().cost;
+    //         outletRevenue += fieldFeatures[i].getProperties().revenue;
+    //         outletNetreturn += fieldFeatures[i].getProperties().netreturn;
+
+    //     }
+    //     outlet2.setProperties({
+    //         'cost': outletCost,
+    //         'revenue': outletRevenue,
+    //         'netreturn': outletNetreturn,
+    //     });
+    // });
 
     var selectedCompareFeature;
     $('#search-compare-prevent').submit(function(e) {
@@ -2734,6 +2834,8 @@ $(document).ready(function() {
                 outletTnAverage = outletTnAverage / 10;
 
 
+
+
                 outlet3.setProperties({
                     'sediment': outletSedimentAverage,
                     'flow': outletFlowAverage,
@@ -2756,11 +2858,13 @@ $(document).ready(function() {
                 if (selectedLayer === "field") {
                     // refreshComparedFieldSource(fieldCompareResult);
                     fieldCompareResult.getSource().clear();
-
                     compareresultMap.addLayer(fieldCompareResult);
                     $("#show-flow-compare-result").attr("disabled", true);
                     $("#show-flow-compare-result").siblings().attr("disabled", false);
                 }
+
+
+
 
                 drawCompareOutletChart("flow");
             }
@@ -2855,9 +2959,6 @@ $(document).ready(function() {
             width: 1
         })
     });
-
-
-
 
 
     var compareDefaultStyle = new ol.style.Style({
@@ -2970,6 +3071,9 @@ $(document).ready(function() {
         }
         return [compareDefaultStyle];
     }
+
+
+
 
     var fieldCompareResult = new ol.layer.Vector({
         source: new ol.source.Vector({
@@ -3092,6 +3196,8 @@ $(document).ready(function() {
                     $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total P " + num);
                 }
 
+
+
                 $(compareResultInfoElement).show();
                 compareResultInfoOverlay.setPosition(offsetCoordinate);
             }
@@ -3120,6 +3226,21 @@ $(document).ready(function() {
                         num = hoveredCompareResultFeature.getProperties().tp;
                         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
                         $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total P " + num);
+                    }
+                    if ($('#show-c-compare-result').prop("disabled") === true) {
+                        num = hoveredCompareResultFeature.getProperties().cost;
+                        num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                        $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Cost " + num);
+                    }
+                    if ($('#show-r-compare-result').prop("disabled") === true) {
+                        num = hoveredCompareResultFeature.getProperties().revenue;
+                        num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                        $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Revenue " + num);
+                    }
+                    if ($('#show-nr-compare-result').prop("disabled") === true) {
+                        num = hoveredCompareResultFeature.getProperties().netreturn;
+                        num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                        $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Net Return " + num);
                     }
 
                     $(compareResultInfoElement).show();
@@ -3178,8 +3299,42 @@ $(document).ready(function() {
         b.setStyle(outletSelectStyle);
         $('#show-tp-compare-result').attr("disabled", true);
         $('#show-tp-compare-result').siblings().attr("disabled", false);
-        drawCompareOutletChart("tp");
+        // drawCompareOutletChart("tp");
     });
+
+    $("#show-c-compare-result").click(function(event) {
+        /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
+        var a = compareresultMap.getLayers().getArray()[2];
+        a.setStyle(compareDefaultStyle);
+        // var b = compareresultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        $('#show-c-compare-result').attr("disabled", true);
+        $('#show-c-compare-result').siblings().attr("disabled", false);
+        // drawCompareOutletChart("sediment");
+    });
+    $("#show-r-compare-result").click(function(event) {
+        /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
+        var a = compareresultMap.getLayers().getArray()[2];
+        a.setStyle(compareDefaultStyle);
+        // var b = compareresultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        $('#show-r-compare-result').attr("disabled", true);
+        $('#show-r-compare-result').siblings().attr("disabled", false);
+        // drawCompareOutletChart("tn");
+    });
+    $("#show-nr-compare-result").click(function(event) {
+        /* Act on the event */
+        compareresultMapSingleClick.getFeatures().clear();
+        var a = compareresultMap.getLayers().getArray()[2];
+        a.setStyle(compareDefaultStyle);
+        // var b = compareresultMap.getLayers().getArray()[1];
+        // b.setStyle(outletSelectStyle);
+        $('#show-nr-compare-result').attr("disabled", true);
+        $('#show-nr-compare-result').siblings().attr("disabled", false);
+        // drawCompareOutletChart("tp");
+    });    
 
     var selectedCompareResultFeature;
     compareresultMapSingleClick.on('select', function(event) {

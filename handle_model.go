@@ -122,6 +122,7 @@ var TpQuartile []float64
 var TnQuartile []float64
 var CostFieldQuartile []float64
 var RevenueFieldQuartile []float64
+
 var NetReturnFieldQuartile []float64
 var CostSubbasinQuartile []float64
 var RevenueSubbasinQuartile []float64
@@ -166,10 +167,17 @@ var outletCompareArray []*OutletResultTypeArray
 // =============================================================================
 var fieldIDArray = make(map[int]float64)
 var subbasinIDArray = make(map[int]float64)
+
 var fieldEcoResult = make(map[int]map[int]*EcoResult)
 var subbasinEcoResult = make(map[int]map[int]*EcoResult)
 var fieldEcoAverageResult = make(map[int]*EcoResult)
 var subbasinEcoAverageResult = make(map[int]*EcoResult)
+
+var fieldCompareEcoResult = make(map[int]map[int]*EcoResult)
+var subbasinCompareEcoResult = make(map[int]map[int]*EcoResult)
+var fieldCompareEcoAverageResult = make(map[int]*EcoResult)
+var subbasinCompareEcoAverageResult = make(map[int]*EcoResult)
+
 var fieldInSubbasin = make(map[int]map[int]float64)
 var subbasinInField = make(map[int]map[int]float64)
 
@@ -178,7 +186,12 @@ var subbasinInField = make(map[int]map[int]float64)
 func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	initFeatureArray()
-	fieldEcoResult, subbasinEcoResult = initEcoData()
+	fieldEcoResult, subbasinEcoResult = initEcoData("yield_historic")
+
+	for w, _ := range fieldEcoResult[84] {
+		fmt.Println(w, fieldEcoResult[84][w])
+	}
+
 	initConvertTable()
 
 	var err error
@@ -208,6 +221,7 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	if d[0].FeatureType == "field" {
 		var effectedSubbasinIDs = []int{}
 		for _, i := range d {
+			fmt.Println(i.FeatureID)
 			updateEconomicByFieldID(i.FeatureID, i.BMPCode)
 			for m, _ := range subbasinInField {
 				if m == i.FeatureID {
@@ -242,8 +256,14 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		}
 	}
 
-	initFieldAverageEcoResultArray()
-	initSubbasinAverageEcoResultArray()
+	for w, _ := range fieldEcoResult[84] {
+		fmt.Println(w, fieldEcoResult[84][w])
+	}
+
+	fieldEcoAverageResult = initFieldAverageEcoResultArray(fieldEcoResult)
+	subbasinEcoAverageResult = initSubbasinAverageEcoResultArray(subbasinEcoResult)
+
+	fmt.Println(w, fieldEcoAverageResult[84].Cost)
 
 	dbSpatial, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
@@ -427,9 +447,11 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	BasintoField("result")
 	// AssignEcoResult()
-	GenerateResultJsonFile("field", "fieldoutput", fieldAverage)
-	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage)
+	GenerateResultJsonFile("field", "fieldoutput", fieldAverage, fieldEcoAverageResult, subbasinEcoAverageResult)
+	GenerateResultJsonFile("basin", "basinoutput", subbasinAverage, fieldEcoAverageResult, subbasinEcoAverageResult)
 	OutletResultArray("result")
+
+	fmt.Println(fieldEcoAverageResult[84].Cost)
 
 	compareTosubbasinArray = subbasinArray
 	compareTosubbasinAverage = subbasinAverage
@@ -440,7 +462,6 @@ func HandleModelRun(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 	a, err := json.Marshal(outletArray)
 	w.Write(a)
-
 }
 
 func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -450,12 +471,30 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	// fmt.Println("1", fieldEcoAverageResult[84].Cost)
+
 	// fmt.Println(scenario)
+	if strings.TrimSpace(scenario.ScenarioGet) == "conventional" {
+		fieldCompareEcoResult, subbasinCompareEcoResult = initEcoData("yield_conventional")
+	}
+	if strings.TrimSpace(scenario.ScenarioGet) == "historical" {
+		fieldCompareEcoResult, subbasinCompareEcoResult = initEcoData("yield_historic")
+	}
+
+	// fmt.Println("2", fieldEcoAverageResult[84].Cost)
+
+	fieldCompareEcoAverageResult = initFieldAverageEcoResultArray(fieldCompareEcoResult)
+	subbasinCompareEcoAverageResult = initSubbasinAverageEcoResultArray(subbasinCompareEcoResult)
+
+	// fmt.Println("3", fieldEcoAverageResult[84].Cost)
 
 	BasintoField(strings.TrimSpace(scenario.ScenarioGet))
-	GenerateResultJsonFile("field", "fieldcompare", fieldAverage)
-	GenerateResultJsonFile("basin", "basincompare", subbasinAverage)
+	GenerateResultJsonFile("field", "fieldcompare", fieldAverage, fieldCompareEcoAverageResult, subbasinCompareEcoAverageResult)
+	GenerateResultJsonFile("basin", "basincompare", subbasinAverage, fieldCompareEcoAverageResult, subbasinCompareEcoAverageResult)
 	OutletResultArray(strings.TrimSpace(scenario.ScenarioGet))
+
+	// fmt.Println(fieldCompareEcoAverageResult[84].Cost)
+	// fmt.Println(fieldEcoAverageResult[84].Cost)
 
 	compareFromsubbasinArray = subbasinArray
 	compareFromsubbasinAverage = subbasinAverage
@@ -465,6 +504,55 @@ func HandleModelResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	// fmt.Println(compareFromsubbasinArray[61])
 
 	a, err := json.Marshal(outletArray)
+	w.Write(a)
+}
+
+func HandleEcoOutletResultGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var scenario = new(ScenarioInfo)
+	err := json.NewDecoder(r.Body).Decode(&scenario)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	var outletEcoResult []float64
+	// fmt.Println(scenario)
+
+	fieldEcoResult := make(map[int]map[int]*EcoResult)
+
+	if strings.TrimSpace(scenario.ScenarioGet) == "conventional" {
+		fieldEcoResult, _ = initEcoData("yield_conventional")
+	}
+	if strings.TrimSpace(scenario.ScenarioGet) == "historical" {
+		fieldEcoResult, _ = initEcoData("yield_historic")
+	}
+
+	fieldEcoAverageResult := initFieldAverageEcoResultArray(fieldEcoResult)
+
+	var costSum float64
+	var revenueSum float64
+	var netreturnSum float64
+	if strings.TrimSpace(scenario.ScenarioGet) == "conventional" {
+		for i, _ := range fieldEcoAverageResult {
+			costSum += fieldEcoAverageResult[i].Cost
+			revenueSum += fieldEcoAverageResult[i].Revenue
+			netreturnSum += fieldEcoAverageResult[i].NetReturn
+		}
+	}
+	if strings.TrimSpace(scenario.ScenarioGet) == "historical" {
+		for i, _ := range fieldEcoAverageResult {
+			costSum += fieldEcoAverageResult[i].Cost
+			revenueSum += fieldEcoAverageResult[i].Revenue
+			netreturnSum += fieldEcoAverageResult[i].NetReturn
+		}
+	}
+
+	outletEcoResult = append(outletEcoResult, costSum)
+	outletEcoResult = append(outletEcoResult, revenueSum)
+	outletEcoResult = append(outletEcoResult, netreturnSum)
+
+	fmt.Println(outletEcoResult)
+
+	a, err := json.Marshal(outletEcoResult)
 	w.Write(a)
 }
 
@@ -717,8 +805,35 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		fieldCompareResult[i] = s
 	}
 
-	GenerateResultJsonFile("field", "fieldcompareresult", fieldCompareResult)
-	GenerateResultJsonFile("basin", "basincompareresult", subbasinCompareResult)
+	fieldEcoAverageCompareResult := make(map[int]*EcoResult)
+	subbasinEcoAverageCompareResult := make(map[int]*EcoResult)
+
+	// fmt.Println(fieldEcoAverageResult[84].Cost)
+	// fmt.Println(fieldCompareEcoAverageResult[84].Cost)
+
+	for i, _ := range fieldEcoAverageResult {
+		var s = new(EcoResult)
+		s.Cost = fieldCompareEcoAverageResult[i].Cost - fieldEcoAverageResult[i].Cost
+		s.Revenue = fieldCompareEcoAverageResult[i].Revenue - fieldEcoAverageResult[i].Revenue
+		s.NetReturn = fieldCompareEcoAverageResult[i].NetReturn - fieldEcoAverageResult[i].NetReturn
+		fieldEcoAverageCompareResult[i] = s
+	}
+
+	fmt.Println(len(subbasinCompareEcoAverageResult))
+	fmt.Println(len(subbasinEcoAverageResult))
+
+	for i, _ := range subbasinEcoAverageResult {
+		var s = new(EcoResult)
+		if i != 0 {
+			s.Cost = subbasinCompareEcoAverageResult[i].Cost - subbasinEcoAverageResult[i].Cost
+			s.Revenue = subbasinCompareEcoAverageResult[i].Revenue - subbasinEcoAverageResult[i].Revenue
+			s.NetReturn = subbasinCompareEcoAverageResult[i].NetReturn - subbasinEcoAverageResult[i].NetReturn
+		}
+		subbasinEcoAverageCompareResult[i] = s
+	}
+
+	GenerateResultJsonFile("field", "fieldcompareresult", fieldCompareResult, fieldEcoAverageCompareResult, subbasinEcoAverageCompareResult)
+	GenerateResultJsonFile("basin", "basincompareresult", subbasinCompareResult, fieldEcoAverageCompareResult, subbasinEcoAverageCompareResult)
 
 	// fmt.Println(scenario.ScenarioGet)
 	OutletCompareResultArray(scenario.ScenarioGet)
@@ -727,7 +842,7 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	w.Write(a)
 }
 
-func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
+func GenerateResultJsonFile(sin string, sout string, array map[int]*Result, fieldEcoAverageResult map[int]*EcoResult, subbasinEcoAverageResult map[int]*EcoResult) {
 	var featureCollection = new(MapFeature)
 	configFile, err := os.Open("./assets/data/geojson/" + sin + ".json")
 	if err != nil {
@@ -739,7 +854,7 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 		fmt.Println("fail 2")
 	}
 
-	QuartileEcoResult()
+	QuartileEcoResult(fieldEcoAverageResult, subbasinEcoAverageResult)
 	Quartile(array)
 
 	for id := range array {
@@ -760,34 +875,33 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 						featureCollection.Features[i].Properties.Revenue = 0.0
 
 					} else {
-						featureCollection.Features[i].Properties.Cost = getAverageResult(fieldEcoResult[id]).Cost
-						featureCollection.Features[i].Properties.NetReturn = getAverageResult(fieldEcoResult[id]).NetReturn
-						featureCollection.Features[i].Properties.Revenue = getAverageResult(fieldEcoResult[id]).Revenue
+						featureCollection.Features[i].Properties.Cost = fieldEcoAverageResult[id].Cost
+						featureCollection.Features[i].Properties.NetReturn = fieldEcoAverageResult[id].NetReturn
+						featureCollection.Features[i].Properties.Revenue = fieldEcoAverageResult[id].Revenue
 
 						featureCollection.Features[i].Properties.CostLevel = SelectLevel(fieldEcoAverageResult[id].Cost, CostFieldQuartile)
 						featureCollection.Features[i].Properties.RevenueLevel = SelectLevel(fieldEcoAverageResult[id].Revenue, RevenueFieldQuartile)
-						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(fieldEcoAverageResult[id].Cost, NetReturnFieldQuartile)
+						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(fieldEcoAverageResult[id].NetReturn, NetReturnFieldQuartile)
 					}
 				}
 				if sin == "basin" {
 					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).Cost) {
 						featureCollection.Features[i].Properties.Cost = 0
 					} else {
-						featureCollection.Features[i].Properties.Cost = getAverageResult(subbasinEcoResult[id]).Cost
+						featureCollection.Features[i].Properties.Cost = subbasinEcoAverageResult[id].Cost
 						featureCollection.Features[i].Properties.CostLevel = SelectLevel(subbasinEcoAverageResult[id].Cost, CostSubbasinQuartile)
 					}
 					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).Revenue) {
 						featureCollection.Features[i].Properties.Revenue = 0
 					} else {
-						featureCollection.Features[i].Properties.Revenue = getAverageResult(subbasinEcoResult[id]).Revenue
+						featureCollection.Features[i].Properties.Revenue = subbasinEcoAverageResult[id].Revenue
 						featureCollection.Features[i].Properties.RevenueLevel = SelectLevel(subbasinEcoAverageResult[id].Revenue, RevenueSubbasinQuartile)
-
 					}
 					if math.IsNaN(getAverageResult(subbasinEcoResult[id]).NetReturn) {
 						featureCollection.Features[i].Properties.NetReturn = 0
 					} else {
-						featureCollection.Features[i].Properties.NetReturn = getAverageResult(subbasinEcoResult[id]).NetReturn
-						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(subbasinEcoAverageResult[id].Cost, NetReturnSubbasinQuartile)
+						featureCollection.Features[i].Properties.NetReturn = subbasinEcoAverageResult[id].NetReturn
+						featureCollection.Features[i].Properties.NetReturnLevel = SelectLevel(subbasinEcoAverageResult[id].NetReturn, NetReturnSubbasinQuartile)
 					}
 				}
 			}
@@ -802,16 +916,20 @@ func GenerateResultJsonFile(sin string, sout string, array map[int]*Result) {
 	}
 }
 
-func initFieldAverageEcoResultArray() {
+func initFieldAverageEcoResultArray(fieldEcoResult map[int]map[int]*EcoResult) map[int]*EcoResult {
+	fieldEcoAverageResult := make(map[int]*EcoResult)
 	for i, _ := range fieldEcoResult {
 		fieldEcoAverageResult[i] = getAverageResult(fieldEcoResult[i])
 	}
+	return fieldEcoAverageResult
 }
 
-func initSubbasinAverageEcoResultArray() {
+func initSubbasinAverageEcoResultArray(subbasinEcoResult map[int]map[int]*EcoResult) map[int]*EcoResult {
+	subbasinEcoAverageResult := make(map[int]*EcoResult)
 	for i, _ := range subbasinEcoResult {
 		subbasinEcoAverageResult[i] = getAverageResult(subbasinEcoResult[i])
 	}
+	return subbasinEcoAverageResult
 }
 
 func BasintoField(database string) {
@@ -993,7 +1111,7 @@ func Quartile(m map[int]*Result) {
 	// fmt.Println(q)          // {15 37.5 40}}
 }
 
-func QuartileEcoResult() {
+func QuartileEcoResult(fieldEcoAverageResult map[int]*EcoResult, subbasinEcoAverageResult map[int]*EcoResult) {
 	var costFieldArray []float64
 	var revenueFieldArray []float64
 	var netreturnFieldArray []float64
@@ -1005,7 +1123,7 @@ func QuartileEcoResult() {
 	for i, _ := range fieldEcoAverageResult {
 		costFieldArray = append(costFieldArray, fieldEcoAverageResult[i].Cost)
 		revenueFieldArray = append(revenueFieldArray, fieldEcoAverageResult[i].Revenue)
-		netreturnFieldArray = append(netreturnFieldArray, fieldEcoAverageResult[i].Cost)
+		netreturnFieldArray = append(netreturnFieldArray, fieldEcoAverageResult[i].NetReturn)
 	}
 
 	for i, _ := range subbasinEcoAverageResult {
@@ -1020,7 +1138,7 @@ func QuartileEcoResult() {
 	d5, _ := stats.Percentile(costFieldArray, 70)
 	e5, _ := stats.Percentile(costFieldArray, 90)
 	CostFieldQuartile = []float64{a5, b5, c5, d5, e5}
-	fmt.Println(CostFieldQuartile)
+	// fmt.Println(CostFieldQuartile)
 
 	a6, _ := stats.Percentile(revenueFieldArray, 10)
 	b6, _ := stats.Percentile(revenueFieldArray, 30)
@@ -1029,7 +1147,7 @@ func QuartileEcoResult() {
 	e6, _ := stats.Percentile(revenueFieldArray, 90)
 
 	RevenueFieldQuartile = []float64{a6, b6, c6, d6, e6}
-	fmt.Println(RevenueFieldQuartile)
+	// fmt.Println(RevenueFieldQuartile)
 
 	a7, _ := stats.Percentile(netreturnFieldArray, 10)
 	b7, _ := stats.Percentile(netreturnFieldArray, 30)
@@ -1046,7 +1164,7 @@ func QuartileEcoResult() {
 	d8, _ := stats.Percentile(costSubbasinArray, 70)
 	e8, _ := stats.Percentile(costSubbasinArray, 90)
 	CostSubbasinQuartile = []float64{a8, b8, c8, d8, e8}
-	fmt.Println(CostSubbasinQuartile)
+	// fmt.Println(CostSubbasinQuartile)
 
 	a9, _ := stats.Percentile(revenueSubbasinArray, 10)
 	b9, _ := stats.Percentile(revenueSubbasinArray, 30)
@@ -1055,7 +1173,7 @@ func QuartileEcoResult() {
 	e9, _ := stats.Percentile(revenueSubbasinArray, 90)
 
 	RevenueSubbasinQuartile = []float64{a9, b9, c9, d9, e9}
-	fmt.Println(RevenueSubbasinQuartile)
+	// fmt.Println(RevenueSubbasinQuartile)
 
 	a10, _ := stats.Percentile(netreturnSubbasinArray, 10)
 	b10, _ := stats.Percentile(netreturnSubbasinArray, 30)
@@ -1655,10 +1773,13 @@ func updateEconomicByFieldID(fieldID int, bmpCode int) map[int]*EcoResult {
 		err = rows.Scan(&id, &year, &revenue, &cost, &netreturn)
 		checkErr(err)
 
-		if len(fieldEcoResult[id]) == 0 {
-			fieldEcoResult[id] = make(map[int]*EcoResult)
+		if fieldID == id {
+			if len(fieldEcoResult[id]) == 0 {
+				fieldEcoResult[id] = make(map[int]*EcoResult)
+			}
+			fieldEcoResult[id][year] = &EcoResult{cost, revenue, netreturn}
 		}
-		fieldEcoResult[id][year] = &EcoResult{cost, revenue, netreturn}
+
 	}
 
 	// for m := range results[fieldID] {
@@ -1737,12 +1858,12 @@ func initFeatureArray() {
 	// fmt.Println(len(subbasinIDArray))
 }
 
-func initEcoData() (map[int]map[int]*EcoResult, map[int]map[int]*EcoResult) {
+func initEcoData(s string) (map[int]map[int]*EcoResult, map[int]map[int]*EcoResult) {
 	var fieldEcoResult = make(map[int]map[int]*EcoResult)
 	var subbasinEcoResult = make(map[int]map[int]*EcoResult)
 	spatialDB, err := sql.Open("sqlite3", "./assets/swat/spatial.db3")
 	checkErr(err)
-	rows, err := spatialDB.Query("SELECT field,year,revenue,cost,netreturn from yield_historic")
+	rows, err := spatialDB.Query("SELECT field,year,revenue,cost,netreturn from " + s)
 	checkErr(err)
 	for rows.Next() {
 		var fieldID int
