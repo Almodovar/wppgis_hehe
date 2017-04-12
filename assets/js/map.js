@@ -1956,9 +1956,17 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(r) {
                     // console.log(r);
+                    var averageCost = 0;
+
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
+                        averageCost += r[i];
                     }
+
+                    outlet.setProperties({
+                        "cost": averageCost / r.length,
+                    });
+
                     $('#model-result-chart').highcharts({
                         title: {
                             text: '',
@@ -2008,9 +2016,17 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(r) {
                     // console.log(r);
+
+                    var averageRevenue = 0;
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
+                        averageRevenue += r[i];
                     }
+
+                    outlet.setProperties({
+                        "revenue": averageRevenue / r.length,
+                    });
+
                     $('#model-result-chart').highcharts({
                         title: {
                             text: '',
@@ -2060,9 +2076,19 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(r) {
                     // console.log(r);
+
+                    var averageNetreturn = 0;
+
                     for (i = 0; i < r.length; i++) {
                         data.push(r[i]);
+                        averageNetreturn += r[i];
                     }
+
+
+                    outlet.setProperties({
+                        "netreturn": averageNetreturn / r.length,
+                    });
+
                     $('#model-result-chart').highcharts({
                         title: {
                             text: '',
@@ -2103,11 +2129,7 @@ $(document).ready(function() {
             });
         }
         // console.log(data);
-
-
     }
-
-
 
     function drawFeatureChart() {
         var feature = new Object();
@@ -2270,9 +2292,6 @@ $(document).ready(function() {
             drawFeatureChart();
         }
     });
-
-
-
 
     $("#result-issue-submit").click(function(event) {
         $("#result-issue-talk").hide();
@@ -2589,8 +2608,6 @@ $(document).ready(function() {
         $('#show-nr2').siblings().attr("disabled", false);
     });
 
-
-
     $("#show-field-map2").click(function(event) {
         compareMapSingleClick.getFeatures().clear();
 
@@ -2727,27 +2744,7 @@ $(document).ready(function() {
                 });
             }
         });
-
     });
-
-
-    // fieldCompare.getSource().on('addfeature', function(event) {
-    //     var fieldFeatures = fieldCompare.getSource().getFeatures();
-    //     var outletCost;
-    //     var outletRevenue;
-    //     var outletNetreturn;
-    //     for (i = 0; i < fieldFeatures.length; i++) {
-    //         outletCost += fieldFeatures[i].getProperties().cost;
-    //         outletRevenue += fieldFeatures[i].getProperties().revenue;
-    //         outletNetreturn += fieldFeatures[i].getProperties().netreturn;
-
-    //     }
-    //     outlet2.setProperties({
-    //         'cost': outletCost,
-    //         'revenue': outletRevenue,
-    //         'netreturn': outletNetreturn,
-    //     });
-    // });
 
     var selectedCompareFeature;
     $('#search-compare-prevent').submit(function(e) {
@@ -2799,7 +2796,6 @@ $(document).ready(function() {
 
                 progress = "compareScenario";
 
-
                 var b = compareresultMap.getLayers().getArray()[1];
                 b.setStyle(outletSelectStyle);
 
@@ -2833,15 +2829,12 @@ $(document).ready(function() {
                 outletTpAverage = outletTpAverage / 10;
                 outletTnAverage = outletTnAverage / 10;
 
-
-
-
                 outlet3.setProperties({
                     'sediment': outletSedimentAverage,
                     'flow': outletFlowAverage,
                     'tp': outletTpAverage,
                     'tn': outletTnAverage,
-                    'name': 'outlet'
+                    'name': 'outlet',
                 });
 
                 compareresultMap.removeLayer(compareresultMap.getLayers().getArray()[2]);
@@ -2862,9 +2855,6 @@ $(document).ready(function() {
                     $("#show-flow-compare-result").attr("disabled", true);
                     $("#show-flow-compare-result").siblings().attr("disabled", false);
                 }
-
-
-
 
                 drawCompareOutletChart("flow");
             }
@@ -2938,7 +2928,6 @@ $(document).ready(function() {
         })
     });
 
-
     var customizedStyleLow = new ol.style.Style({
         fill: new ol.style.Fill({
             color: 'rgba(216, 170, 0, 0.6)'
@@ -2948,7 +2937,6 @@ $(document).ready(function() {
             width: 1
         })
     });
-
 
     var customizedStyleBad = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -2960,7 +2948,6 @@ $(document).ready(function() {
         })
     });
 
-
     var compareDefaultStyle = new ol.style.Style({
         fill: new ol.style.Fill({
             color: 'rgba(34, 44, 85, 0.6)'
@@ -2970,14 +2957,6 @@ $(document).ready(function() {
             width: 1
         })
     });
-
-
-    // "Great": Great,
-    // "Good": Good,
-    // "Normal": Normal,
-    // "Slight": Slight,
-    // "Bad": Bad,
-    // "Severe": Severe
 
     function compareStyleFlowFunction(feature, resolution) {
         var featureID = feature.getProperties().name;
@@ -3072,8 +3051,56 @@ $(document).ready(function() {
         return [compareDefaultStyle];
     }
 
+    function compareStyleCFunction(feature, resolution) {
+        var featureID = feature.getProperties().name;
+        for (var i = 0; i < bmpAssignmentArray.length; i++) {
+            if (featureID == bmpAssignmentArray[i].featureID) {
+                var cost = feature.getProperties().cost;
+                if (cost > 0) {
+                    return [customizedStyleBad];
+                } else if (cost < 0) {
+                    return [customizedStyleHigh];
+                } else {
+                    return [compareDefaultStyle];
+                }
+            }
+        }
+        return [compareDefaultStyle];
+    }
 
+    function compareStyleRFunction(feature, resolution) {
+        var featureID = feature.getProperties().name;
+        for (var i = 0; i < bmpAssignmentArray.length; i++) {
+            if (featureID == bmpAssignmentArray[i].featureID) {
+                var revenue = feature.getProperties().revenue;
+                if (revenue < 0) {
+                    return [customizedStyleBad];
+                } else if (revenue > 0) {
+                    return [customizedStyleHigh];
+                } else {
+                    return [compareDefaultStyle];
+                }
+            }
+        }
+        return [compareDefaultStyle];
+    }
 
+    function compareStyleNRFunction(feature, resolution) {
+        var featureID = feature.getProperties().name;
+        for (var i = 0; i < bmpAssignmentArray.length; i++) {
+            if (featureID == bmpAssignmentArray[i].featureID) {
+                var netreturn = feature.getProperties().netreturn;
+                if (netreturn < 0) {
+                    return [customizedStyleBad];
+                } else if (netreturn > 0) {
+                    return [customizedStyleHigh];
+                } else {
+                    return [compareDefaultStyle];
+                }
+            }
+        }
+        return [compareDefaultStyle];
+    }
 
     var fieldCompareResult = new ol.layer.Vector({
         source: new ol.source.Vector({
@@ -3082,7 +3109,6 @@ $(document).ready(function() {
         }),
         style: compareStyleFlowFunction
     });
-
 
     var subbasinCompareResult = new ol.layer.Vector({
         source: new ol.source.Vector({
@@ -3196,7 +3222,21 @@ $(document).ready(function() {
                     $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Total P " + num);
                 }
 
-
+                if ($('#show-c-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().cost;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Cost " + num);
+                }
+                if ($('#show-r-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().revenue;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Revenue " + num);
+                }
+                if ($('#show-nr-compare-result').prop("disabled") === true) {
+                    num = hoveredCompareResultFeature.getProperties().netreturn;
+                    num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
+                    $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Net Return " + num);
+                }
 
                 $(compareResultInfoElement).show();
                 compareResultInfoOverlay.setPosition(offsetCoordinate);
@@ -3299,42 +3339,42 @@ $(document).ready(function() {
         b.setStyle(outletSelectStyle);
         $('#show-tp-compare-result').attr("disabled", true);
         $('#show-tp-compare-result').siblings().attr("disabled", false);
-        // drawCompareOutletChart("tp");
+        drawCompareOutletChart("tp");
     });
 
     $("#show-c-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[2];
-        a.setStyle(compareDefaultStyle);
-        // var b = compareresultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
+        a.setStyle(compareStyleCFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-c-compare-result').attr("disabled", true);
         $('#show-c-compare-result').siblings().attr("disabled", false);
-        // drawCompareOutletChart("sediment");
+        drawCompareOutletChart("cost");
     });
     $("#show-r-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[2];
-        a.setStyle(compareDefaultStyle);
-        // var b = compareresultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
+        a.setStyle(compareStyleRFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-r-compare-result').attr("disabled", true);
         $('#show-r-compare-result').siblings().attr("disabled", false);
-        // drawCompareOutletChart("tn");
+        drawCompareOutletChart("revenue");
     });
     $("#show-nr-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
         var a = compareresultMap.getLayers().getArray()[2];
-        a.setStyle(compareDefaultStyle);
-        // var b = compareresultMap.getLayers().getArray()[1];
-        // b.setStyle(outletSelectStyle);
+        a.setStyle(compareStyleNRFunction);
+        var b = compareresultMap.getLayers().getArray()[1];
+        b.setStyle(outletSelectStyle);
         $('#show-nr-compare-result').attr("disabled", true);
         $('#show-nr-compare-result').siblings().attr("disabled", false);
-        // drawCompareOutletChart("tp");
-    });    
+        drawCompareOutletChart("netreturn");
+    });
 
     var selectedCompareResultFeature;
     compareresultMapSingleClick.on('select', function(event) {
@@ -3359,6 +3399,15 @@ $(document).ready(function() {
             if ($('#show-tp-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("tp");
             }
+            if ($('#show-c-compare-result').prop("disabled") === true) {
+                drawCompareOutletChart("cost");
+            }
+            if ($('#show-r-compare-result').prop("disabled") === true) {
+                drawCompareOutletChart("revenue");
+            }
+            if ($('#show-nr-compare-result').prop("disabled") === true) {
+                drawCompareOutletChart("netreturn");
+            }            
             b.setStyle(outletSelectStyle);
         }
     });
@@ -3370,51 +3419,343 @@ $(document).ready(function() {
         var data = [];
         if (s === "sediment") {
             data = outletCompareSediment;
+            $('#model-compare-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "flow") {
             data = outletCompareFlow;
+            $('#model-compare-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "tp") {
             data = outletCompareTp;
+            $('#model-compare-chart').highcharts({
+                title: {
+                    text: '',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
+                }]
+            });
         }
         if (s === "tn") {
             data = outletCompareTn;
-        }
-        $('#model-compare-chart').highcharts({
-            title: {
-                text: '',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: ['2002', '2003', '2004', '2005', '2006', '2007',
-                    '2008', '2009', '2010', '2011'
-                ]
-            },
-            yAxis: {
+            $('#model-compare-chart').highcharts({
                 title: {
-                    text: 'Value'
+                    text: '',
+                    x: -20 //center
                 },
-                lineWidth: 1,
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+                xAxis: {
+                    categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                        '2008', '2009', '2010', '2011'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    lineWidth: 1,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Yr',
+                    data: data
                 }]
-            },
-            credits: {
-                enabled: false
-            },
-            tooltip: {
-                valueSuffix: ''
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Yr',
-                data: data
-            }]
-        });
+            });
+        }
+
+        if (s == "cost") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletcomparechart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    // console.log(r);
+
+                    var averageCost = 0;
+
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                        averageCost += r[i];
+                    }
+
+
+                    outlet3.setProperties({
+                        "cost": averageCost / r.length,
+                    });
+
+                    $('#model-compare-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
+        if (s == "revenue") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletcomparechart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    // console.log(r);
+
+                    var averageRevenue = 0;
+
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                        averageRevenue += r[i];
+                    }
+
+
+                    outlet3.setProperties({
+                        "revenue": averageRevenue / r.length,
+                    });
+
+                    $('#model-compare-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
+        if (s == "netreturn") {
+            var ecoType = JSON.stringify(s);
+            $.ajax({
+                url: '/drawecooutletcomparechart',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: ecoType,
+                dataType: 'json',
+                success: function(r) {
+                    // console.log(r);
+
+                    var averageNetreturn = 0;
+
+                    for (i = 0; i < r.length; i++) {
+                        data.push(r[i]);
+                        averageNetreturn += r[i];
+                    }
+
+
+                    outlet3.setProperties({
+                        "netreturn": averageNetreturn / r.length,
+                    });
+
+                    $('#model-compare-chart').highcharts({
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+
+                        xAxis: {
+                            categories: ['2002', '2003', '2004', '2005', '2006', '2007',
+                                '2008', '2009', '2010', '2011'
+                            ]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Value' + " ( Outlet )"
+                            },
+                            lineWidth: 1,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Yr',
+                            data: data
+                        }]
+                    });
+                }
+            });
+        }
     }
 
     function drawCompareFeatureChart() {
@@ -3432,15 +3773,17 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(r) {
                 var dataArray = [];
+
                 for (var i = 0; i < r.length; i++) {
-                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(6);
+                    r[i] = parseFloat(Math.round(r[i] * 100) / 100).toFixed(2);
                     dataArray[i] = parseFloat(r[i]);
                 }
+
                 var average = [];
                 var averageNum;
                 if (feature.ResultType == "sediment") {
                     averageNum = selectedCompareResultFeature.getProperties().sediment;
-                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(6));
+                    averageNum = parseFloat((Math.round(averageNum * 100) / 100).toFixed(2));
 
                     for (i = 0; i < 10; i++) {
                         average[i] = averageNum;
@@ -3448,26 +3791,50 @@ $(document).ready(function() {
                 }
                 if (feature.ResultType == "flow") {
                     averageNum = selectedCompareResultFeature.getProperties().flow;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
                     averageNum = parseFloat(averageNum);
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedCompareResultFeature.getProperties().flow;
+                        average[i] = averageNum;
                     }
                 }
                 if (feature.ResultType == "tn") {
                     averageNum = selectedCompareResultFeature.getProperties().tn;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
                     averageNum = parseFloat(averageNum);
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedCompareResultFeature.getProperties().tn;
+                        average[i] = averageNum;
                     }
                 }
                 if (feature.ResultType == "tp") {
                     averageNum = selectedCompareResultFeature.getProperties().tp;
-                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(6);
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
                     averageNum = parseFloat(averageNum);
                     for (i = 0; i < 10; i++) {
-                        average[i] = selectedCompareResultFeature.getProperties().tp;
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "cost") {
+                    averageNum = selectedCompareResultFeature.getProperties().cost;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "revenue") {
+                    averageNum = selectedCompareResultFeature.getProperties().revenue;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
+                    }
+                }
+                if (feature.ResultType == "netreturn") {
+                    averageNum = selectedCompareResultFeature.getProperties().netreturn;
+                    averageNum = parseFloat(Math.round(averageNum * 100) / 100).toFixed(2);
+                    averageNum = parseFloat(averageNum);
+                    for (i = 0; i < 10; i++) {
+                        average[i] = averageNum;
                     }
                 }
                 $('#model-compare-chart').highcharts({
@@ -3528,6 +3895,15 @@ $(document).ready(function() {
         }
         if ($('#show-tp-compare-result').prop("disabled") === true) {
             return "tp";
+        }
+        if ($('#show-c-compare-result').prop("disabled") === true) {
+            return "cost";
+        }
+        if ($('#show-r-compare-result').prop("disabled") === true) {
+            return "revenue";
+        }
+        if ($('#show-nr-compare-result').prop("disabled") === true) {
+            return "netreturn";
         }
     }
 

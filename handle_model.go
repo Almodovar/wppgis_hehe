@@ -694,6 +694,47 @@ func HandleEcoOutletChart(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	w.Write(a)
 }
 
+func HandleEcoOutletCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d string
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	var result = []float64{}
+	var sumByYear = make(map[int]float64)
+
+	if d == "cost" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				var changeVal = fieldEcoResult[i][j].Cost - fieldCompareEcoResult[i][j].Cost
+				sumByYear[j] += changeVal
+			}
+		}
+	}
+	if d == "revenue" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				var changeVal = fieldEcoResult[i][j].Revenue - fieldCompareEcoResult[i][j].Revenue
+				sumByYear[j] += changeVal
+			}
+		}
+	}
+	if d == "netreturn" {
+		for i := range fieldEcoResult {
+			for j := range fieldEcoResult[i] {
+				var changeVal = fieldEcoResult[i][j].NetReturn - fieldCompareEcoResult[i][j].NetReturn
+				sumByYear[j] += changeVal
+			}
+		}
+	}
+
+	for y := 2002; y <= 2011; y++ {
+		result = append(result, sumByYear[y])
+	}
+	a, err := json.Marshal(result)
+	w.Write(a)
+}
+
 func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var d FeatureResultType
 	err := json.NewDecoder(r.Body).Decode(&d)
@@ -721,7 +762,6 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 				// fmt.Println(compareFromsubbasinArray[d.ID][i].Sediment)
 			}
 		}
-
 		if d.ResultType == "tp" {
 			for i := 2002; i <= 2011; i++ {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Tp-compareFromsubbasinArray[d.ID][i].Tp)*100/compareFromsubbasinArray[d.ID][i].Tp)
@@ -730,6 +770,21 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		if d.ResultType == "tn" {
 			for i := 2002; i <= 2011; i++ {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTosubbasinArray[d.ID][i].Tn-compareFromsubbasinArray[d.ID][i].Tn)*100/compareFromsubbasinArray[d.ID][i].Tn)
+			}
+		}
+		if d.ResultType == "cost" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].Cost-subbasinCompareEcoResult[d.ID][i].Cost)
+			}
+		}
+		if d.ResultType == "revenue" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].Revenue-subbasinCompareEcoResult[d.ID][i].Revenue)
+			}
+		}
+		if d.ResultType == "netreturn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, subbasinEcoResult[d.ID][i].NetReturn-subbasinCompareEcoResult[d.ID][i].NetReturn)
 			}
 		}
 	}
@@ -745,7 +800,6 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Sediment-compareFromfieldArray[d.ID][i].Sediment)*100/compareFromfieldArray[d.ID][i].Sediment)
 			}
 		}
-
 		if d.ResultType == "tp" {
 			for i := 2002; i <= 2011; i++ {
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Tp-compareFromfieldArray[d.ID][i].Tp)*100/compareFromfieldArray[d.ID][i].Tp)
@@ -756,7 +810,26 @@ func HandleCompareChart(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 				arrayDataFeatureResultType = append(arrayDataFeatureResultType, (compareTofieldArray[d.ID][i].Tn-compareFromfieldArray[d.ID][i].Tn)*100/compareFromfieldArray[d.ID][i].Tn)
 			}
 		}
+		if d.ResultType == "cost" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].Cost-fieldCompareEcoResult[d.ID][i].Cost)
+			}
+		}
+		if d.ResultType == "revenue" {
+			for i := 2002; i <= 2011; i++ {
+				fmt.Println(fieldEcoResult[d.ID][i].Revenue)
+				fmt.Println(fieldCompareEcoResult[d.ID][i].Revenue)
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].Revenue-fieldCompareEcoResult[d.ID][i].Revenue)
+			}
+		}
+		if d.ResultType == "netreturn" {
+			for i := 2002; i <= 2011; i++ {
+				arrayDataFeatureResultType = append(arrayDataFeatureResultType, fieldEcoResult[d.ID][i].NetReturn-fieldCompareEcoResult[d.ID][i].NetReturn)
+			}
+		}
 	}
+
+	fmt.Println(arrayDataFeatureResultType)
 
 	// fmt.Println(arrayDataFeatureResultType)
 	a, err := json.Marshal(arrayDataFeatureResultType)
@@ -813,9 +886,9 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 
 	for i, _ := range fieldEcoAverageResult {
 		var s = new(EcoResult)
-		s.Cost = fieldCompareEcoAverageResult[i].Cost - fieldEcoAverageResult[i].Cost
-		s.Revenue = fieldCompareEcoAverageResult[i].Revenue - fieldEcoAverageResult[i].Revenue
-		s.NetReturn = fieldCompareEcoAverageResult[i].NetReturn - fieldEcoAverageResult[i].NetReturn
+		s.Cost = fieldEcoAverageResult[i].Cost - fieldCompareEcoAverageResult[i].Cost
+		s.Revenue = fieldEcoAverageResult[i].Revenue - fieldCompareEcoAverageResult[i].Revenue
+		s.NetReturn = fieldEcoAverageResult[i].NetReturn - fieldCompareEcoAverageResult[i].NetReturn
 		fieldEcoAverageCompareResult[i] = s
 	}
 
@@ -825,9 +898,9 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	for i, _ := range subbasinEcoAverageResult {
 		var s = new(EcoResult)
 		if i != 0 {
-			s.Cost = subbasinCompareEcoAverageResult[i].Cost - subbasinEcoAverageResult[i].Cost
-			s.Revenue = subbasinCompareEcoAverageResult[i].Revenue - subbasinEcoAverageResult[i].Revenue
-			s.NetReturn = subbasinCompareEcoAverageResult[i].NetReturn - subbasinEcoAverageResult[i].NetReturn
+			s.Cost = subbasinEcoAverageResult[i].Cost - subbasinCompareEcoAverageResult[i].Cost
+			s.Revenue = subbasinEcoAverageResult[i].Revenue - subbasinCompareEcoAverageResult[i].Revenue
+			s.NetReturn = subbasinEcoAverageResult[i].NetReturn - subbasinCompareEcoAverageResult[i].NetReturn
 		}
 		subbasinEcoAverageCompareResult[i] = s
 	}
