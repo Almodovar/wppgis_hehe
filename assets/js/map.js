@@ -3060,6 +3060,8 @@ $(document).ready(function() {
                     return [customizedStyleBad];
                 } else if (cost < 0) {
                     return [customizedStyleHigh];
+                } else if (cost === 0) {
+                    return [customizedStyleMedium];
                 } else {
                     return [compareDefaultStyle];
                 }
@@ -3077,6 +3079,8 @@ $(document).ready(function() {
                     return [customizedStyleBad];
                 } else if (revenue > 0) {
                     return [customizedStyleHigh];
+                } else if (revenue == 0) {
+                    return [customizedStyleMedium];
                 } else {
                     return [compareDefaultStyle];
                 }
@@ -3094,6 +3098,8 @@ $(document).ready(function() {
                     return [customizedStyleBad];
                 } else if (netreturn > 0) {
                     return [customizedStyleHigh];
+                } else if (netreturn === 0) {
+                    return [customizedStyleMedium];
                 } else {
                     return [compareDefaultStyle];
                 }
@@ -3270,7 +3276,7 @@ $(document).ready(function() {
                     if ($('#show-c-compare-result').prop("disabled") === true) {
                         num = hoveredCompareResultFeature.getProperties().cost;
                         num = parseFloat(Math.round(num * 100) / 100).toFixed(2);
-                        $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Cost " + num);
+                        $(compareResultInfoElement).html("FeatureID: " + hoveredCompareResultFeature.getProperties().name + "<br />" + "Cost " + num + "<br />" + "CE-F " + hoveredCompareResultFeature.getProperties().CEF+ "<br />" + "CE-S " + hoveredCompareResultFeature.getProperties().CES+ "<br />" + "CE-N " + hoveredCompareResultFeature.getProperties().CEN+ "<br />" + "CE-P " + hoveredCompareResultFeature.getProperties().CEP);
                     }
                     if ($('#show-r-compare-result').prop("disabled") === true) {
                         num = hoveredCompareResultFeature.getProperties().revenue;
@@ -3352,6 +3358,8 @@ $(document).ready(function() {
         $('#show-c-compare-result').attr("disabled", true);
         $('#show-c-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("cost");
+        updateCostEffectiveness();
+
     });
     $("#show-r-compare-result").click(function(event) {
         /* Act on the event */
@@ -3364,6 +3372,7 @@ $(document).ready(function() {
         $('#show-r-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("revenue");
     });
+
     $("#show-nr-compare-result").click(function(event) {
         /* Act on the event */
         compareresultMapSingleClick.getFeatures().clear();
@@ -3375,6 +3384,41 @@ $(document).ready(function() {
         $('#show-nr-compare-result').siblings().attr("disabled", false);
         drawCompareOutletChart("netreturn");
     });
+
+
+    function updateCostEffectiveness() {
+        var featureArray = getSelectedFeatureIDs();
+        for (var i = 0; i < featureArray.length; i++) {
+            var feature = new Object();
+            feature.featureType = determineFeatureType();
+            feature.featureID = parseInt(featureArray[i]);
+            console.log(featureArray[i],determineFeatureType());
+            var data = JSON.stringify(feature);
+            $.ajax({
+                url: '/getcosteffectiveness',
+                type: "post",
+                contentType: 'application/json; charset=utf-8',
+                data: data,
+                dataType: 'json',
+                success: function(r) {
+                    var compareFeatures = fieldCompareResult.getSource().getFeatures();
+                    var updateFeature;
+                    for (var j = 0; j < compareFeatures.length; j++) {
+                        // console.log(r[4].toString());
+                        if(compareFeatures[j].getProperties().name == r[4].toString()){
+                            updateFeature = compareFeatures[j];
+                        }
+                    }
+                    updateFeature.setProperties({
+                        'CEF': r[0].toFixed(4),
+                        'CES': r[1].toFixed(4),
+                        'CEN': r[2].toFixed(4),
+                        'CEP': r[3].toFixed(4)
+                    });
+                }
+            });
+        }
+    }
 
     var selectedCompareResultFeature;
     compareresultMapSingleClick.on('select', function(event) {
@@ -3407,7 +3451,7 @@ $(document).ready(function() {
             }
             if ($('#show-nr-compare-result').prop("disabled") === true) {
                 drawCompareOutletChart("netreturn");
-            }            
+            }
             b.setStyle(outletSelectStyle);
         }
     });
@@ -3788,6 +3832,8 @@ $(document).ready(function() {
                     for (i = 0; i < 10; i++) {
                         average[i] = averageNum;
                     }
+
+
                 }
                 if (feature.ResultType == "flow") {
                     averageNum = selectedCompareResultFeature.getProperties().flow;

@@ -915,6 +915,62 @@ func HandleModelCompare(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 	w.Write(a)
 }
 
+type FeatureCostEffect struct {
+	FeatureID   int
+	FeatureType string
+}
+
+func HandleEcoCostEffectiveness(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var d = new(FeatureCostEffect)
+	var costeffectiveness = make([]float64, 5)
+	err := json.NewDecoder(r.Body).Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	fmt.Println(d.FeatureID)
+	fmt.Println(fieldEcoAverageResult[64].Cost)
+	fmt.Println(fieldCompareEcoAverageResult[64].Cost)
+
+	if d.FeatureType == "field" {
+		var costChange = fieldEcoAverageResult[d.FeatureID].Cost - fieldCompareEcoAverageResult[d.FeatureID].Cost
+		if costChange != 0 {
+			costeffectiveness[0] = (compareTofieldAverage[d.FeatureID].Water - compareFromfieldAverage[d.FeatureID].Water) / costChange
+			costeffectiveness[1] = (compareTofieldAverage[d.FeatureID].Sediment - compareFromfieldAverage[d.FeatureID].Sediment) / costChange
+			costeffectiveness[2] = (compareTofieldAverage[d.FeatureID].Tn - compareFromfieldAverage[d.FeatureID].Tn) / costChange
+			costeffectiveness[3] = (compareTofieldAverage[d.FeatureID].Tp - compareFromfieldAverage[d.FeatureID].Tp) / costChange
+			costeffectiveness[4] = float64(d.FeatureID)
+		} else {
+			costeffectiveness[0] = 0
+			costeffectiveness[1] = 0
+			costeffectiveness[2] = 0
+			costeffectiveness[3] = 0
+			costeffectiveness[4] = float64(d.FeatureID)
+
+		}
+	}
+
+	if d.FeatureType == "subbasin" {
+		var costChange = subbasinEcoAverageResult[d.FeatureID].Cost - subbasinCompareEcoAverageResult[d.FeatureID].Cost
+		if costChange != 0 {
+			costeffectiveness[0] = (compareTosubbasinAverage[d.FeatureID].Water - compareFromsubbasinAverage[d.FeatureID].Water) / costChange
+			costeffectiveness[1] = (compareTosubbasinAverage[d.FeatureID].Sediment - compareFromsubbasinAverage[d.FeatureID].Sediment) / costChange
+			costeffectiveness[2] = (compareTosubbasinAverage[d.FeatureID].Tn - compareFromsubbasinAverage[d.FeatureID].Tn) / costChange
+			costeffectiveness[3] = (compareTosubbasinAverage[d.FeatureID].Tp - compareFromsubbasinAverage[d.FeatureID].Tp) / costChange
+			costeffectiveness[4] = float64(d.FeatureID)
+
+		} else {
+			costeffectiveness[0] = 0
+			costeffectiveness[1] = 0
+			costeffectiveness[2] = 0
+			costeffectiveness[3] = 0
+			costeffectiveness[4] = float64(d.FeatureID)
+
+		}
+	}
+	a, err := json.Marshal(costeffectiveness)
+	w.Write(a)
+}
+
 func GenerateResultJsonFile(sin string, sout string, array map[int]*Result, fieldEcoAverageResult map[int]*EcoResult, subbasinEcoAverageResult map[int]*EcoResult) {
 	var featureCollection = new(MapFeature)
 	configFile, err := os.Open("./assets/data/geojson/" + sin + ".json")

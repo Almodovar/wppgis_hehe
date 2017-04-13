@@ -59,6 +59,7 @@ func main() {
 	secureRouter.Handle("POST", "/drawecooutletchart", HandleEcoOutletChart)
 	secureRouter.Handle("POST", "/drawecooutletcomparechart", HandleEcoOutletCompareChart)
 	secureRouter.Handle("POST", "/readoutletecoresult", HandleEcoOutletResultGet)
+	secureRouter.Handle("POST", "/getcosteffectiveness", HandleEcoCostEffectiveness)
 
 	// secureRouter.Handle("POST", "/reportgenerator", HandleReportGenerate)
 
